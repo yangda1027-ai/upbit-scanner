@@ -1,53 +1,6 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827"><title>Upbit Scanner V3</title>
-<style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111827;background:#f3f4f6}
-body{margin:0;padding:env(safe-area-inset-top) 14px calc(24px + env(safe-area-inset-bottom))}
-.wrap{max-width:920px;margin:auto}.hero{padding:18px 2px 8px}.hero h1{font-size:25px;margin:0 0 5px}
-.muted{color:#6b7280;font-size:13px}.card{background:#fff;border-radius:18px;padding:15px;margin:10px 0;box-shadow:0 1px 4px #00000012}
-.row{display:flex;gap:10px;align-items:center;justify-content:space-between}.rank{font-weight:800;font-size:22px;width:35px}
-.coin{flex:1}.coin b{font-size:18px}.score{font-size:24px;font-weight:800;text-align:right}.score small{display:block;color:#6b7280;font-size:11px;font-weight:600}
-.pill{display:inline-block;background:#eef2ff;border-radius:99px;padding:4px 8px;margin:3px 3px 0 0;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}.metric{background:#f9fafb;border-radius:12px;padding:8px}.metric small{display:block;color:#6b7280}.metric b{font-size:14px}
-button{border:0;border-radius:12px;padding:10px 13px;background:#111827;color:white;font-weight:700}.warn{background:#fff7ed;border-radius:14px;padding:12px;font-size:12px;color:#9a3412;margin-top:12px}
-.market{background:#ecfeff;border-radius:14px;padding:10px;margin:8px 0;font-size:13px}.hot{background:#ecfdf5}.cold{background:#fef2f2}
-@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr)}}
-</style></head>
-<body><div class="wrap">
-<div class="hero"><h1>업비트 급등 전 패턴 스캐너 V3</h1><div class="muted">KRW 전체 · 매시간 자동분석 · 거래대금 선행 + 과거 유사패턴 도달률</div></div>
-<div id="market" class="market">시장상태 불러오는 중…</div>
-<div class="row"><div id="status" class="muted">불러오는 중…</div><button onclick="load()">새로고침</button></div>
-<div id="list"></div>
-<div class="warn">급등준비점수는 상승확률이 아닙니다. +3%/+5%/+10%는 최근 데이터에서 유사했던 과거 패턴들의 향후 6시간 내 관측 도달률입니다. 표본이 짧아 과신하면 안 됩니다.</div>
-</div>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Upbit Scanner V4</title>
+<style>:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111827;background:#f3f4f6}body{margin:0;padding:14px}.w{max-width:940px;margin:auto}h1{margin:10px 0 3px;font-size:26px}.mut{color:#6b7280;font-size:13px}.bar,.bt{padding:11px;border-radius:14px;margin:10px 0;background:#ecfeff}.bt{background:#f5f3ff}.row{display:flex;gap:10px;align-items:center;justify-content:space-between}.card{background:#fff;border-radius:18px;padding:15px;margin:11px 0;box-shadow:0 1px 4px #0001}.rank{font-size:22px;font-weight:800;width:34px}.coin{flex:1}.coin b{font-size:18px}.score{font-size:25px;font-weight:800;text-align:right}.score small{display:block;font-size:11px;color:#6b7280}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}.m{background:#f9fafb;border-radius:12px;padding:8px}.m small{display:block;color:#6b7280}.pill{display:inline-block;background:#eef2ff;border-radius:99px;padding:4px 8px;margin:4px 3px 0 0;font-size:12px}button{background:#111827;color:#fff;border:0;border-radius:12px;padding:10px 13px;font-weight:700}.warn{font-size:12px;color:#9a3412;background:#fff7ed;padding:12px;border-radius:14px;margin:12px 0}@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr)}}</style></head>
+<body><div class="w"><h1>업비트 급등 전 패턴 스캐너 V4</h1><div class="mut">KRW 전체 · 약 60일 1시간봉 학습 · 교차코인 유사패턴 · 거래대금 선행 · 제한적 백테스트</div><div id="market" class="bar">불러오는 중…</div><div id="bt" class="bt"></div><div class="row"><div id="st" class="mut"></div><button onclick="load()">새로고침</button></div><div id="list"></div><div class="warn">급등준비점수는 상승확률이 아닙니다. 관측률과 백테스트도 미래 성과를 보장하지 않습니다. 특히 신규 상장·뉴스·시장 급변 시 과거 패턴의 설명력이 크게 낮아질 수 있습니다.</div></div>
 <script>
-function fmt(n){if(n==null)return "-";return Number(n).toLocaleString("ko-KR",{maximumFractionDigits:8})}
-function m(label,val,suffix=""){return `<div class="metric"><small>${label}</small><b>${val??"-"}${suffix}</b></div>`}
-async function load(){
- const st=document.getElementById("status"); st.textContent="업데이트 확인 중…";
- try{
-  const r=await fetch("data/latest.json?t="+Date.now(),{cache:"no-store"}); if(!r.ok) throw Error(r.status);
-  const d=await r.json(), t=new Date(d.generated_at_utc), b=d.btc_regime||{};
-  const mc=document.getElementById("market");
-  mc.className="market "+(b.score>=3?"hot":b.score<=1?"cold":"");
-  mc.innerHTML=`BTC 시장상태 <b>${b.score??"-"}/4</b> · 6h ${b.ret6??"-"}% · 24h ${b.ret24??"-"}% · RSI(1h) ${b.rsi1h??"-"}`;
-  st.textContent=`마지막 분석 ${t.toLocaleString("ko-KR")} · 과거패턴 ${d.config.historical_examples}개 · 후보 ${d.config.current_candidates}개`;
-  document.getElementById("list").innerHTML=d.results.map((x,i)=>`
-   <div class="card">
-    <div class="row"><div class="rank">${i+1}</div><div class="coin"><b>${x.name}</b><div class="muted">${x.market}${x.early_volume_signal?" · 거래대금 선행 감지":""}</div></div>
-    <div class="score">${x.score}<small>급등준비점수 /100</small></div></div>
-    <div class="grid">
-      ${m("현재가",fmt(x.price),"원")}${m("패턴 유사도",x.similarity,"%")}${m("유사패턴 +3%",x.hist_p3,"%")}${m("유사패턴 +5%",x.hist_p5,"%")}
-      ${m("유사패턴 +10%",x.hist_p10,"%")}${m("5분 거래대금",x.vol_ratio5m,"x")}${m("15분 거래대금",x.vol_ratio15m,"x")}${m("1시간 거래대금",x.vol_ratio1h,"x")}
-      ${m("4시간 거래대금",x.vol_ratio4h,"x")}${m("RSI 15m",x.rsi15m)}${m("RSI 1h",x.rsi1h)}${m("RSI 4h",x.rsi4h)}
-      ${m("1h 등락",x.ret1h,"%")}${m("6h 등락",x.ret6h,"%")}${m("30일 최대급등",x.max_30d_pump_pct,"%")}${m("유사패턴 평균 6h",x.hist_avg_gain6h,"%")}
-    </div>
-    <div style="margin-top:9px">${x.why.map(w=>`<span class="pill">${w}</span>`).join("")}</div>
-   </div>`).join("");
- }catch(e){st.textContent="결과를 불러오지 못했습니다. Actions 실행 결과를 확인하세요.";console.error(e)}
-}
-load();
-</script></body></html>
+const M=(l,v,s="")=>`<div class="m"><small>${l}</small><b>${v??"-"}${s}</b></div>`;
+async function load(){try{let d=await (await fetch("data/latest.json?t="+Date.now(),{cache:"no-store"})).json(),b=d.btc_regime||{},q=d.backtest||{};document.getElementById("market").innerHTML=`BTC 시장상태 <b>${b.score}/4</b> · 6h ${b.ret6}% · 24h ${b.ret24}% · RSI(1h) ${b.rsi1h}`;document.getElementById("bt").innerHTML=`<b>V4 진단 백테스트</b> · 일반 +5% 발생률 ${q.base_p5??"-"}% → 상위 신호 +5% 발생률 ${q.signal_p5??"-"}% · 테스트 ${q.test_samples??"-"}개 / 신호 ${q.signal_samples??"-"}개`;document.getElementById("st").textContent=`마지막 분석 ${new Date(d.generated_at_utc).toLocaleString("ko-KR")} · 약 ${d.config.days_back}일 · 과거패턴 ${d.config.historical_examples.toLocaleString()}개 · 후보 ${d.config.current_candidates}개`;document.getElementById("list").innerHTML=d.results.map((x,i)=>`<div class="card"><div class="row"><div class="rank">${i+1}</div><div class="coin"><b>${x.name}</b><div class="mut">${x.market}${x.early_volume_signal?" · 거래대금 선행 감지":""}</div></div><div class="score">${x.score}<small>급등준비점수 /100</small></div></div><div class="grid">${M("현재가",Number(x.price).toLocaleString("ko-KR"),"원")}${M("패턴 유사도",x.similarity,"%")}${M("60일 유사 +3%",x.hist_p3,"%")}${M("60일 유사 +5%",x.hist_p5,"%")}${M("60일 유사 +10%",x.hist_p10,"%")}${M("5분 거래대금",x.vol5,"x")}${M("15분 거래대금",x.vol15,"x")}${M("1시간 거래대금",x.vol1h,"x")}${M("4시간 거래대금",x.vol4h,"x")}${M("RSI 15m",x.rsi15)}${M("RSI 1h",x.rsi1h)}${M("RSI 4h",x.rsi4h)}${M("1h 등락",x.ret1h,"%")}${M("6h 등락",x.ret6h,"%")}${M("30일 최대급등",x.max_30d_pump_pct,"%")}${M("유사 평균 6h",x.hist_avg_gain6h,"%")}</div><div>${x.why.map(v=>`<span class="pill">${v}</span>`).join("")}</div></div>`).join("")}catch(e){document.getElementById("st").textContent="결과 로딩 실패: Actions를 확인하세요";console.error(e)}}load();</script></body></html>
