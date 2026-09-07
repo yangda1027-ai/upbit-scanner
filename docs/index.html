@@ -2,48 +2,49 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<link rel="manifest" href="manifest.webmanifest">
-<title>Upbit Hourly Scanner</title>
+<meta name="theme-color" content="#111827"><title>Upbit Scanner V2</title>
 <style>
 :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111827;background:#f3f4f6}
 body{margin:0;padding:env(safe-area-inset-top) 14px calc(24px + env(safe-area-inset-bottom))}
-.wrap{max-width:820px;margin:auto}.hero{padding:18px 2px 10px}.hero h1{font-size:25px;margin:0 0 6px}.muted{color:#6b7280;font-size:13px}
-.card{background:#fff;border-radius:18px;padding:15px;margin:10px 0;box-shadow:0 1px 4px #00000012}
+.wrap{max-width:900px;margin:auto}.hero{padding:18px 2px 8px}.hero h1{font-size:25px;margin:0 0 5px}
+.muted{color:#6b7280;font-size:13px}.card{background:#fff;border-radius:18px;padding:15px;margin:10px 0;box-shadow:0 1px 4px #00000012}
 .row{display:flex;gap:10px;align-items:center;justify-content:space-between}.rank{font-weight:800;font-size:22px;width:35px}
 .coin{flex:1}.coin b{font-size:18px}.score{font-size:24px;font-weight:800;text-align:right}.pill{display:inline-block;background:#eef2ff;border-radius:99px;padding:4px 8px;margin:3px 3px 0 0;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}.metric{background:#f9fafb;border-radius:12px;padding:8px}.metric small{display:block;color:#6b7280}.metric b{font-size:14px}
-button{border:0;border-radius:12px;padding:10px 13px;background:#111827;color:white;font-weight:700}#status{margin:8px 0}
-.warn{background:#fff7ed;border-radius:14px;padding:12px;font-size:12px;color:#9a3412}
-@media(max-width:420px){.grid{grid-template-columns:repeat(2,1fr)}}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}.metric{background:#f9fafb;border-radius:12px;padding:8px}.metric small{display:block;color:#6b7280}.metric b{font-size:14px}
+button{border:0;border-radius:12px;padding:10px 13px;background:#111827;color:white;font-weight:700}.warn{background:#fff7ed;border-radius:14px;padding:12px;font-size:12px;color:#9a3412;margin-top:12px}
+.market{background:#ecfeff;border-radius:14px;padding:10px;margin:8px 0;font-size:13px}
+@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr)}}
 </style></head>
 <body><div class="wrap">
-<div class="hero"><h1>업비트 급등 전 패턴 스캐너</h1><div class="muted">KRW 전체 · 매시간 자동 분석 · 최근 급등 전 패턴 유사도</div></div>
+<div class="hero"><h1>업비트 급등 전 패턴 스캐너 V2</h1><div class="muted">KRW 전체 · 매시간 자동분석 · 거래대금 + 유사패턴 실제 도달률</div></div>
+<div id="market" class="market">시장상태 불러오는 중…</div>
 <div class="row"><div id="status" class="muted">불러오는 중…</div><button onclick="load()">새로고침</button></div>
 <div id="list"></div>
-<div class="warn">주의: 이 화면의 점수는 과거 급등 직전 패턴과의 유사도를 수치화한 모델 점수이며 실제 상승확률이나 수익을 보장하지 않습니다. 급등 코인은 변동성과 손실 위험이 큽니다.</div>
+<div class="warn">+5%/+10%는 미래 확률이 아니라 최근 데이터에서 가장 유사했던 과거 패턴들이 향후 6시간 안에 해당 상승폭에 도달한 관측 비율입니다. 실제 매매에서는 손실 가능성이 있습니다.</div>
 </div>
 <script>
 function fmt(n){if(n==null)return "-";return Number(n).toLocaleString("ko-KR",{maximumFractionDigits:8})}
 function m(label,val,suffix=""){return `<div class="metric"><small>${label}</small><b>${val??"-"}${suffix}</b></div>`}
 async function load(){
- const st=document.getElementById("status"); st.textContent="업데이트 확인 중…";
+ let st=document.getElementById("status"); st.textContent="업데이트 확인 중…";
  try{
-  const r=await fetch("data/latest.json?t="+Date.now(),{cache:"no-store"}); if(!r.ok) throw Error(r.status);
-  const d=await r.json(); const t=new Date(d.generated_at_utc);
-  st.textContent=`마지막 분석: ${t.toLocaleString("ko-KR")} · ${d.config.markets_analyzed}종목 · 학습패턴 ${d.config.training_examples}개`;
+  let r=await fetch("data/latest.json?t="+Date.now(),{cache:"no-store"}); if(!r.ok) throw Error(r.status);
+  let d=await r.json(), t=new Date(d.generated_at_utc), b=d.btc_regime||{};
+  document.getElementById("market").innerHTML=`BTC 시장상태 점수 <b>${b.score??"-"}/4</b> · 6h ${b.ret6??"-"}% · 24h ${b.ret24??"-"}% · RSI(1h) ${b.rsi1h??"-"}`;
+  st.textContent=`마지막 분석 ${t.toLocaleString("ko-KR")} · 과거패턴 ${d.config.historical_examples}개 · 후보 ${d.config.current_candidates}개`;
   document.getElementById("list").innerHTML=d.results.map((x,i)=>`
    <div class="card">
     <div class="row"><div class="rank">${i+1}</div><div class="coin"><b>${x.name}</b><div class="muted">${x.market}</div></div>
-    <div class="score">${x.score}<div class="muted">패턴점수</div></div></div>
+    <div class="score">${x.score}<div class="muted">상대순위 점수</div></div></div>
     <div class="grid">
-     ${m("현재가",fmt(x.price),"원")}${m("유사도",x.similarity,"%")}${m("30일 최대급등",x.max_30d_pump_pct,"%")}
-     ${m("RSI 15m",x.rsi15m)}${m("RSI 1h",x.rsi1h)}${m("RSI 4h",x.rsi4h)}
-     ${m("1h 등락",x.ret1h,"%")}${m("6h 등락",x.ret6h,"%")}${m("24h 등락",x.ret24h,"%")}
+      ${m("현재가",fmt(x.price),"원")}${m("유사도",x.similarity,"%")}${m("유사패턴 +5%",x.hist_p5,"%")}${m("유사패턴 +10%",x.hist_p10,"%")}
+      ${m("5분 거래대금",x.vol_ratio5m,"x")}${m("15분 거래대금",x.vol_ratio15m,"x")}${m("1시간 거래대금",x.vol_ratio1h,"x")}${m("4시간 거래대금",x.vol_ratio4h,"x")}
+      ${m("RSI 15m",x.rsi15m)}${m("RSI 1h",x.rsi1h)}${m("RSI 4h",x.rsi4h)}${m("6h 등락",x.ret6h,"%")}
+      ${m("30일 최대급등",x.max_30d_pump_pct,"%")}${m("유사패턴 평균 6h",x.hist_avg_gain6h,"%")}
     </div>
     <div style="margin-top:9px">${x.why.map(w=>`<span class="pill">${w}</span>`).join("")}</div>
    </div>`).join("");
- }catch(e){st.textContent="결과를 불러오지 못했습니다. GitHub Actions 실행 여부를 확인하세요.";console.error(e)}
+ }catch(e){st.textContent="결과를 불러오지 못했습니다. Actions 실행 결과를 확인하세요.";console.error(e)}
 }
 load();
 </script></body></html>
