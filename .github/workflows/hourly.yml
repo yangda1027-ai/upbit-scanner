@@ -1,4 +1,4 @@
-name: Hourly Upbit Scan
+name: Hourly Upbit Scan V2
 on:
   workflow_dispatch:
   schedule:
@@ -8,23 +8,24 @@ permissions:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - name: Analyze all KRW markets
+      - name: Analyze KRW markets V2
         env:
           EXCLUDE_PUMP_PCT: "20"
-          TRAIN_PUMP_PCT: "10"
           TOP_N: "10"
+          LOOKAHEAD_HOURS: "6"
+          K_NEIGHBORS: "30"
         run: python src/analyze.py
       - name: Commit refreshed result
         run: |
           git config user.name "upbit-scanner-bot"
           git config user.email "actions@users.noreply.github.com"
           git add docs/data/latest.json
-          git diff --cached --quiet || git commit -m "Update hourly Upbit scan"
+          git diff --cached --quiet || git commit -m "Update hourly Upbit V2 scan"
           git push
