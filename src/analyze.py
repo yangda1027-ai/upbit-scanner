@@ -1,349 +1,241 @@
 import json, math, os, statistics, time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
 
-BASE = "https://api.upbit.com"
-OUT = Path(os.getenv("OUTPUT_JSON", "docs/data/latest.json"))
-TOP_N = int(os.getenv("TOP_N", "10"))
-EXCLUDE_PUMP_PCT = float(os.getenv("EXCLUDE_PUMP_PCT", "20"))
-LOOKAHEAD_HOURS = int(os.getenv("LOOKAHEAD_HOURS", "6"))
-K_NEIGHBORS = int(os.getenv("K_NEIGHBORS", "40"))
-REQUEST_DELAY = float(os.getenv("REQUEST_DELAY", "0.11"))
+BASE="https://api.upbit.com"
+OUT=Path("docs/data/latest.json")
+TOP_N=int(os.getenv("TOP_N","10"))
+DAYS_BACK=int(os.getenv("DAYS_BACK","60"))
+EXCLUDE_PUMP_PCT=float(os.getenv("EXCLUDE_PUMP_PCT","20"))
+LOOKAHEAD=int(os.getenv("LOOKAHEAD_HOURS","6"))
+K=int(os.getenv("K_NEIGHBORS","50"))
+DELAY=float(os.getenv("REQUEST_DELAY","0.11"))
+STABLE={"USDT","USDC","DAI","TUSD","FDUSD","USDE","PYUSD","USDS","USD1","RLUSD","BUSD","USTC"}
+S=requests.Session()
+S.headers.update({"Accept":"application/json","User-Agent":"upbit-v4-event-backtest-scanner/4.0"})
 
-STABLE_SYMBOLS = {
-    "USDT","USDC","DAI","TUSD","FDUSD","USDE","PYUSD","USDS","USD1","RLUSD","BUSD","USTC"
-}
-
-S = requests.Session()
-S.headers.update({"Accept":"application/json","User-Agent":"upbit-v3-breakout-scanner/3.0"})
-
-def get(path, params=None, retries=6):
-    err=None
+def api(path,params=None,retries=6):
+    last=None
     for n in range(retries):
         try:
-            r=S.get(BASE+path, params=params, timeout=20)
+            r=S.get(BASE+path,params=params,timeout=20)
             if r.status_code==429:
-                time.sleep(1.2+n)
-                continue
-            r.raise_for_status()
-            time.sleep(REQUEST_DELAY)
-            return r.json()
+                time.sleep(1.0+n); continue
+            r.raise_for_status(); time.sleep(DELAY); return r.json()
         except Exception as e:
-            err=e
-            time.sleep(min(2**n,8))
-    raise RuntimeError(f"API failed {path} {params}: {err}")
+            last=e; time.sleep(min(2**n,8))
+    raise RuntimeError(f"{path}: {last}")
 
-def markets():
-    rows=get("/v1/market/all",{"is_details":"true"})
+def market_list():
     out=[]
-    for x in rows:
+    for x in api("/v1/market/all",{"is_details":"true"}):
         mk=x["market"]
         if not mk.startswith("KRW-"): continue
         sym=mk.split("-",1)[1].upper()
-        if sym in STABLE_SYMBOLS: continue
+        if sym in STABLE: continue
         ev=x.get("market_event") or {}
         if ev.get("warning") is True: continue
-        out.append({
-            "market":mk,"symbol":sym,
-            "korean_name":x.get("korean_name",sym),
-            "english_name":x.get("english_name","")
-        })
+        out.append({"market":mk,"name":x.get("korean_name",sym),"symbol":sym})
     return out
 
-def candles(market, unit, count=200):
-    rows=get(f"/v1/candles/minutes/{unit}",{"market":market,"count":min(count,200)})
-    return list(reversed(rows))
+def minute(mk,u,count=200,to=None):
+    p={"market":mk,"count":min(count,200)}
+    if to: p["to"]=to
+    return api(f"/v1/candles/minutes/{u}",p)
 
-def days(market,count=35):
-    rows=get("/v1/candles/days",{"market":market,"count":min(count,200)})
-    return list(reversed(rows))
+def day(mk,count=35):
+    return list(reversed(api("/v1/candles/days",{"market":mk,"count":count})))
 
-def div(a,b,d=0.0): return a/b if b not in (0,None) else d
-def mean(xs): return statistics.fmean(xs) if xs else 0.0
-def stdev(xs): return statistics.pstdev(xs) if len(xs)>1 else 0.0
+def history_1h(mk,days_back=DAYS_BACK):
+    need=days_back*24
+    allrows=[]; to=None
+    while len(allrows)<need:
+        rows=minute(mk,60,min(200,need-len(allrows)),to)
+        if not rows: break
+        allrows.extend(rows)
+        oldest=rows[-1]["candle_date_time_utc"]
+        dt=datetime.fromisoformat(oldest).replace(tzinfo=timezone.utc)-timedelta(seconds=1)
+        to=dt.strftime("%Y-%m-%dT%H:%M:%S")
+        if len(rows)<min(200,need-len(allrows)+len(rows)): break
+    # API pages newest->oldest; de-duplicate and sort ascending
+    uniq={r["candle_date_time_utc"]:r for r in allrows}
+    return [uniq[k] for k in sorted(uniq)]
+
+def div(a,b,d=0): return a/b if b not in (0,None) else d
+def mean(x): return statistics.fmean(x) if x else 0
+def sd(x): return statistics.pstdev(x) if len(x)>1 else 0
 def clamp(x,a,b): return max(a,min(b,x))
+def ema(v,n):
+    if not v:return 0
+    a=2/(n+1); z=v[0]
+    for x in v[1:]: z=a*x+(1-a)*z
+    return z
+def rsi(v,n=14):
+    if len(v)<n+1:return 50
+    d=[v[i]-v[i-1] for i in range(1,len(v))]
+    g=mean([max(x,0) for x in d[-n:]]); l=mean([max(-x,0) for x in d[-n:]])
+    if l==0:return 100 if g else 50
+    return 100-100/(1+g/l)
 
-def ema(vals,span):
-    if not vals: return 0.0
-    alpha=2/(span+1); v=vals[0]
-    for x in vals[1:]:
-        v=alpha*x+(1-alpha)*v
-    return v
+F=["ret1","ret3","ret6","ret24","rsi","ema_gap","vol_ratio","volatility","bb_width","range_pos","breakout_dist","body"]
 
-def rsi(vals,p=14):
-    if len(vals)<p+1: return 50.0
-    ds=[vals[i]-vals[i-1] for i in range(1,len(vals))]
-    g=mean([max(x,0) for x in ds[-p:]])
-    l=mean([max(-x,0) for x in ds[-p:]])
-    if l==0: return 100.0 if g>0 else 50.0
-    rs=g/l
-    return 100-100/(1+rs)
-
-FEATURES=[
- "ret1","ret3","ret6","ret24","rsi14","ema_gap","vol_ratio",
- "volatility","bb_width","range_pos","breakout_dist","body_strength"
-]
-
-def feat(rows,idx=None):
-    if idx is None: idx=len(rows)-1
-    if idx<30: return None
-    w=rows[max(0,idx-40):idx+1]
-    c=[float(x["trade_price"]) for x in w]
-    h=[float(x["high_price"]) for x in w]
-    l=[float(x["low_price"]) for x in w]
-    v=[float(x["candle_acc_trade_price"]) for x in w]
+def features(rows,i=None):
+    if i is None:i=len(rows)-1
+    if i<30:return None
+    w=rows[max(0,i-40):i+1]
+    c=[float(x["trade_price"]) for x in w]; h=[float(x["high_price"]) for x in w]
+    l=[float(x["low_price"]) for x in w]; v=[float(x["candle_acc_trade_price"]) for x in w]
     now=c[-1]
-    def ret(n): return (div(now,c[-1-n],1)-1)*100 if len(c)>n else 0.0
-    rr=[(div(c[i],c[i-1],1)-1)*100 for i in range(1,len(c))]
-    ma20=mean(c[-20:]); sd20=stdev(c[-20:])
-    hi20=max(h[-20:]); lo20=min(l[-20:]); prev_hi=max(h[-21:-1])
-    op=float(w[-1]["opening_price"]); hi=float(w[-1]["high_price"]); lo=float(w[-1]["low_price"])
-    prevvol=v[-24:-3] if len(v)>=24 else v[:-3]
-    return {
-      "ret1":ret(1),"ret3":ret(3),"ret6":ret(6),"ret24":ret(24),
-      "rsi14":rsi(c,14),
+    def ret(n):return (div(now,c[-1-n],1)-1)*100 if len(c)>n else 0
+    rr=[(div(c[j],c[j-1],1)-1)*100 for j in range(1,len(c))]
+    ma=mean(c[-20:]); s=sd(c[-20:]); hi=max(h[-20:]); lo=min(l[-20:]); ph=max(h[-21:-1])
+    op=float(w[-1]["opening_price"]); hh=float(w[-1]["high_price"]); ll=float(w[-1]["low_price"])
+    pv=v[-24:-3] if len(v)>=24 else v[:-3]
+    return {"ret1":ret(1),"ret3":ret(3),"ret6":ret(6),"ret24":ret(24),"rsi":rsi(c),
       "ema_gap":(div(ema(c[-21:],9),ema(c[-21:],21),1)-1)*100,
-      "vol_ratio":div(mean(v[-3:]),mean(prevvol) or mean(v),1),
-      "volatility":stdev(rr[-24:]),
-      "bb_width":div(4*sd20,ma20,0)*100,
-      "range_pos":div(now-lo20,hi20-lo20,0.5)*100,
-      "breakout_dist":(div(now,prev_hi,1)-1)*100,
-      "body_strength":div(now-op,hi-lo,0)*100
-    }
+      "vol_ratio":div(mean(v[-3:]),mean(pv) or mean(v),1),"volatility":sd(rr[-24:]),
+      "bb_width":div(4*s,ma,0)*100,"range_pos":div(now-lo,hi-lo,.5)*100,
+      "breakout_dist":(div(now,ph,1)-1)*100,"body":div(now-op,hh-ll,0)*100}
 
-def recent_pump(day_rows):
+def future_gain(rows,i,h=LOOKAHEAD):
+    if i+h>=len(rows):return None
+    b=float(rows[i]["trade_price"]); mx=max(float(x["high_price"]) for x in rows[i+1:i+h+1])
+    return (div(mx,b,1)-1)*100
+
+def recent_pump(d):
     mx=-999
-    for i in range(1,len(day_rows)):
-        d,p=day_rows[i],day_rows[i-1]
-        base=min(float(d["opening_price"]),float(p["trade_price"]))
-        gain=(div(float(d["high_price"]),base,1)-1)*100
-        mx=max(mx,gain)
+    for i in range(1,len(d)):
+        base=min(float(d[i]["opening_price"]),float(d[i-1]["trade_price"]))
+        mx=max(mx,(div(float(d[i]["high_price"]),base,1)-1)*100)
     return mx>=EXCLUDE_PUMP_PCT,mx
 
-def future_gain(rows,i,hours=LOOKAHEAD_HOURS):
-    if i+hours>=len(rows): return None
-    base=float(rows[i]["trade_price"])
-    hi=max(float(x["high_price"]) for x in rows[i+1:i+1+hours])
-    return (div(hi,base,1)-1)*100
+def current_micro(mk,h1):
+    r5=list(reversed(minute(mk,5,120))); r15=list(reversed(minute(mk,15,120))); r4=list(reversed(minute(mk,240,120)))
+    f5,f15,f1,f4=features(r5),features(r15),features(h1),features(r4)
+    return {"price":float(r5[-1]["trade_price"]),
+      "vol5":round(f5["vol_ratio"],2),"vol15":round(f15["vol_ratio"],2),"vol1h":round(f1["vol_ratio"],2),"vol4h":round(f4["vol_ratio"],2),
+      "rsi15":round(f15["rsi"],1),"rsi1h":round(f1["rsi"],1),"rsi4h":round(f4["rsi"],1),
+      "ret1h":round(f1["ret1"],2),"ret6h":round(f1["ret6"],2),"ret24h":round(f1["ret24"],2),
+      "breakout":round(f1["breakout_dist"],2),"ema_gap":round(f1["ema_gap"],2),"range_pos":round(f1["range_pos"],1)}
 
-def build_examples(rows,market):
-    out=[]
-    # Sample every 3 hours to reduce highly overlapping observations.
-    for i in range(30,len(rows)-LOOKAHEAD_HOURS):
-        if i%3: continue
-        f=feat(rows,i)
-        if not f: continue
-        g=future_gain(rows,i)
-        if g is None: continue
-        out.append({"market":market,"f":f,"gain":g})
-    return out
-
-def robust_stats(vectors):
-    out={}
-    for k in FEATURES:
-        vals=[float(v[k]) for v in vectors]
-        med=statistics.median(vals)
-        mad=statistics.median([abs(x-med) for x in vals]) or stdev(vals) or 1.0
-        out[k]=(med,mad*1.4826)
-    return out
-
-def zvec(f,stats):
-    return [(float(f[k])-stats[k][0])/(stats[k][1] or 1) for k in FEATURES]
-
-WEIGHTS=[1.0,1.0,1.0,0.8,1.2,1.0,1.4,0.8,0.9,1.0,1.3,0.8]
-def distance(a,b):
-    return math.sqrt(sum(w*(x-y)**2 for x,y,w in zip(a,b,WEIGHTS)))
-
-def current_micro(m5,m15,h1,h4):
-    f5,f15,f1,f4=feat(m5),feat(m15),feat(h1),feat(h4)
-    return {
-      "price":float(m5[-1]["trade_price"]),
-      "vol_ratio5m":round(f5["vol_ratio"],2),
-      "vol_ratio15m":round(f15["vol_ratio"],2),
-      "vol_ratio1h":round(f1["vol_ratio"],2),
-      "vol_ratio4h":round(f4["vol_ratio"],2),
-      "rsi15m":round(f15["rsi14"],1),
-      "rsi1h":round(f1["rsi14"],1),
-      "rsi4h":round(f4["rsi14"],1),
-      "ret1h":round(f1["ret1"],2),
-      "ret6h":round(f1["ret6"],2),
-      "ret24h":round(f1["ret24"],2),
-      "breakout_dist1h":round(f1["breakout_dist"],2),
-      "ema_gap1h":round(f1["ema_gap"],2),
-      "range_pos1h":round(f1["range_pos"],1),
-      "bb_width1h":round(f1["bb_width"],2),
-    }
-
-def btc_regime():
+def btc():
     try:
-        h1=candles("KRW-BTC",60,80)
-        f=feat(h1)
-        closes=[float(x["trade_price"]) for x in h1]
-        e20=ema(closes[-30:],20); e50=ema(closes[-60:],50)
-        score=0
-        if f["ret6"]>-1.5: score+=1
-        if f["ret24"]>-3.0: score+=1
-        if e20>=e50: score+=1
-        if f["rsi14"]>=42: score+=1
-        return {"score":score,"ret6":round(f["ret6"],2),"ret24":round(f["ret24"],2),"rsi1h":round(f["rsi14"],1)}
-    except Exception:
-        return {"score":2,"ret6":0,"ret24":0,"rsi1h":50}
+        h=list(reversed(minute("KRW-BTC",60,100))); f=features(h); c=[float(x["trade_price"]) for x in h]
+        sc=sum([f["ret6"]>-1.5,f["ret24"]>-3,ema(c[-30:],20)>=ema(c[-60:],50),f["rsi"]>=42])
+        return {"score":sc,"ret6":round(f["ret6"],2),"ret24":round(f["ret24"],2),"rsi1h":round(f["rsi"],1)}
+    except:return {"score":2,"ret6":0,"ret24":0,"rsi1h":50}
 
-def readiness_score(m, hist_p3, hist_p5, hist_p10, similarity, btc_score):
-    # 0-100 setup score. Not a probability.
-    # A coin with zero historical +5/+10 success cannot reach the top purely on short volume.
-    vol_accel = (
-        clamp((m["vol_ratio5m"]-0.8)/1.8,0,1)*12 +
-        clamp((m["vol_ratio15m"]-0.8)/1.8,0,1)*10 +
-        clamp((m["vol_ratio1h"]-0.7)/1.6,0,1)*7 +
-        clamp((m["vol_ratio4h"]-0.7)/1.6,0,1)*4
-    )
-    # Reward volume arriving earlier than price acceleration.
-    early_flow=0
-    if m["vol_ratio5m"]>=1.4 and m["vol_ratio15m"]>=1.2 and m["ret1h"]<2.5:
-        early_flow+=8
-    if m["vol_ratio15m"]>m["vol_ratio1h"]*1.25 and m["ret1h"]<2.0:
-        early_flow+=5
+def stats(vecs):
+    o={}
+    for k in F:
+        a=[x[k] for x in vecs]; med=statistics.median(a); mad=statistics.median([abs(x-med) for x in a]) or sd(a) or 1
+        o[k]=(med,mad*1.4826)
+    return o
+def zv(f,s):return [(f[k]-s[k][0])/(s[k][1] or 1) for k in F]
+W=[1,1,1,.8,1.2,1,1.4,.8,.9,1,1.3,.8]
+def dist(a,b):return math.sqrt(sum(w*(x-y)**2 for x,y,w in zip(a,b,W)))
 
-    technical=0
-    if 45<=m["rsi1h"]<=66: technical+=8
-    elif 40<=m["rsi1h"]<45 or 66<m["rsi1h"]<=70: technical+=4
-    if -3.0<=m["breakout_dist1h"]<=1.2: technical+=7
-    if -1.0<=m["ema_gap1h"]<=2.5: technical+=5
-    if 45<=m["range_pos1h"]<=92: technical+=3
-    if m["ret6h"]<6: technical+=3
-    if m["ret24h"]<10: technical+=2
-
-    history = hist_p3*0.18 + hist_p5*0.22 + hist_p10*0.20
-    history = clamp(history,0,25)
-    similarity_part=clamp(similarity/100,0,1)*8
-
-    score=vol_accel+early_flow+technical+history+similarity_part
-    if hist_p5==0 and hist_p10==0:
-        score=min(score,74)
-    if m["rsi1h"]>72 or m["rsi4h"]>76:
-        score-=8
-    if m["ret6h"]>8:
-        score-=8
-    if btc_score<=1: score*=0.78
-    elif btc_score==2: score*=0.90
-    return round(clamp(score,0,100),1)
-
-def explain(x):
-    why=[]
-    if x["early_volume_signal"]: why.append("가격보다 단기 거래대금이 먼저 증가")
-    if x["hist_p3"]>=30: why.append(f"유사패턴 +3% 관측률 {x['hist_p3']:.0f}%")
-    if x["hist_p5"]>=15: why.append(f"유사패턴 +5% 관측률 {x['hist_p5']:.0f}%")
-    if x["vol_ratio5m"]>=1.5 and x["vol_ratio15m"]>=1.2: why.append("5·15분 거래대금 동시 증가")
-    if 45<=x["rsi1h"]<=66: why.append("1시간 RSI 과열 전 구간")
-    if -3<=x["breakout_dist1h"]<=1.2: why.append("최근 고점 근처 압축")
-    return why[:4] or ["복합 조건 상위"]
+def readiness(m,p3,p5,p10,sim,btcscore):
+    vol=clamp((m["vol5"]-.8)/1.8,0,1)*12+clamp((m["vol15"]-.8)/1.8,0,1)*10+clamp((m["vol1h"]-.7)/1.6,0,1)*7+clamp((m["vol4h"]-.7)/1.6,0,1)*4
+    early=(8 if m["vol5"]>=1.4 and m["vol15"]>=1.15 and m["ret1h"]<2.5 else 0)+(5 if m["vol15"]>m["vol1h"]*1.25 and m["ret1h"]<2 else 0)
+    tech=(8 if 45<=m["rsi1h"]<=66 else 4 if 40<=m["rsi1h"]<=70 else 0)+(7 if -3<=m["breakout"]<=1.2 else 0)+(5 if -1<=m["ema_gap"]<=2.5 else 0)+(3 if 45<=m["range_pos"]<=92 else 0)
+    hist=clamp(p3*.18+p5*.22+p10*.20,0,28)
+    z=vol+early+tech+hist+clamp(sim/100,0,1)*8
+    if p5==0 and p10==0:z=min(z,70)
+    if m["rsi1h"]>72 or m["rsi4h"]>76:z-=8
+    if m["ret6h"]>8:z-=8
+    if btcscore<=1:z*=.78
+    elif btcscore==2:z*=.90
+    return round(clamp(z,0,100),1)
 
 def main():
-    btc=btc_regime()
-    ms=markets()
-    examples=[]
-    candidates=[]
-    errors=[]
-
-    for n,m in enumerate(ms,1):
-        mk=m["market"]
+    regime=btc(); ms=market_list(); candidates=[]; examples=[]; errors=[]
+    # First use cheap daily filter, then download 60-day hourly history only for eligible coins.
+    eligible=[]
+    for m in ms:
         try:
-            h1=candles(mk,60,200)
-            examples.extend(build_examples(h1,mk))
-            d=days(mk,35)
-            excluded,mx=recent_pump(d)
-            if excluded: continue
+            ex,mx=recent_pump(day(m["market"],35))
+            if not ex: eligible.append((m,mx))
+        except Exception as e: errors.append(f'{m["market"]} daily: {e}')
+    print(f"eligible {len(eligible)}/{len(ms)}")
 
-            m5=candles(mk,5,120)
-            m15=candles(mk,15,120)
-            h4=candles(mk,240,120)
-            f1=feat(h1)
-            if not f1: continue
-            micro=current_micro(m5,m15,h1,h4)
-            candidates.append({"meta":m,"f":f1,"micro":micro,"h1":h1,"max30":mx})
-        except Exception as e:
-            errors.append(f"{mk}: {e}")
-        if n%25==0:
-            print(f"{n}/{len(ms)} markets; examples={len(examples)} candidates={len(candidates)}")
+    for n,(m,mx) in enumerate(eligible,1):
+        try:
+            h=history_1h(m["market"])
+            if len(h)<200: continue
+            # Non-overlapping-ish 6-hour snapshots over ~60 days.
+            local=[]
+            for i in range(30,len(h)-LOOKAHEAD,6):
+                f=features(h,i); g=future_gain(h,i)
+                if f and g is not None: local.append({"market":m["market"],"f":f,"gain":g})
+            examples.extend(local)
+            micro=current_micro(m["market"],h)
+            liq=mean([float(x["candle_acc_trade_price"]) for x in h[-24:]])
+            candidates.append({"m":m,"h":h,"f":features(h),"micro":micro,"max30":mx,"liq":liq})
+        except Exception as e: errors.append(f'{m["market"]}: {e}')
+        if n%10==0: print(f"{n}/{len(eligible)}; examples={len(examples)}")
+    if len(examples)<500 or not candidates: raise RuntimeError("insufficient data")
 
-    if len(examples)<100 or not candidates:
-        raise RuntimeError("Insufficient market data")
-
-    stats=robust_stats([e["f"] for e in examples])
-    exz=[zvec(e["f"],stats) for e in examples]
-
-    results=[]
+    s=stats([e["f"] for e in examples]); ez=[zv(e["f"],s) for e in examples]
+    out=[]
     for x in candidates:
-        z=zvec(x["f"],stats)
-        ds=sorted(((distance(z,ez),i) for i,ez in enumerate(exz)), key=lambda q:q[0])
-        # Prefer neighbors from other markets to reduce same-coin autocorrelation.
-        selected=[]
-        same=[]
+        z=zv(x["f"],s)
+        ds=sorted(((dist(z,q),i) for i,q in enumerate(ez)),key=lambda a:a[0])
+        neigh=[]
+        # Cross-coin examples first, and use only one snapshot per source coin until needed.
+        used=set()
         for d,i in ds:
             e=examples[i]
-            if e["market"]!=x["meta"]["market"] and len(selected)<K_NEIGHBORS:
-                selected.append((d,e))
-            elif len(same)<10:
-                same.append((d,e))
-            if len(selected)>=K_NEIGHBORS: break
-        neigh=selected if len(selected)>=max(15,K_NEIGHBORS//2) else selected+same[:K_NEIGHBORS-len(selected)]
+            if e["market"]==x["m"]["market"] or e["market"] in used: continue
+            neigh.append((d,e)); used.add(e["market"])
+            if len(neigh)>=K: break
+        if len(neigh)<K:
+            for d,i in ds:
+                e=examples[i]
+                if e["market"]==x["m"]["market"]: continue
+                if (d,e) not in neigh: neigh.append((d,e))
+                if len(neigh)>=K: break
         gains=[e["gain"] for _,e in neigh]
-        p3=100*sum(g>=3 for g in gains)/len(gains) if gains else 0
-        p5=100*sum(g>=5 for g in gains)/len(gains) if gains else 0
-        p10=100*sum(g>=10 for g in gains)/len(gains) if gains else 0
-        avg_gain=mean(gains) if gains else 0
-        avg_dist=mean([d for d,_ in neigh]) if neigh else 99
-        similarity=100/(1+avg_dist)
+        p3=100*sum(g>=3 for g in gains)/len(gains); p5=100*sum(g>=5 for g in gains)/len(gains); p10=100*sum(g>=10 for g in gains)/len(gains)
+        sim=100/(1+mean([d for d,_ in neigh])); m=x["micro"]
+        score=readiness(m,p3,p5,p10,sim,regime["score"])
+        if x["liq"]<30_000_000:score=round(score*.75,1)
+        elif x["liq"]<80_000_000:score=round(score*.9,1)
+        early=m["vol5"]>=1.4 and m["vol15"]>=1.15 and m["ret1h"]<2.5
+        why=[]
+        if early:why.append("가격보다 단기 거래대금이 먼저 증가")
+        if p3>=30:why.append(f"60일 유사패턴 +3% {p3:.0f}%")
+        if p5>=15:why.append(f"60일 유사패턴 +5% {p5:.0f}%")
+        if m["vol5"]>=1.5 and m["vol15"]>=1.2:why.append("5·15분 거래대금 동시 증가")
+        if 45<=m["rsi1h"]<=66:why.append("1시간 RSI 과열 전")
+        if -3<=m["breakout"]<=1.2:why.append("최근 고점 근처 압축")
+        out.append({"market":x["m"]["market"],"name":x["m"]["name"],"score":score,"similarity":round(sim,1),
+          "hist_p3":round(p3,1),"hist_p5":round(p5,1),"hist_p10":round(p10,1),"hist_avg_gain6h":round(mean(gains),2),
+          "max_30d_pump_pct":round(x["max30"],1),"early_volume_signal":early,"why":why[:4] or ["복합 조건 상위"],**m})
+    out.sort(key=lambda q:(q["score"],q["hist_p5"],q["hist_p3"]),reverse=True)
 
-        m=x["micro"]
-        early = (
-            m["vol_ratio5m"]>=1.4 and
-            m["vol_ratio15m"]>=1.15 and
-            m["ret1h"]<2.5
-        )
-        score=readiness_score(m,p3,p5,p10,similarity,btc["score"])
+    # Honest walk-forward-like diagnostic: older 80% examples predict newer 20% examples.
+    # Limit test size for runtime; this is a diagnostic, not a guarantee.
+    split=int(len(examples)*.8); train=examples[:split]; test=examples[split:][-500:]
+    ts=stats([e["f"] for e in train]); tz=[zv(e["f"],ts) for e in train]
+    preds=[]; actual=[]
+    for e in test:
+        q=zv(e["f"],ts); near=sorted(((dist(q,z),i) for i,z in enumerate(tz)),key=lambda a:a[0])[:30]
+        pp=mean([1 if train[i]["gain"]>=5 else 0 for _,i in near])
+        preds.append(pp); actual.append(1 if e["gain"]>=5 else 0)
+    # Top-quartile signal precision vs overall +5 base rate.
+    if preds:
+        cut=sorted(preds)[max(0,int(len(preds)*.75)-1)]
+        sel=[a for p,a in zip(preds,actual) if p>=cut]
+        bt={"test_samples":len(test),"base_p5":round(mean(actual)*100,1),"signal_p5":round(mean(sel)*100,1) if sel else 0,"signal_samples":len(sel)}
+    else: bt={}
 
-        liq=mean([float(r["candle_acc_trade_price"]) for r in x["h1"][-24:]])
-        if liq<30_000_000: score=round(score*0.75,1)
-        elif liq<80_000_000: score=round(score*0.9,1)
-
-        row={
-          "market":x["meta"]["market"],"name":x["meta"]["korean_name"],"english_name":x["meta"]["english_name"],
-          **m,
-          "score":score,
-          "similarity":round(similarity,1),
-          "hist_p3":round(p3,1),"hist_p5":round(p5,1),"hist_p10":round(p10,1),
-          "hist_avg_gain6h":round(avg_gain,2),
-          "max_30d_pump_pct":round(x["max30"],1),
-          "early_volume_signal":early
-        }
-        row["why"]=explain(row)
-        results.append(row)
-
-    results.sort(key=lambda q:(q["score"],q["hist_p5"],q["hist_p3"],q["similarity"]), reverse=True)
-
-    payload={
-      "generated_at_utc":datetime.now(timezone.utc).isoformat(),
-      "version":"V3",
-      "config":{
-        "exclude_pump_pct":EXCLUDE_PUMP_PCT,
-        "lookahead_hours":LOOKAHEAD_HOURS,
-        "neighbors":K_NEIGHBORS,
-        "top_n":TOP_N,
-        "historical_examples":len(examples),
-        "markets_considered":len(ms),
-        "current_candidates":len(candidates)
-      },
-      "btc_regime":btc,
-      "results":results[:TOP_N],
-      "errors":errors[:30],
-      "disclaimer":"급등준비점수는 확률이 아닌 0~100 종합 셋업 점수입니다. +3/+5/+10 수치는 최근 1시간봉 데이터에서 유사했던 과거 패턴이 향후 6시간 내 해당 상승폭에 도달한 관측 비율이며 미래 수익을 보장하지 않습니다."
-    }
-    OUT.parent.mkdir(parents=True,exist_ok=True)
-    OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding="utf-8")
+    payload={"version":"V4","generated_at_utc":datetime.now(timezone.utc).isoformat(),
+      "config":{"days_back":DAYS_BACK,"lookahead_hours":LOOKAHEAD,"neighbors":K,"historical_examples":len(examples),"current_candidates":len(candidates)},
+      "btc_regime":regime,"backtest":bt,"results":out[:TOP_N],"errors":errors[:30],
+      "disclaimer":"급등준비점수는 확률이 아닙니다. +3/+5/+10은 약 60일 1시간봉의 교차코인 유사패턴이 향후 6시간 내 도달한 관측 비율입니다. 백테스트는 제한된 진단이며 미래 수익을 보장하지 않습니다."}
+    OUT.parent.mkdir(parents=True,exist_ok=True); OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding="utf-8")
     print(json.dumps(payload,ensure_ascii=False,indent=2))
 
-if __name__=="__main__":
-    main()
+if __name__=="__main__": main()
