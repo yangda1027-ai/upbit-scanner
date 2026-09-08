@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upbit V6.5 Historical Replication Backtest</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f4f5f7;color:#121826}
+.wrap{max-width:1180px;margin:auto;padding:22px}.card{background:#fff;border-radius:20px;padding:22px;margin:16px 0;box-shadow:0 2px 12px #0000000b}
+h1{font-size:30px;margin:6px 0 14px}h2{margin:0 0 16px}.meta{line-height:1.7}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:11px 8px;border-bottom:1px solid #e6e8ec;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}.good{font-weight:800}.scroll{overflow-x:auto}.note{font-size:13px;line-height:1.65;color:#596275}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.pill{background:#f0f2f5;border-radius:999px;padding:7px 11px;font-size:13px}
+</style></head>
+<body><div class="wrap"><h1>업비트 V6.5 Historical Replication 백테스트</h1>
+<div id="meta" class="card">불러오는 중...</div><div id="rules" class="card"></div><div id="content"></div><div id="notes" class="card"></div></div>
+<script>
+const fmt=x=>x==null?'-':x;
+const groupLabel={ALL:'전체 시장',GREEN:'GREEN만',YELLOW:'YELLOW만',RED:'RED만',NON_RED:'RED 제외'};
+const stratLabel={fixed_5_3_6h:'즉시 100% · +5% / -3% / 6h',runner70_80only:'80점+만 30% 익절 + 70% Runner'};
+fetch('./data/backtest_replication_latest.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
+ document.getElementById('meta').innerHTML=`<b>${d.version}</b> · 학습 ${d.config.train_days}일 / 검증 ${d.config.test_days}일 · ${d.config.markets}개 마켓<br>
+ <span class="note">V6.4 규칙 그대로 복제 · 과거 별도 60일 · 완결 캔들만 사용 · 수수료/슬리피지 미반영</span><br><span class="note">검증구간: ${d.config.test_start_utc?.slice(0,10)} ~ ${d.config.test_end_utc?.slice(0,10)} UTC</span>
+ <div class="pills"><span class="pill">GREEN 시간 ${d.regime_hours.GREEN}</span><span class="pill">YELLOW 시간 ${d.regime_hours.YELLOW}</span><span class="pill">RED 시간 ${d.regime_hours.RED}</span><span class="pill">신호 G/Y/R ${d.signal_regimes.GREEN}/${d.signal_regimes.YELLOW}/${d.signal_regimes.RED}</span></div>`;
+ document.getElementById('rules').innerHTML=`<b>결과 보기 전에 고정한 Market Regime</b><div class="note" style="margin-top:8px">
+ BTC 4h 모멘텀 20점 + BTC 24h 모멘텀 15점 + BTC EMA20≥EMA50 15점 + 알트 1h breadth 20점 + 알트 4h breadth 15점 + 거래대금 확산 15점<br>
+ GREEN ≥70 · YELLOW 50~69.99 · RED &lt;50<br>
+ Emergency RED: BTC 1h ≤ -2.5% 또는 BTC 4h ≤ -5% 또는 알트 1h 상승종목 비율 ≤25%</div>`;
+ let out='';
+ for(const [th,groups] of Object.entries(d.results)){
+   out+=`<div class="card"><h2>B형 ${th}점+</h2><div class="scroll"><table><thead><tr>
+   <th>시장상태 / 전략</th><th>거래수</th><th>승률</th><th>손실률</th><th>평균수익</th><th>중앙값</th><th>PF</th><th>평균이익</th><th>평균손실</th><th>최고</th><th>최악</th>
+   </tr></thead><tbody>`;
+   for(const [g,ss] of Object.entries(groups)){
+     for(const [k,s] of Object.entries(ss)){
+       out+=`<tr><td><b>${groupLabel[g]||g}</b> · ${stratLabel[k]||k}</td><td>${fmt(s.n)}</td><td>${fmt(s.win_rate)}%</td><td>${fmt(s.loss_rate)}%</td>
+       <td class="good">${fmt(s.avg_return)}%</td><td>${fmt(s.median_return)}%</td><td class="good">${fmt(s.profit_factor)}</td>
+       <td>${fmt(s.avg_win)}%</td><td>${fmt(s.avg_loss)}%</td><td>${fmt(s.best_trade)}%</td><td>${fmt(s.worst_trade)}%</td></tr>`;
+     }
+   }
+   out+='</tbody></table></div></div>';
+ }
+ document.getElementById('content').innerHTML=out;
+ document.getElementById('notes').innerHTML='<b>해석할 때 주의</b><div class="note" style="margin-top:8px">'+d.notes.map(x=>'• '+x).join('<br>')+'</div>';
+}).catch(e=>document.getElementById('meta').textContent='결과 파일을 불러오지 못했습니다: '+e);
+</script></body></html>
