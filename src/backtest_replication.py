@@ -376,6 +376,7 @@ def main():
             "수수료·슬리피지·호가체결 영향은 아직 미반영",
             "현재 상장 종목 목록을 과거에 적용하므로 상장폐지/신규상장에 따른 survivorship bias 가능성은 남아 있음",
             "이 과거 복제 테스트도 진짜 미래 데이터인 forward test를 대체하지 않음"
+        ],
     }
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
