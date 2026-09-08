@@ -1,0 +1,40 @@
+name: Manual V6 Backtest
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: upbit-v6-backtest
+  cancel-in-progress: false
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install packages
+        run: pip install requests numpy scipy
+      - name: Run strict out-of-sample V6 backtest
+        env:
+          TRAIN_DAYS: "120"
+          TEST_DAYS: "60"
+          LOOKAHEAD_HOURS: "6"
+          K_NEIGHBORS: "50"
+          EXCLUDE_PUMP_PCT: "20"
+          MAX_MARKETS: "0"
+          REQUEST_DELAY: "0.12"
+        run: python src/backtest.py
+      - name: Commit backtest result
+        run: |
+          git config user.name "upbit-scanner-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data/backtest_latest.json docs/backtest.html
+          git diff --cached --quiet || git commit -m "Update V6 backtest result"
+          git pull --rebase
+          git push
