@@ -1,46 +1,39 @@
-name: Hourly Upbit Scan V5
+name: Hourly Upbit Scan V6
 on:
   workflow_dispatch:
   schedule:
     - cron: "7 * * * *"
-
 permissions:
   contents: write
-
 concurrency:
   group: upbit-hourly-scan
   cancel-in-progress: false
-
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - run: pip install -r requirements.txt
-
-      - name: Analyze KRW markets V4 engine
+      - name: Analyze KRW markets V6
         env:
           DAYS_BACK: "60"
           EXCLUDE_PUMP_PCT: "20"
           LOOKAHEAD_HOURS: "6"
           K_NEIGHBORS: "50"
-          TOP_N: "10"
+          TOP_A: "5"
+          TOP_B: "5"
         run: python src/analyze.py
-
-      - name: Update V5 live validation
+      - name: Update V6 live validation
         run: python src/track.py
-
       - name: Commit refreshed result and live history
         run: |
           git config user.name "upbit-scanner-bot"
           git config user.email "actions@users.noreply.github.com"
           git add docs/data/latest.json docs/data/signals.json
-          git diff --cached --quiet || git commit -m "Update hourly Upbit V5 scan"
+          git diff --cached --quiet || git commit -m "Update hourly Upbit V6 scan"
           git pull --rebase
           git push
