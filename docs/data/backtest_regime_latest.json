@@ -1,0 +1,450 @@
+{
+  "version": "V6.4 Market Regime Backtest",
+  "generated_at_utc": "2026-09-08T18:36:59.795471+00:00",
+  "config": {
+    "train_days": 120,
+    "test_days": 60,
+    "markets": 273,
+    "k_neighbors": 50,
+    "lookahead_alignment": "completed_candles_only"
+  },
+  "regime_rules": {
+    "weights": {
+      "btc_4h_momentum": 20,
+      "btc_24h_momentum": 15,
+      "btc_ema20_ge_ema50": 15,
+      "alt_breadth_1h": 20,
+      "alt_breadth_4h": 15,
+      "alt_volume_expansion_share": 15
+    },
+    "green": "market_score >= 70",
+    "yellow": "50 <= market_score < 70",
+    "red": "market_score < 50",
+    "emergency_red": "BTC 1h <= -2.5% OR BTC 4h <= -5% OR alt 1h breadth <= 25%",
+    "volume_expansion": "현재 1h 거래대금 >= 직전 24h 평균의 1.20배인 알트 비율"
+  },
+  "regime_hours": {
+    "GREEN": 59,
+    "YELLOW": 164,
+    "RED": 1193
+  },
+  "signal_regimes": {
+    "GREEN": 271,
+    "YELLOW": 233,
+    "RED": 866
+  },
+  "strategy_labels": {
+    "fixed_5_3_6h": "즉시 100% · +5% 익절 / -3% 손절 / 6h",
+    "runner70_80only": "즉시 100% · 80점+만 +5%에서 30% 익절 · 70% 3% 트레일링 / 최대 24h"
+  },
+  "results": {
+    "70": {
+      "ALL": {
+        "fixed_5_3_6h": {
+          "n": 1288,
+          "win_rate": 36.8,
+          "loss_rate": 61.65,
+          "avg_return": -0.183,
+          "median_return": -1.986,
+          "profit_factor": 0.89,
+          "avg_win": 3.853,
+          "avg_loss": -2.598,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 1279,
+          "win_rate": 35.5,
+          "loss_rate": 64.27,
+          "avg_return": -0.199,
+          "median_return": -3.0,
+          "profit_factor": 0.89,
+          "avg_win": 4.752,
+          "avg_loss": -2.934,
+          "best_trade": 10.264,
+          "worst_trade": -3.0
+        }
+      },
+      "GREEN": {
+        "fixed_5_3_6h": {
+          "n": 265,
+          "win_rate": 46.42,
+          "loss_rate": 52.45,
+          "avg_return": 0.412,
+          "median_return": -0.848,
+          "profit_factor": 1.29,
+          "avg_win": 3.959,
+          "avg_loss": -2.718,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 265,
+          "win_rate": 44.15,
+          "loss_rate": 55.85,
+          "avg_return": 0.491,
+          "median_return": -3.0,
+          "profit_factor": 1.29,
+          "avg_win": 4.892,
+          "avg_loss": -2.987,
+          "best_trade": 10.264,
+          "worst_trade": -3.0
+        }
+      },
+      "YELLOW": {
+        "fixed_5_3_6h": {
+          "n": 230,
+          "win_rate": 40.87,
+          "loss_rate": 57.39,
+          "avg_return": 0.13,
+          "median_return": -0.9,
+          "profit_factor": 1.09,
+          "avg_win": 3.787,
+          "avg_loss": -2.47,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 229,
+          "win_rate": 38.86,
+          "loss_rate": 61.14,
+          "avg_return": 0.026,
+          "median_return": -3.0,
+          "profit_factor": 1.01,
+          "avg_win": 4.689,
+          "avg_loss": -2.938,
+          "best_trade": 6.01,
+          "worst_trade": -3.0
+        }
+      },
+      "RED": {
+        "fixed_5_3_6h": {
+          "n": 826,
+          "win_rate": 32.81,
+          "loss_rate": 65.62,
+          "avg_return": -0.432,
+          "median_return": -3.0,
+          "profit_factor": 0.75,
+          "avg_win": 3.864,
+          "avg_loss": -2.59,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 822,
+          "win_rate": 32.12,
+          "loss_rate": 67.52,
+          "avg_return": -0.455,
+          "median_return": -3.0,
+          "profit_factor": 0.77,
+          "avg_win": 4.717,
+          "avg_loss": -2.918,
+          "best_trade": 10.056,
+          "worst_trade": -3.0
+        }
+      },
+      "NON_RED": {
+        "fixed_5_3_6h": {
+          "n": 485,
+          "win_rate": 43.71,
+          "loss_rate": 54.85,
+          "avg_return": 0.269,
+          "median_return": -0.883,
+          "profit_factor": 1.19,
+          "avg_win": 3.878,
+          "avg_loss": -2.601,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 484,
+          "win_rate": 41.53,
+          "loss_rate": 58.47,
+          "avg_return": 0.261,
+          "median_return": -3.0,
+          "profit_factor": 1.15,
+          "avg_win": 4.799,
+          "avg_loss": -2.963,
+          "best_trade": 10.264,
+          "worst_trade": -3.0
+        }
+      }
+    },
+    "75": {
+      "ALL": {
+        "fixed_5_3_6h": {
+          "n": 521,
+          "win_rate": 38.39,
+          "loss_rate": 60.46,
+          "avg_return": -0.027,
+          "median_return": -2.991,
+          "profit_factor": 0.98,
+          "avg_win": 4.143,
+          "avg_loss": -2.675,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 518,
+          "win_rate": 36.87,
+          "loss_rate": 62.93,
+          "avg_return": -0.084,
+          "median_return": -3.0,
+          "profit_factor": 0.96,
+          "avg_win": 4.839,
+          "avg_loss": -2.968,
+          "best_trade": 10.264,
+          "worst_trade": -3.0
+        }
+      },
+      "GREEN": {
+        "fixed_5_3_6h": {
+          "n": 104,
+          "win_rate": 47.12,
+          "loss_rate": 50.96,
+          "avg_return": 0.475,
+          "median_return": -0.981,
+          "profit_factor": 1.32,
+          "avg_win": 4.127,
+          "avg_loss": -2.884,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 104,
+          "win_rate": 42.31,
+          "loss_rate": 57.69,
+          "avg_return": 0.418,
+          "median_return": -3.0,
+          "profit_factor": 1.24,
+          "avg_win": 5.035,
+          "avg_loss": -2.969,
+          "best_trade": 10.264,
+          "worst_trade": -3.0
+        }
+      },
+      "YELLOW": {
+        "fixed_5_3_6h": {
+          "n": 104,
+          "win_rate": 43.27,
+          "loss_rate": 55.77,
+          "avg_return": 0.455,
+          "median_return": -0.776,
+          "profit_factor": 1.33,
+          "avg_win": 4.254,
+          "avg_loss": -2.485,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 103,
+          "win_rate": 40.78,
+          "loss_rate": 59.22,
+          "avg_return": 0.186,
+          "median_return": -3.0,
+          "profit_factor": 1.11,
+          "avg_win": 4.754,
+          "avg_loss": -2.959,
+          "best_trade": 6.01,
+          "worst_trade": -3.0
+        }
+      },
+      "RED": {
+        "fixed_5_3_6h": {
+          "n": 323,
+          "win_rate": 34.37,
+          "loss_rate": 64.71,
+          "avg_return": -0.309,
+          "median_return": -3.0,
+          "profit_factor": 0.82,
+          "avg_win": 4.126,
+          "avg_loss": -2.668,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 322,
+          "win_rate": 34.47,
+          "loss_rate": 65.22,
+          "avg_return": -0.288,
+          "median_return": -3.0,
+          "profit_factor": 0.85,
+          "avg_win": 4.787,
+          "avg_loss": -2.972,
+          "best_trade": 10.056,
+          "worst_trade": -3.0
+        }
+      },
+      "NON_RED": {
+        "fixed_5_3_6h": {
+          "n": 204,
+          "win_rate": 45.59,
+          "loss_rate": 52.94,
+          "avg_return": 0.479,
+          "median_return": -0.776,
+          "profit_factor": 1.34,
+          "avg_win": 4.179,
+          "avg_loss": -2.694,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 203,
+          "win_rate": 41.38,
+          "loss_rate": 58.62,
+          "avg_return": 0.289,
+          "median_return": -3.0,
+          "profit_factor": 1.17,
+          "avg_win": 4.895,
+          "avg_loss": -2.963,
+          "best_trade": 10.264,
+          "worst_trade": -3.0
+        }
+      }
+    },
+    "80": {
+      "ALL": {
+        "fixed_5_3_6h": {
+          "n": 167,
+          "win_rate": 32.34,
+          "loss_rate": 67.07,
+          "avg_return": -0.495,
+          "median_return": -3.0,
+          "profit_factor": 0.73,
+          "avg_win": 4.213,
+          "avg_loss": -2.77,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 164,
+          "win_rate": 29.88,
+          "loss_rate": 70.12,
+          "avg_return": -0.703,
+          "median_return": -3.0,
+          "profit_factor": 0.66,
+          "avg_win": 4.667,
+          "avg_loss": -2.991,
+          "best_trade": 10.264,
+          "worst_trade": -3.0
+        }
+      },
+      "GREEN": {
+        "fixed_5_3_6h": {
+          "n": 29,
+          "win_rate": 37.93,
+          "loss_rate": 58.62,
+          "avg_return": -0.022,
+          "median_return": -3.0,
+          "profit_factor": 0.99,
+          "avg_win": 4.219,
+          "avg_loss": -2.767,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 29,
+          "win_rate": 34.48,
+          "loss_rate": 65.52,
+          "avg_return": -0.188,
+          "median_return": -3.0,
+          "profit_factor": 0.9,
+          "avg_win": 5.154,
+          "avg_loss": -3.0,
+          "best_trade": 10.264,
+          "worst_trade": -3.0
+        }
+      },
+      "YELLOW": {
+        "fixed_5_3_6h": {
+          "n": 28,
+          "win_rate": 39.29,
+          "loss_rate": 60.71,
+          "avg_return": 0.03,
+          "median_return": -2.425,
+          "profit_factor": 1.02,
+          "avg_win": 4.19,
+          "avg_loss": -2.661,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 27,
+          "win_rate": 37.04,
+          "loss_rate": 62.96,
+          "avg_return": -0.207,
+          "median_return": -3.0,
+          "profit_factor": 0.89,
+          "avg_win": 4.542,
+          "avg_loss": -3.0,
+          "best_trade": 6.01,
+          "worst_trade": -3.0
+        }
+      },
+      "RED": {
+        "fixed_5_3_6h": {
+          "n": 110,
+          "win_rate": 29.09,
+          "loss_rate": 70.91,
+          "avg_return": -0.754,
+          "median_return": -3.0,
+          "profit_factor": 0.62,
+          "avg_win": 4.219,
+          "avg_loss": -2.794,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 109,
+          "win_rate": 26.61,
+          "loss_rate": 73.39,
+          "avg_return": -0.984,
+          "median_return": -3.0,
+          "profit_factor": 0.55,
+          "avg_win": 4.543,
+          "avg_loss": -2.987,
+          "best_trade": 10.056,
+          "worst_trade": -3.0
+        }
+      },
+      "NON_RED": {
+        "fixed_5_3_6h": {
+          "n": 57,
+          "win_rate": 38.6,
+          "loss_rate": 59.65,
+          "avg_return": 0.004,
+          "median_return": -3.0,
+          "profit_factor": 1.0,
+          "avg_win": 4.204,
+          "avg_loss": -2.714,
+          "best_trade": 5.0,
+          "worst_trade": -3.0
+        },
+        "runner70_80only": {
+          "n": 56,
+          "win_rate": 35.71,
+          "loss_rate": 64.29,
+          "avg_return": -0.197,
+          "median_return": -3.0,
+          "profit_factor": 0.9,
+          "avg_win": 4.848,
+          "avg_loss": -3.0,
+          "best_trade": 10.264,
+          "worst_trade": -3.0
+        }
+      }
+    }
+  },
+  "notes": [
+    "과적합 방지를 위해 Market Regime 규칙과 GREEN/YELLOW/RED 경계값을 결과 확인 전에 고정",
+    "이번 결과를 본 뒤 regime 임계값을 미세조정하지 않는 것을 권장",
+    "B점수 공식은 변경하지 않았고, V6.3과 동일하게 score() 내부 btc=2 근사를 유지하여 regime 필터 효과만 분리",
+    "V6.4는 결정시각 직전까지 완전히 끝난 캔들만 사용하도록 시간 정렬을 엄격하게 수정",
+    "따라서 V6.3 숫자와 단순 1:1 비교하면 안 되며, V6.4의 ALL 행을 새로운 기준선으로 사용",
+    "같은 코인 포지션 보유 중 중복진입 제외",
+    "동일 5분봉에서 +5%와 -3%가 동시에 닿으면 손절 우선",
+    "runner는 +5% 도달 뒤 다음 5분봉부터 최고가 대비 -3% 트레일링, 최소 스탑은 진입가",
+    "수수료·슬리피지·호가체결 영향은 아직 미반영",
+    "GREEN이 좋아 보여도 완전히 새로운 OOS/forward 데이터에서 재확인하기 전 실전 우위로 간주하지 않음"
+  ]
+}
