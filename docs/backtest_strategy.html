@@ -13,6 +13,12 @@ th:first-child,td:first-child{text-align:left}.good{font-weight:800}.scroll{over
 <div id="meta" class="card">불러오는 중...</div><div id="content"></div><div id="notes" class="card"></div></div>
 <script>
 const fmt=x=>x==null?'-':x;
+const strategyLabels={
+  fixed_5_3_6h:'즉시 100% · +5% 익절 / -3% 손절 / 6h',
+  split_30_30_40:'3단 분할 30/30/40 · 0/-2/-4% · 평균단가 +5% / 초기 -6% 하드스탑 / 6h',
+  runner50_all:'즉시 100% · +5%에서 50% 익절 · 나머지 3% 트레일링 / 최대 24h',
+  runner70_80only:'즉시 100% · 80점+만 +5%에서 30% 익절 · 70% 3% 트레일링 / 최대 24h'
+};
 fetch('./data/backtest_strategy_latest.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
  document.getElementById('meta').innerHTML=`<b>${d.version}</b> · 학습 ${d.config.train_days}일 / 검증 ${d.config.test_days}일 · ${d.config.markets}개 마켓<br>
  <span class="note">같은 코인 포지션 보유 중 중복진입 제외 · 수수료/슬리피지 미반영</span>`;
@@ -22,13 +28,13 @@ fetch('./data/backtest_strategy_latest.json?ts='+Date.now()).then(r=>r.json()).t
    <th>전략</th><th>거래수</th><th>승률</th><th>손실률</th><th>평균수익</th><th>중앙값</th><th>PF</th><th>평균이익</th><th>평균손실</th><th>최고</th><th>최악</th>
    </tr></thead><tbody>`;
    for(const [k,s] of Object.entries(ss)){
-     out+=`<tr><td>${d.strategy_labels[k]}</td><td>${fmt(s.n)}</td><td>${fmt(s.win_rate)}%</td><td>${fmt(s.loss_rate)}%</td>
+     out+=`<tr><td>${strategyLabels[k]||k}</td><td>${fmt(s.n)}</td><td>${fmt(s.win_rate)}%</td><td>${fmt(s.loss_rate)}%</td>
      <td class="good">${fmt(s.avg_return)}%</td><td>${fmt(s.median_return)}%</td><td class="good">${fmt(s.profit_factor)}</td>
      <td>${fmt(s.avg_win)}%</td><td>${fmt(s.avg_loss)}%</td><td>${fmt(s.best_trade)}%</td><td>${fmt(s.worst_trade)}%</td></tr>`;
    }
    out+='</tbody></table></div></div>';
  }
  document.getElementById('content').innerHTML=out;
- document.getElementById('notes').innerHTML='<b>해석할 때 주의</b><div class="note">'+d.notes.map(x=>'• '+x).join('<br>')+'</div>';
+ document.getElementById('notes').innerHTML='<b>해석할 때 주의</b><div class="note">• V6.2와 같은 신호 엔진을 사용한 전략 비교용 근사 백테스트<br>• 동일 코인 포지션 보유 중에는 새 신호 중복진입 금지<br>• 동일 5분봉에서 +5%와 -3%가 동시에 닿으면 손절 우선<br>• 분할매수 전략은 -4% 추가매수를 허용하기 위해 초기 신호가 기준 -6% 하드스탑 사용<br>• runner는 +5% 도달 뒤 다음 5분봉부터 최고가 대비 -3% 트레일링, 최소 스탑은 진입가<br>• 수수료·슬리피지·호가체결 영향 미반영<br>• 과거 BTC regime은 V6.2와 동일하게 상수 근사(btc=2)를 사용</div>';
 }).catch(e=>document.getElementById('meta').textContent='결과 파일을 불러오지 못했습니다: '+e);
 </script></body></html>
