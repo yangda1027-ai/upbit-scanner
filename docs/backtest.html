@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upbit V6 Backtest</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f4f6;color:#111827;margin:0;padding:16px}
+.w{max-width:1100px;margin:auto}.card{background:white;border-radius:16px;padding:15px;margin:12px 0}.mut{color:#6b7280;font-size:13px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}th,td{padding:9px 7px;border-bottom:1px solid #e5e7eb;text-align:right;font-size:13px}
+th:first-child,td:first-child{text-align:left}.good{font-weight:800}.warn{background:#fff7ed;color:#9a3412}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.m{background:#f9fafb;border-radius:12px;padding:10px}.m small{display:block;color:#6b7280}@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr);table{font-size:11px}}}
+</style></head>
+<body><div class="w">
+<h1>업비트 V6 워크포워드 백테스트</h1>
+<div id="meta" class="card">불러오는 중…</div>
+<div id="summary"></div>
+<div id="rank"></div>
+<div class="card warn">과거 백테스트는 미래 성과를 보장하지 않습니다. 목표가 도달은 해당 구간의 장중 고가 기준이며 수수료·슬리피지는 포함하지 않습니다.</div>
+</div>
+<script>
+const f=v=>v===undefined||v===null?"-":v;
+function table(title,obj){
+ let rows=Object.entries(obj||{}).map(([th,x])=>`<tr><td>${th}점 이상</td><td>${f(x.n)}</td><td>${f(x["1h_3"])}%</td><td>${f(x["3h_5"])}%</td><td><b>${f(x["6h_5"])}%</b></td><td>${f(x["6h_10"])}%</td><td>${f(x["24h_5"])}%</td><td>${f(x.avg_max_gain_6h)}%</td><td>${f(x.avg_max_dd_6h)}%</td></tr>`).join("");
+ return `<div class="card"><h2>${title}</h2><div style="overflow:auto"><table><tr><th>점수</th><th>신호수</th><th>1h +3%</th><th>3h +5%</th><th>6h +5%</th><th>6h +10%</th><th>24h +5%</th><th>평균 6h 최대상승</th><th>평균 6h DD</th></tr>${rows}</table></div></div>`;
+}
+function rankTable(title,obj){
+ let rows=Object.entries(obj||{}).map(([r,x])=>`<tr><td>TOP ${r}</td><td>${f(x.n)}</td><td>${f(x["6h_5"])}%</td><td>${f(x["6h_10"])}%</td><td>${f(x["24h_5"])}%</td><td>${f(x.avg_max_gain_6h)}%</td><td>${f(x.avg_max_dd_6h)}%</td></tr>`).join("");
+ return `<div class="card"><h2>${title}</h2><div style="overflow:auto"><table><tr><th>랭킹</th><th>신호수</th><th>6h +5%</th><th>6h +10%</th><th>24h +5%</th><th>평균 6h 최대상승</th><th>평균 6h DD</th></tr>${rows}</table></div></div>`;
+}
+async function load(){
+ try{
+  let d=await(await fetch("data/backtest_latest.json?t="+Date.now(),{cache:"no-store"})).json(),m=d.method||{};
+  document.getElementById("meta").innerHTML=`<b>${d.version}</b><div class="grid">
+   <div class="m"><small>학습구간</small><b>${m.train_days}일</b></div>
+   <div class="m"><small>검증구간</small><b>${m.test_days}일</b></div>
+   <div class="m"><small>검증 종목</small><b>${m.markets}개</b></div>
+   <div class="m"><small>학습 예제</small><b>${Number(m.training_examples||0).toLocaleString()}개</b></div>
+  </div><p class="mut">${m.walkforward_note}</p>`;
+  document.getElementById("summary").innerHTML=table("A형 · 급등 전 잠복형",d.score_thresholds?.A)+table("B형 · 재급등/모멘텀형",d.score_thresholds?.B);
+  document.getElementById("rank").innerHTML=rankTable("A형 TOP 랭킹 성적",d.top_rank?.A)+rankTable("B형 TOP 랭킹 성적",d.top_rank?.B);
+ }catch(e){document.getElementById("meta").textContent="아직 백테스트 결과가 없습니다. GitHub Actions에서 Backtest를 먼저 실행하세요."}
+}load();
+</script></body></html>
