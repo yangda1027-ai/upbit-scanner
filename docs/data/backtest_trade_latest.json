@@ -1,0 +1,84 @@
+{
+  "version": "V6.2 Trade Backtest",
+  "generated_at_utc": "2026-09-08T09:57:14.711754+00:00",
+  "config": {
+    "train_days": 120,
+    "test_days": 60,
+    "tp": 5.0,
+    "sl": 3.0,
+    "hold_hours": 6,
+    "markets": 273,
+    "surge_signal_threshold": 75
+  },
+  "threshold_trade_stats": {
+    "60": {
+      "n": 5557,
+      "tp_rate": 27.21,
+      "sl_rate": 27.37,
+      "time_rate": 45.42,
+      "avg_return": 0.745,
+      "profit_factor": 1.72,
+      "same_candle_conflicts": 3
+    },
+    "65": {
+      "n": 2698,
+      "tp_rate": 29.95,
+      "sl_rate": 29.84,
+      "time_rate": 40.21,
+      "avg_return": 0.786,
+      "profit_factor": 1.73,
+      "same_candle_conflicts": 0
+    },
+    "70": {
+      "n": 1198,
+      "tp_rate": 32.97,
+      "sl_rate": 32.3,
+      "time_rate": 34.72,
+      "avg_return": 0.826,
+      "profit_factor": 1.72,
+      "same_candle_conflicts": 0
+    },
+    "75": {
+      "n": 421,
+      "tp_rate": 38.24,
+      "sl_rate": 33.49,
+      "time_rate": 28.27,
+      "avg_return": 1.01,
+      "profit_factor": 1.88,
+      "same_candle_conflicts": 0
+    },
+    "80": {
+      "n": 112,
+      "tp_rate": 48.21,
+      "sl_rate": 28.57,
+      "time_rate": 23.21,
+      "avg_return": 1.609,
+      "profit_factor": 2.59,
+      "same_candle_conflicts": 0
+    }
+  },
+  "surge_recall": {
+    "10": {
+      "events": 1827,
+      "detected_1h_pct": 0.27,
+      "detected_3h_pct": 1.81,
+      "detected_6h_pct": 2.96
+    },
+    "20": {
+      "events": 402,
+      "detected_1h_pct": 0.5,
+      "detected_3h_pct": 1.24,
+      "detected_6h_pct": 2.74
+    },
+    "30": {
+      "events": 136,
+      "detected_1h_pct": 0.0,
+      "detected_3h_pct": 0.0,
+      "detected_6h_pct": 0.74
+    }
+  },
+  "notes": [
+    "동일 5분봉에서 TP/SL 동시 도달 시 SL 우선",
+    "수수료·슬리피지 미반영"
+  ]
+}
