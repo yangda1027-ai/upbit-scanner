@@ -1,0 +1,36 @@
+name: Manual V6.3 Strategy Backtest
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: upbit-v6-3-strategy-backtest
+  cancel-in-progress: false
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests numpy scipy
+      - name: Run V6.3 strategy backtest
+        env:
+          TRAIN_DAYS: "120"
+          TEST_DAYS: "60"
+          K_NEIGHBORS: "50"
+          REQUEST_DELAY: "0.12"
+        run: python src/backtest_strategy.py
+      - name: Commit result
+        run: |
+          git config user.name "upbit-scanner-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data/backtest_strategy_latest.json docs/backtest_strategy.html
+          git diff --cached --quiet || git commit -m "Update V6.3 strategy backtest"
+          git pull --rebase
+          git push
