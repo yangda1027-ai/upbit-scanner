@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upbit V6.3 Strategy Backtest</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f4f5f7;color:#121826}
+.wrap{max-width:1100px;margin:auto;padding:22px}.card{background:#fff;border-radius:20px;padding:22px;margin:16px 0;box-shadow:0 2px 12px #0000000b}
+h1{font-size:30px;margin:6px 0 14px}h2{margin:0 0 16px}.meta{line-height:1.7}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:12px 8px;border-bottom:1px solid #e6e8ec;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}.good{font-weight:800}.scroll{overflow-x:auto}
+.note{font-size:13px;line-height:1.6;color:#596275}
+</style></head>
+<body><div class="wrap"><h1>업비트 V6.3 전략 비교 백테스트</h1>
+<div id="meta" class="card">불러오는 중...</div><div id="content"></div><div id="notes" class="card"></div></div>
+<script>
+const fmt=x=>x==null?'-':x;
+fetch('./data/backtest_strategy_latest.json?ts='+Date.now()).then(r=>r.json()).then(d=>{
+ document.getElementById('meta').innerHTML=`<b>${d.version}</b> · 학습 ${d.config.train_days}일 / 검증 ${d.config.test_days}일 · ${d.config.markets}개 마켓<br>
+ <span class="note">같은 코인 포지션 보유 중 중복진입 제외 · 수수료/슬리피지 미반영</span>`;
+ let out='';
+ for(const [th,ss] of Object.entries(d.results)){
+   out+=`<div class="card"><h2>B형 ${th}점+</h2><div class="scroll"><table><thead><tr>
+   <th>전략</th><th>거래수</th><th>승률</th><th>손실률</th><th>평균수익</th><th>중앙값</th><th>PF</th><th>평균이익</th><th>평균손실</th><th>최고</th><th>최악</th>
+   </tr></thead><tbody>`;
+   for(const [k,s] of Object.entries(ss)){
+     out+=`<tr><td>${d.strategy_labels[k]}</td><td>${fmt(s.n)}</td><td>${fmt(s.win_rate)}%</td><td>${fmt(s.loss_rate)}%</td>
+     <td class="good">${fmt(s.avg_return)}%</td><td>${fmt(s.median_return)}%</td><td class="good">${fmt(s.profit_factor)}</td>
+     <td>${fmt(s.avg_win)}%</td><td>${fmt(s.avg_loss)}%</td><td>${fmt(s.best_trade)}%</td><td>${fmt(s.worst_trade)}%</td></tr>`;
+   }
+   out+='</tbody></table></div></div>';
+ }
+ document.getElementById('content').innerHTML=out;
+ document.getElementById('notes').innerHTML='<b>해석할 때 주의</b><div class="note">'+d.notes.map(x=>'• '+x).join('<br>')+'</div>';
+}).catch(e=>document.getElementById('meta').textContent='결과 파일을 불러오지 못했습니다: '+e);
+</script></body></html>
