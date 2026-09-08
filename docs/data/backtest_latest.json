@@ -1,0 +1,1202 @@
+{
+  "version": "V6 Backtest 1.0",
+  "generated_at_utc": "2026-09-08T07:48:08.089926+00:00",
+  "method": {
+    "train_days": 120,
+    "test_days": 60,
+    "walkforward_note": "120일 학습구간의 데이터만 KNN 참조에 사용하고 이후 60일은 완전 분리된 OOS 검증구간으로 평가",
+    "markets": 273,
+    "training_examples": 111951,
+    "test_hours": 1417,
+    "hit_definition": "각 신호 가격 이후 해당 시간 내 장중 고가가 목표 상승률에 도달하면 hit",
+    "fees_slippage": "미반영"
+  },
+  "score_thresholds": {
+    "A": {
+      "50": {
+        "n": 5377,
+        "1h_3": 5.39,
+        "3h_5": 5.77,
+        "6h_5": 10.99,
+        "6h_10": 2.38,
+        "24h_5": 28.94,
+        "avg_max_gain_6h": 2.26,
+        "avg_max_dd_6h": -2.08
+      },
+      "60": {
+        "n": 1126,
+        "1h_3": 7.99,
+        "3h_5": 7.46,
+        "6h_5": 14.74,
+        "6h_10": 3.29,
+        "24h_5": 33.57,
+        "avg_max_gain_6h": 2.68,
+        "avg_max_dd_6h": -2.68
+      },
+      "65": {
+        "n": 275,
+        "1h_3": 14.18,
+        "3h_5": 13.09,
+        "6h_5": 24.36,
+        "6h_10": 5.82,
+        "24h_5": 41.09,
+        "avg_max_gain_6h": 3.79,
+        "avg_max_dd_6h": -2.93
+      },
+      "70": {
+        "n": 43,
+        "1h_3": 20.93,
+        "3h_5": 18.6,
+        "6h_5": 27.91,
+        "6h_10": 6.98,
+        "24h_5": 44.19,
+        "avg_max_gain_6h": 3.79,
+        "avg_max_dd_6h": -2.74
+      },
+      "75": {
+        "n": 3,
+        "1h_3": 33.33,
+        "3h_5": 0.0,
+        "6h_5": 0.0,
+        "6h_10": 0.0,
+        "24h_5": 0.0,
+        "avg_max_gain_6h": 2.62,
+        "avg_max_dd_6h": -3.74
+      },
+      "80": {
+        "n": 0
+      }
+    },
+    "B": {
+      "50": {
+        "n": 11366,
+        "1h_3": 22.91,
+        "3h_5": 21.1,
+        "6h_5": 30.92,
+        "6h_10": 10.45,
+        "24h_5": 51.75,
+        "avg_max_gain_6h": 4.66,
+        "avg_max_dd_6h": -3.07
+      },
+      "60": {
+        "n": 3444,
+        "1h_3": 30.95,
+        "3h_5": 28.11,
+        "6h_5": 38.44,
+        "6h_10": 13.73,
+        "24h_5": 56.01,
+        "avg_max_gain_6h": 5.4,
+        "avg_max_dd_6h": -3.84
+      },
+      "65": {
+        "n": 1792,
+        "1h_3": 33.48,
+        "3h_5": 30.92,
+        "6h_5": 41.85,
+        "6h_10": 14.01,
+        "24h_5": 57.48,
+        "avg_max_gain_6h": 5.51,
+        "avg_max_dd_6h": -4.19
+      },
+      "70": {
+        "n": 886,
+        "1h_3": 34.31,
+        "3h_5": 32.51,
+        "6h_5": 43.68,
+        "6h_10": 15.69,
+        "24h_5": 59.26,
+        "avg_max_gain_6h": 5.72,
+        "avg_max_dd_6h": -4.39
+      },
+      "75": {
+        "n": 383,
+        "1h_3": 40.47,
+        "3h_5": 36.29,
+        "6h_5": 48.04,
+        "6h_10": 17.75,
+        "24h_5": 61.88,
+        "avg_max_gain_6h": 6.38,
+        "avg_max_dd_6h": -4.58
+      },
+      "80": {
+        "n": 164,
+        "1h_3": 43.29,
+        "3h_5": 39.63,
+        "6h_5": 51.22,
+        "6h_10": 19.51,
+        "24h_5": 62.8,
+        "avg_max_gain_6h": 7.02,
+        "avg_max_dd_6h": -4.63
+      }
+    }
+  },
+  "top_rank": {
+    "A": {
+      "1": {
+        "n": 1369,
+        "1h_3": 5.48,
+        "3h_5": 6.21,
+        "6h_5": 11.61,
+        "6h_10": 2.63,
+        "24h_5": 29.15,
+        "avg_max_gain_6h": 2.41,
+        "avg_max_dd_6h": -2.15
+      },
+      "3": {
+        "n": 4107,
+        "1h_3": 4.63,
+        "3h_5": 4.82,
+        "6h_5": 9.62,
+        "6h_10": 2.24,
+        "24h_5": 27.51,
+        "avg_max_gain_6h": 2.2,
+        "avg_max_dd_6h": -1.99
+      },
+      "5": {
+        "n": 6845,
+        "1h_3": 4.34,
+        "3h_5": 4.54,
+        "6h_5": 9.47,
+        "6h_10": 2.06,
+        "24h_5": 27.49,
+        "avg_max_gain_6h": 2.15,
+        "avg_max_dd_6h": -1.93
+      }
+    },
+    "B": {
+      "1": {
+        "n": 1369,
+        "1h_3": 27.9,
+        "3h_5": 26.59,
+        "6h_5": 37.18,
+        "6h_10": 13.95,
+        "24h_5": 55.37,
+        "avg_max_gain_6h": 5.38,
+        "avg_max_dd_6h": -3.72
+      },
+      "3": {
+        "n": 4107,
+        "1h_3": 25.03,
+        "3h_5": 23.64,
+        "6h_5": 33.84,
+        "6h_10": 11.81,
+        "24h_5": 51.47,
+        "avg_max_gain_6h": 4.89,
+        "avg_max_dd_6h": -3.29
+      },
+      "5": {
+        "n": 6845,
+        "1h_3": 23.4,
+        "3h_5": 21.78,
+        "6h_5": 30.9,
+        "6h_10": 10.69,
+        "24h_5": 48.93,
+        "avg_max_gain_6h": 4.63,
+        "avg_max_dd_6h": -3.01
+      }
+    }
+  },
+  "recent_top_signals": [
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-XTZ",
+      "name": "테조스",
+      "score": 47.8,
+      "future_6h_max": 1.85,
+      "future_24h_max": 1.85
+    },
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-BOUNTY",
+      "name": "체인바운티",
+      "score": 46.4,
+      "future_6h_max": 3.59,
+      "future_24h_max": 3.59
+    },
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-AI",
+      "name": "젠신",
+      "score": 44.4,
+      "future_6h_max": 3.26,
+      "future_24h_max": 8.33
+    },
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-YGG",
+      "name": "일드길드게임즈",
+      "score": 44.4,
+      "future_6h_max": 23.26,
+      "future_24h_max": 23.26
+    },
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-HUNT",
+      "name": "헌트",
+      "score": 44.3,
+      "future_6h_max": 0.82,
+      "future_24h_max": 0.82
+    },
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-TIA",
+      "name": "셀레스티아",
+      "score": 52.4,
+      "future_6h_max": 25.46,
+      "future_24h_max": 25.46
+    },
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-TAO",
+      "name": "비트텐서",
+      "score": 47.4,
+      "future_6h_max": 4.96,
+      "future_24h_max": 6.92
+    },
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-TOSHI",
+      "name": "토시",
+      "score": 45.9,
+      "future_6h_max": 4.07,
+      "future_24h_max": 11.63
+    },
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-CRV",
+      "name": "커브",
+      "score": 45.6,
+      "future_6h_max": 3.53,
+      "future_24h_max": 8.24
+    },
+    {
+      "time": "2026-09-06T19:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-MON",
+      "name": "모나드",
+      "score": 45.2,
+      "future_6h_max": 1.37,
+      "future_24h_max": 5.48
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-FIL",
+      "name": "파일코인",
+      "score": 56.2,
+      "future_6h_max": 2.67,
+      "future_24h_max": 10.2
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-BTT",
+      "name": "비트토렌트",
+      "score": 47.4,
+      "future_6h_max": 0.24,
+      "future_24h_max": 0.24
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-TAO",
+      "name": "비트텐서",
+      "score": 46.8,
+      "future_6h_max": 1.4,
+      "future_24h_max": 3.29
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-NEAR",
+      "name": "니어프로토콜",
+      "score": 46.6,
+      "future_6h_max": 3.03,
+      "future_24h_max": 3.03
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-HUNT",
+      "name": "헌트",
+      "score": 43.7,
+      "future_6h_max": 0.0,
+      "future_24h_max": 0.0
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-TIA",
+      "name": "셀레스티아",
+      "score": 65.0,
+      "future_6h_max": 21.86,
+      "future_24h_max": 21.86
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-FIL",
+      "name": "파일코인",
+      "score": 64.1,
+      "future_6h_max": 2.67,
+      "future_24h_max": 10.2
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-MON",
+      "name": "모나드",
+      "score": 61.6,
+      "future_6h_max": 1.09,
+      "future_24h_max": 5.19
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-TAO",
+      "name": "비트텐서",
+      "score": 61.4,
+      "future_6h_max": 1.4,
+      "future_24h_max": 3.29
+    },
+    {
+      "time": "2026-09-06T20:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-VIRTUAL",
+      "name": "버추얼프로토콜",
+      "score": 56.8,
+      "future_6h_max": 4.95,
+      "future_24h_max": 6.32
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-LINK",
+      "name": "체인링크",
+      "score": 66.8,
+      "future_6h_max": 0.06,
+      "future_24h_max": 2.7
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-AVAX",
+      "name": "아발란체",
+      "score": 63.9,
+      "future_6h_max": 1.78,
+      "future_24h_max": 4.98
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-ONDO",
+      "name": "온도파이낸스",
+      "score": 62.6,
+      "future_6h_max": 3.46,
+      "future_24h_max": 3.46
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-ADA",
+      "name": "에이다",
+      "score": 58.5,
+      "future_6h_max": 1.99,
+      "future_24h_max": 1.99
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-ETH",
+      "name": "이더리움",
+      "score": 57.3,
+      "future_6h_max": 1.09,
+      "future_24h_max": 1.09
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-LINK",
+      "name": "체인링크",
+      "score": 79.1,
+      "future_6h_max": 0.06,
+      "future_24h_max": 2.7
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-ONDO",
+      "name": "온도파이낸스",
+      "score": 71.4,
+      "future_6h_max": 3.46,
+      "future_24h_max": 3.46
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-JTO",
+      "name": "지토",
+      "score": 66.8,
+      "future_6h_max": 4.95,
+      "future_24h_max": 4.95
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-AVAX",
+      "name": "아발란체",
+      "score": 65.4,
+      "future_6h_max": 1.78,
+      "future_24h_max": 4.98
+    },
+    {
+      "time": "2026-09-06T21:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-ETH",
+      "name": "이더리움",
+      "score": 63.1,
+      "future_6h_max": 1.09,
+      "future_24h_max": 1.09
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-DEEP",
+      "name": "딥북",
+      "score": 60.5,
+      "future_6h_max": 1.37,
+      "future_24h_max": 2.74
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-NEAR",
+      "name": "니어프로토콜",
+      "score": 60.2,
+      "future_6h_max": 0.45,
+      "future_24h_max": 0.45
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-DATA",
+      "name": "데이터네트워크",
+      "score": 58.6,
+      "future_6h_max": 1.53,
+      "future_24h_max": 1.91
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-VANA",
+      "name": "바나",
+      "score": 58.6,
+      "future_6h_max": 1.87,
+      "future_24h_max": 7.48
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-JTO",
+      "name": "지토",
+      "score": 58.4,
+      "future_6h_max": 0.61,
+      "future_24h_max": 0.61
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-DATA",
+      "name": "데이터네트워크",
+      "score": 64.1,
+      "future_6h_max": 1.53,
+      "future_24h_max": 1.91
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-TIA",
+      "name": "셀레스티아",
+      "score": 63.0,
+      "future_6h_max": 16.04,
+      "future_24h_max": 16.04
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-LINK",
+      "name": "체인링크",
+      "score": 62.7,
+      "future_6h_max": 3.48,
+      "future_24h_max": 6.45
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-AVAX",
+      "name": "아발란체",
+      "score": 62.4,
+      "future_6h_max": 2.46,
+      "future_24h_max": 5.67
+    },
+    {
+      "time": "2026-09-06T22:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-ZKP",
+      "name": "지케이패스",
+      "score": 62.2,
+      "future_6h_max": 0.76,
+      "future_24h_max": 3.04
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-APT",
+      "name": "앱토스",
+      "score": 61.8,
+      "future_6h_max": 1.18,
+      "future_24h_max": 4.36
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-ANIME",
+      "name": "애니메코인",
+      "score": 59.5,
+      "future_6h_max": 2.02,
+      "future_24h_max": 2.02
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-PLUME",
+      "name": "플룸",
+      "score": 58.3,
+      "future_6h_max": 3.16,
+      "future_24h_max": 4.21
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-BTC",
+      "name": "비트코인",
+      "score": 57.9,
+      "future_6h_max": 0.4,
+      "future_24h_max": 0.4
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-AXS",
+      "name": "엑시인피니티",
+      "score": 57.8,
+      "future_6h_max": 1.22,
+      "future_24h_max": 2.44
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-MET2",
+      "name": "메테오라",
+      "score": 64.8,
+      "future_6h_max": 1.04,
+      "future_24h_max": 9.38
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-JUP",
+      "name": "주피터",
+      "score": 64.8,
+      "future_6h_max": 3.28,
+      "future_24h_max": 3.28
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-DATA",
+      "name": "데이터네트워크",
+      "score": 64.6,
+      "future_6h_max": 0.38,
+      "future_24h_max": 0.75
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-AAVE",
+      "name": "에이브",
+      "score": 63.4,
+      "future_6h_max": 1.53,
+      "future_24h_max": 1.53
+    },
+    {
+      "time": "2026-09-06T23:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-VIRTUAL",
+      "name": "버추얼프로토콜",
+      "score": 62.3,
+      "future_6h_max": 2.55,
+      "future_24h_max": 2.75
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-BLEND",
+      "name": "플루언트",
+      "score": 71.7,
+      "future_6h_max": 1.07,
+      "future_24h_max": 1.07
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-XLM",
+      "name": "스텔라루멘",
+      "score": 64.3,
+      "future_6h_max": 3.12,
+      "future_24h_max": 4.3
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-ME",
+      "name": "매직에덴",
+      "score": 63.9,
+      "future_6h_max": 0.22,
+      "future_24h_max": 0.22
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-MEW",
+      "name": "캣인어독스월드",
+      "score": 63.5,
+      "future_6h_max": 3.8,
+      "future_24h_max": 3.8
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-SLX",
+      "name": "솔스티스",
+      "score": 61.4,
+      "future_6h_max": 0.0,
+      "future_24h_max": 0.1
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-ORCA",
+      "name": "오르카",
+      "score": 86.1,
+      "future_6h_max": 16.28,
+      "future_24h_max": 16.28
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-MBL",
+      "name": "무비블록",
+      "score": 81.1,
+      "future_6h_max": 4.12,
+      "future_24h_max": 4.12
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-CFG",
+      "name": "센트리퓨즈",
+      "score": 78.0,
+      "future_6h_max": 26.17,
+      "future_24h_max": 26.17
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-FLOCK",
+      "name": "플록",
+      "score": 71.6,
+      "future_6h_max": 3.81,
+      "future_24h_max": 3.81
+    },
+    {
+      "time": "2026-09-07T00:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-XLM",
+      "name": "스텔라루멘",
+      "score": 71.3,
+      "future_6h_max": 3.12,
+      "future_24h_max": 4.3
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-PLUME",
+      "name": "플룸",
+      "score": 62.2,
+      "future_6h_max": 3.16,
+      "future_24h_max": 4.21
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-VANA",
+      "name": "바나",
+      "score": 61.6,
+      "future_6h_max": -0.08,
+      "future_24h_max": 7.48
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-DOT",
+      "name": "폴카닷",
+      "score": 60.5,
+      "future_6h_max": -0.07,
+      "future_24h_max": 9.5
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-RENDER",
+      "name": "렌더토큰",
+      "score": 60.1,
+      "future_6h_max": 1.43,
+      "future_24h_max": 3.43
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-ME",
+      "name": "매직에덴",
+      "score": 59.9,
+      "future_6h_max": 0.67,
+      "future_24h_max": 0.89
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-ARX",
+      "name": "아르키움",
+      "score": 82.8,
+      "future_6h_max": 8.37,
+      "future_24h_max": 10.84
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-GAME2",
+      "name": "게임빌드",
+      "score": 81.3,
+      "future_6h_max": 3.05,
+      "future_24h_max": 3.05
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-T",
+      "name": "쓰레스홀드",
+      "score": 79.0,
+      "future_6h_max": 1.23,
+      "future_24h_max": 1.23
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-VET",
+      "name": "비체인",
+      "score": 71.8,
+      "future_6h_max": 2.85,
+      "future_24h_max": 2.85
+    },
+    {
+      "time": "2026-09-07T01:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-CFG",
+      "name": "센트리퓨즈",
+      "score": 70.0,
+      "future_6h_max": 23.68,
+      "future_24h_max": 23.68
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-PLUME",
+      "name": "플룸",
+      "score": 64.9,
+      "future_6h_max": 3.68,
+      "future_24h_max": 4.21
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-AERO",
+      "name": "에어로드롬파이낸스",
+      "score": 56.3,
+      "future_6h_max": 2.15,
+      "future_24h_max": 23.28
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-TFUEL",
+      "name": "쎄타퓨엘",
+      "score": 51.5,
+      "future_6h_max": 3.08,
+      "future_24h_max": 3.08
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-PROVE",
+      "name": "서싱트",
+      "score": 49.4,
+      "future_6h_max": 4.44,
+      "future_24h_max": 5.65
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-WET",
+      "name": "휴미디파이",
+      "score": 49.4,
+      "future_6h_max": 1.5,
+      "future_24h_max": 1.5
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-CFG",
+      "name": "센트리퓨즈",
+      "score": 74.0,
+      "future_6h_max": 18.24,
+      "future_24h_max": 18.24
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-CTC",
+      "name": "크레딧코인",
+      "score": 70.5,
+      "future_6h_max": 9.35,
+      "future_24h_max": 9.35
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-ORCA",
+      "name": "오르카",
+      "score": 69.7,
+      "future_6h_max": 0.21,
+      "future_24h_max": 0.21
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-ARX",
+      "name": "아르키움",
+      "score": 67.8,
+      "future_6h_max": 6.64,
+      "future_24h_max": 6.64
+    },
+    {
+      "time": "2026-09-07T02:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-AUCTION",
+      "name": "바운스토큰",
+      "score": 66.8,
+      "future_6h_max": 1.23,
+      "future_24h_max": 1.8
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-TAIKO",
+      "name": "타이코",
+      "score": 70.8,
+      "future_6h_max": 3.51,
+      "future_24h_max": 3.51
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-WLD",
+      "name": "월드코인",
+      "score": 64.6,
+      "future_6h_max": 10.84,
+      "future_24h_max": 19.93
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-VET",
+      "name": "비체인",
+      "score": 62.7,
+      "future_6h_max": 0.2,
+      "future_24h_max": 1.61
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-PLUME",
+      "name": "플룸",
+      "score": 60.5,
+      "future_6h_max": 2.59,
+      "future_24h_max": 2.59
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-TRX",
+      "name": "트론",
+      "score": 54.3,
+      "future_6h_max": 0.88,
+      "future_24h_max": 0.88
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-CRV",
+      "name": "커브",
+      "score": 66.7,
+      "future_6h_max": 0.37,
+      "future_24h_max": 0.37
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-TAIKO",
+      "name": "타이코",
+      "score": 66.3,
+      "future_6h_max": 3.51,
+      "future_24h_max": 3.51
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-ARX",
+      "name": "아르키움",
+      "score": 65.1,
+      "future_6h_max": 9.22,
+      "future_24h_max": 9.22
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-ANIME",
+      "name": "애니메코인",
+      "score": 62.6,
+      "future_6h_max": 0.0,
+      "future_24h_max": 0.0
+    },
+    {
+      "time": "2026-09-07T03:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-DOOD",
+      "name": "두들즈",
+      "score": 59.5,
+      "future_6h_max": 23.46,
+      "future_24h_max": 24.62
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "A",
+      "rank": 1,
+      "market": "KRW-F",
+      "name": "신퓨처스",
+      "score": 70.8,
+      "future_6h_max": 0.82,
+      "future_24h_max": 0.82
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "A",
+      "rank": 2,
+      "market": "KRW-MNT",
+      "name": "맨틀",
+      "score": 55.6,
+      "future_6h_max": 3.85,
+      "future_24h_max": 3.85
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "A",
+      "rank": 3,
+      "market": "KRW-TAIKO",
+      "name": "타이코",
+      "score": 55.1,
+      "future_6h_max": 2.61,
+      "future_24h_max": 2.61
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "A",
+      "rank": 4,
+      "market": "KRW-ZBT",
+      "name": "제로베이스",
+      "score": 54.0,
+      "future_6h_max": 0.86,
+      "future_24h_max": 1.72
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "A",
+      "rank": 5,
+      "market": "KRW-XLM",
+      "name": "스텔라루멘",
+      "score": 52.7,
+      "future_6h_max": 2.72,
+      "future_24h_max": 3.89
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "B",
+      "rank": 1,
+      "market": "KRW-ARX",
+      "name": "아르키움",
+      "score": 71.0,
+      "future_6h_max": 3.21,
+      "future_24h_max": 3.21
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "B",
+      "rank": 2,
+      "market": "KRW-GRVT",
+      "name": "그래비티토큰",
+      "score": 69.3,
+      "future_6h_max": 5.26,
+      "future_24h_max": 5.26
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "B",
+      "rank": 3,
+      "market": "KRW-MNT",
+      "name": "맨틀",
+      "score": 66.1,
+      "future_6h_max": 3.85,
+      "future_24h_max": 3.85
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "B",
+      "rank": 4,
+      "market": "KRW-IOST",
+      "name": "아이오에스티",
+      "score": 65.8,
+      "future_6h_max": 24.75,
+      "future_24h_max": 55.45
+    },
+    {
+      "time": "2026-09-07T04:00:00+00:00",
+      "mode": "B",
+      "rank": 5,
+      "market": "KRW-XLM",
+      "name": "스텔라루멘",
+      "score": 65.5,
+      "future_6h_max": 2.72,
+      "future_24h_max": 3.89
+    }
+  ],
+  "warning": "백테스트는 과거 시뮬레이션이며 미래 수익을 보장하지 않습니다. 고가 도달 기준이라 실제 체결·수수료·슬리피지와 다를 수 있습니다."
+}
