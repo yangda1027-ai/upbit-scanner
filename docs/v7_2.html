@@ -1,0 +1,32 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upbit V7.2 Forward Risk Analysis</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;background:#f4f6f8;margin:0;color:#111827}
+.w{max-width:1200px;margin:28px auto;padding:0 16px}.card{background:#fff;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 1px 5px #0001}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;border-bottom:1px solid #e5e7eb;text-align:right}th:first-child,td:first-child{text-align:left}
+.muted{color:#6b7280}.good{font-weight:800}.pill{display:inline-block;background:#eef2f7;padding:5px 9px;border-radius:999px;margin-right:6px}
+@media(max-width:700px){table{font-size:11px}}
+</style></head><body><div class="w">
+<h1>업비트 V7.2 Forward Risk Analysis</h1>
+<div class="card"><b>V7 Score × V7.1 Market Risk 실제 미래 성적</b>
+<p class="muted">과거 백테스트가 아니라 이미 저장된 V7/V7.1 forward 기록만 결합합니다. Risk 구간은 0–19 / 20–39 / 40–59 / 60–79 / 80–100으로 고정합니다.</p>
+<div id="meta"></div></div>
+<div class="card"><h2>1시간</h2><div style="overflow:auto"><table id="h1"></table></div></div>
+<div class="card"><h2>3시간</h2><div style="overflow:auto"><table id="h3"></table></div></div>
+<div class="card"><h2>6시간</h2><div style="overflow:auto"><table id="h6"></table></div></div>
+<div class="card"><h2>24시간</h2><div style="overflow:auto"><table id="h24"></table></div></div>
+</div>
+<script>
+const fmt=x=>x==null?'—':Number(x).toFixed(3);
+fetch('./data/v7_2_risk_analysis.json?x='+Date.now()).then(r=>r.json()).then(d=>{
+ document.getElementById('meta').innerHTML=`<span class="pill">결합 신호 ${d.joined_signals}건</span><span class="pill">V7 신호 ${d.source_signals}건</span><span class="pill">Risk 스냅샷 ${d.source_risk_snapshots}건</span>`;
+ for(const h of ['h1','h3','h6','h24']){
+  let t='<tr><th>Score</th><th>Risk</th><th>N</th><th>평균 종가%</th><th>중앙값%</th><th>+5% 터치</th><th>-3% 터치</th><th>PF</th></tr>';
+  for(const r of d.rows){
+    const s=r[h];
+    t+=`<tr><td>${r.score_threshold}+</td><td>${r.risk_bucket}</td><td>${s.n}</td><td>${fmt(s.avg_close)}</td><td>${fmt(s.median_close)}</td><td>${s.hit5==null?'—':s.hit5.toFixed(1)+'%'}</td><td>${s.stop3==null?'—':s.stop3.toFixed(1)+'%'}</td><td>${s.pf==null?'—':s.pf}</td></tr>`;
+  }
+  document.getElementById(h).innerHTML=t;
+ }
+}).catch(e=>document.getElementById('meta').textContent='데이터가 아직 없습니다: '+e);
+</script></body></html>
