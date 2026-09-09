@@ -1,0 +1,32 @@
+name: V7.2 Forward Risk Analysis
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: upbit-v7-2-forward-risk-analysis
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Analyze V7 forward signals by Market Risk
+        run: python src/v7_2_analyze.py
+      - name: Commit V7.2 analysis
+        run: |
+          git config user.name "upbit-scanner-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data/v7_2_risk_analysis.json
+          git diff --cached --quiet || git commit -m "Update V7.2 forward risk analysis"
+          git pull --rebase
+          git push
