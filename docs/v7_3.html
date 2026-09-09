@@ -8,106 +8,61 @@
 body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif;background:#f4f6f8;margin:0;color:#111827}
 .w{max-width:1100px;margin:28px auto;padding:0 16px}
 .card{background:#fff;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 1px 5px #0001}
-.warn{padding:12px;border-radius:12px;font-weight:700;display:none}
-.stale{background:#ffe3e3}
-.muted{color:#6b7280}
-.pill{padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px}
+.warn{padding:12px;border-radius:12px;font-weight:700;display:none}.stale{background:#ffe3e3}
+.muted{color:#6b7280}.pill{padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px}
 .early{background:#dcfce7}.watch{background:#e5e7eb}.chase{background:#fee2e2}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:9px;border-bottom:1px solid #e5e7eb;text-align:right}
-th:first-child,td:first-child{text-align:left}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}table{font-size:11px}}
-</style>
-</head>
-<body>
-<div class="w">
+.counts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.count{background:#eef2f7;padding:8px 11px;border-radius:999px;font-size:13px;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px;border-bottom:1px solid #e5e7eb;text-align:right}th:first-child,td:first-child{text-align:left}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}table{font-size:11px}}
+</style></head>
+<body><div class="w">
 <h1>&#50629;&#48708;&#53944; V7.3 Early Signal</h1>
-
 <div id="stale" class="warn stale"></div>
-
 <div class="card">
-  <b>&#51060;&#48120; &#50724;&#47480; &#53076;&#51064;&#51060; &#50500;&#45768;&#46972; '&#50880;&#51649;&#51076;&#51060; &#49884;&#51089;&#46104;&#45716; &#53076;&#51064;' &#50864;&#49440;</b>
-  <p class="muted">EARLY&#47484; &#52572;&#50864;&#49440; &#54364;&#49884;&#54616;&#44256;, &#51060;&#48120; &#44553;&#46321;&#54620; &#51333;&#47785;&#51008; CHASE&#47196; &#48516;&#47532;&#54633;&#45768;&#45796;.</p>
-  <div id="meta"></div>
+<b>&#51060;&#48120; &#50724;&#47480; &#53076;&#51064;&#51060; &#50500;&#45768;&#46972; '&#50880;&#51649;&#51076;&#51060; &#49884;&#51089;&#46104;&#45716; &#53076;&#51064;' &#50864;&#49440;</b>
+<p class="muted">EARLY&#47484; &#52572;&#50864;&#49440; &#54364;&#49884;&#54616;&#44256;, &#51060;&#48120; &#44553;&#46321;&#54620; &#51333;&#47785;&#51008; CHASE&#47196; &#48516;&#47532;&#54633;&#45768;&#45796;.</p>
+<div id="meta"></div><div id="counts" class="counts"></div>
 </div>
-
-<div class="card">
-  <h2>&#54788;&#51116; TOP 10</h2>
-  <div style="overflow:auto"><table id="top"></table></div>
+<div class="card"><h2>&#54788;&#51116; TOP 10</h2><div style="overflow:auto"><table id="top"></table></div></div>
+<div class="card"><h2>Forward &#49457;&#51201;</h2><div id="stats" class="grid"></div></div>
+<div class="card"><h2>&#52572;&#44540; &#44592;&#47197;</h2><div style="overflow:auto"><table id="hist"></table></div></div>
 </div>
-
-<div class="card">
-  <h2>Forward &#49457;&#51201;</h2>
-  <div id="stats" class="grid"></div>
-</div>
-
-<div class="card">
-  <h2>&#52572;&#44540; &#44592;&#47197;</h2>
-  <div style="overflow:auto"><table id="hist"></table></div>
-</div>
-</div>
-
 <script>
 const pct=x=>x==null?'\u2014':Number(x).toFixed(2)+'%';
 const cls=x=>x==='EARLY'?'early':(x==='CHASE'?'chase':'watch');
-const kst=s=>{
-  if(!s) return '\u2014';
-  const d=new Date(s);
-  if(Number.isNaN(d.getTime())) return '\u2014';
-  return new Intl.DateTimeFormat('ko-KR',{
-    timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',
-    hour:'2-digit',minute:'2-digit',hour12:false
-  }).format(d);
-};
-
+const kst=s=>{if(!s)return '\u2014';const d=new Date(s);if(Number.isNaN(d.getTime()))return '\u2014';return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(d);};
 Promise.all([
-  fetch('./data/v7_3_latest.json?x='+Date.now()).then(r=>r.json()),
-  fetch('./data/v7_3_signals.json?x='+Date.now()).then(r=>r.json())
+ fetch('./data/v7_3_latest.json?x='+Date.now()).then(r=>r.json()),
+ fetch('./data/v7_3_signals.json?x='+Date.now()).then(r=>r.json())
 ]).then(([l,h])=>{
+ const valid=!!l.updated_at&&!Number.isNaN(new Date(l.updated_at).getTime());
+ if(valid){
+   const age=(Date.now()-new Date(l.updated_at).getTime())/60000;
+   document.getElementById('meta').innerHTML=`<p>\uB9C8\uC9C0\uB9C9 \uC218\uC9D1: <b>${kst(l.updated_at)} KST</b> \u00B7 ${age.toFixed(1)}\uBD84 \uC804 \u00B7 BTC 15m ${pct(l.btc?.ret_15m)} \u00B7 BTC 60m ${pct(l.btc?.ret_60m)}</p>`;
+   if(age>7){const s=document.getElementById('stale');s.style.display='block';s.textContent=`\u26A0 STALE DATA \u00B7 \uB9C8\uC9C0\uB9C9 \uC218\uC9D1\uC774 ${age.toFixed(1)}\uBD84 \uC804\uC785\uB2C8\uB2E4. \uC2E4\uC2DC\uAC04 \uB9E4\uC218 \uD310\uB2E8\uC5D0 \uC0AC\uC6A9\uD558\uC9C0 \uB9C8\uC138\uC694.`;}
+ } else document.getElementById('meta').innerHTML='<p><b>\uC544\uC9C1 \uCCAB \uC218\uC9D1 \uC804\uC785\uB2C8\uB2E4.</b></p>';
 
-  const validTime = !!l.updated_at && !Number.isNaN(new Date(l.updated_at).getTime());
+ const hist=Array.isArray(h)?h:[];
+ const early=hist.filter(x=>x.label==='EARLY');
+ const g1=early.filter(x=>x.h1).length,g3=early.filter(x=>x.h3).length,g6=early.filter(x=>x.h6).length,g24=early.filter(x=>x.h24).length;
+ document.getElementById('counts').innerHTML=
+  `<span class="count">\uB204\uC801 \uC2E0\uD638 ${hist.length}\uAC74</span>`+
+  `<span class="count">EARLY ${early.length}\uAC74</span>`+
+  `<span class="count">1h \uCC44\uC810 ${g1}\uAC74</span>`+
+  `<span class="count">3h \uCC44\uC810 ${g3}\uAC74</span>`+
+  `<span class="count">6h \uCC44\uC810 ${g6}\uAC74</span>`+
+  `<span class="count">24h \uCC44\uC810 ${g24}\uAC74</span>`;
 
-  if(!validTime){
-    document.getElementById('meta').innerHTML =
-      '<p><b>\uC544\uC9C1 \uCCAB \uC218\uC9D1 \uC804\uC785\uB2C8\uB2E4.</b> Actions\uC5D0\uC11C V7.3 workflow\uB97C \uD55C \uBC88 \uC2E4\uD589\uD574 \uC8FC\uC138\uC694.</p>';
-  }else{
-    const age=(Date.now()-new Date(l.updated_at).getTime())/60000;
-    document.getElementById('meta').innerHTML =
-      `<p>\uB9C8\uC9C0\uB9C9 \uC218\uC9D1: <b>${kst(l.updated_at)} KST</b> \u00B7 ${age.toFixed(1)}\uBD84 \uC804 \u00B7 BTC 15m ${pct(l.btc?.ret_15m)} \u00B7 BTC 60m ${pct(l.btc?.ret_60m)}</p>`;
+ let t='<tr><th>\uC885\uBAA9</th><th>\uC0C1\uD0DC</th><th>Score</th><th>5m</th><th>15m</th><th>60m</th><th>5m \uAC70\uB798\uB300\uAE08</th><th>15m \uAC00\uC18D</th></tr>';
+ for(const x of (l.top||[]))t+=`<tr><td>${x.market}</td><td><span class="pill ${cls(x.label)}">${x.label}</span></td><td><b>${x.score}</b></td><td>${pct(x.ret_5m)}</td><td>${pct(x.ret_15m)}</td><td>${pct(x.ret_60m)}</td><td>${x.value_ratio_5m}x</td><td>${x.value_accel_15m}x</td></tr>`;
+ document.getElementById('top').innerHTML=t;
 
-    if(age>7){
-      const s=document.getElementById('stale');
-      s.style.display='block';
-      s.textContent=`\u26A0 STALE DATA \u00B7 \uB9C8\uC9C0\uB9C9 \uC218\uC9D1\uC774 ${age.toFixed(1)}\uBD84 \uC804\uC785\uB2C8\uB2E4. \uC2E4\uC2DC\uAC04 \uB9E4\uC218 \uD310\uB2E8\uC5D0 \uC0AC\uC6A9\uD558\uC9C0 \uB9C8\uC138\uC694.`;
-    }
-  }
-
-  let t='<tr><th>\uC885\uBAA9</th><th>\uC0C1\uD0DC</th><th>Score</th><th>5m</th><th>15m</th><th>60m</th><th>5m \uAC70\uB798\uB300\uAE08</th><th>15m \uAC00\uC18D</th></tr>';
-  for(const x of (l.top||[])){
-    t+=`<tr><td>${x.market}</td><td><span class="pill ${cls(x.label)}">${x.label}</span></td><td><b>${x.score}</b></td><td>${pct(x.ret_5m)}</td><td>${pct(x.ret_15m)}</td><td>${pct(x.ret_60m)}</td><td>${x.value_ratio_5m}x</td><td>${x.value_accel_15m}x</td></tr>`;
-  }
-  document.getElementById('top').innerHTML=t;
-
-  const hist=Array.isArray(h)?h:[];
-  for(const [key,label] of [['h1','1\uC2DC\uAC04'],['h3','3\uC2DC\uAC04'],['h6','6\uC2DC\uAC04'],['h24','24\uC2DC\uAC04']]){
-    const a=hist.filter(x=>x[key]&&x.label==='EARLY');
-    const hit=a.filter(x=>x[key].hit_5).length;
-    const avg=a.length?a.reduce((s,x)=>s+Number(x[key].close_pct||0),0)/a.length:0;
-    document.getElementById('stats').innerHTML +=
-      `<div class="card"><b>EARLY ${label}</b><p>\uCC44\uC810 ${a.length}\uAC74</p><p>+5% \uD130\uCE58 ${a.length?(hit/a.length*100).toFixed(1):'\u2014'}%</p><p>\uD3C9\uADE0 \uC885\uAC00\uC218\uC775 ${a.length?avg.toFixed(3):'\u2014'}%</p></div>`;
-  }
-
-  const recent=hist.slice(-100).reverse();
-  let z='<tr><th>\uC2DC\uAC04(KST)</th><th>\uC885\uBAA9</th><th>\uC0C1\uD0DC</th><th>\uC810\uC218</th><th>1h</th><th>3h</th><th>6h</th><th>24h</th></tr>';
-  for(const x of recent){
-    z+=`<tr><td>${kst(x.ts)}</td><td>${x.market}</td><td><span class="pill ${cls(x.label)}">${x.label}</span></td><td>${x.score}</td><td>${x.h1?pct(x.h1.close_pct):'\u2014'}</td><td>${x.h3?pct(x.h3.close_pct):'\u2014'}</td><td>${x.h6?pct(x.h6.close_pct):'\u2014'}</td><td>${x.h24?pct(x.h24.close_pct):'\u2014'}</td></tr>`;
-  }
-  document.getElementById('hist').innerHTML=z;
-
-}).catch(e=>{
-  document.getElementById('meta').textContent='\uB370\uC774\uD130\uB97C \uBD88\uB7EC\uC624\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4: '+e;
-});
-</script>
-</body>
-</html>
+ for(const [key,label] of [['h1','1\uC2DC\uAC04'],['h3','3\uC2DC\uAC04'],['h6','6\uC2DC\uAC04'],['h24','24\uC2DC\uAC04']]){
+   const a=early.filter(x=>x[key]);const hit=a.filter(x=>x[key].hit_5).length;const avg=a.length?a.reduce((s,x)=>s+Number(x[key].close_pct||0),0)/a.length:0;
+   document.getElementById('stats').innerHTML+=`<div class="card"><b>EARLY ${label}</b><p>\uCC44\uC810 ${a.length}\uAC74</p><p>+5% \uD130\uCE58 ${a.length?(hit/a.length*100).toFixed(1):'\u2014'}%</p><p>\uD3C9\uADE0 \uC885\uAC00\uC218\uC775 ${a.length?avg.toFixed(3):'\u2014'}%</p></div>`;
+ }
+ const recent=hist.slice(-100).reverse();let z='<tr><th>\uC2DC\uAC04(KST)</th><th>\uC885\uBAA9</th><th>\uC0C1\uD0DC</th><th>\uC810\uC218</th><th>1h</th><th>3h</th><th>6h</th><th>24h</th></tr>';
+ for(const x of recent)z+=`<tr><td>${kst(x.ts)}</td><td>${x.market}</td><td><span class="pill ${cls(x.label)}">${x.label}</span></td><td>${x.score}</td><td>${x.h1?pct(x.h1.close_pct):'\u2014'}</td><td>${x.h3?pct(x.h3.close_pct):'\u2014'}</td><td>${x.h6?pct(x.h6.close_pct):'\u2014'}</td><td>${x.h24?pct(x.h24.close_pct):'\u2014'}</td></tr>`;
+ document.getElementById('hist').innerHTML=z;
+}).catch(e=>document.getElementById('meta').textContent='\uB370\uC774\uD130\uB97C \uBD88\uB7EC\uC624\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4: '+e);
+</script></body></html>
