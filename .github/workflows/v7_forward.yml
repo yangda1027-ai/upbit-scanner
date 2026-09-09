@@ -1,0 +1,35 @@
+name: V7 Forward Validation
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: upbit-v7-forward
+  cancel-in-progress: false
+
+jobs:
+  forward:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Collect immutable forward signals
+        run: python src/v7_forward.py
+      - name: Evaluate matured signals
+        run: python src/v7_evaluate.py
+      - name: Commit forward log
+        run: |
+          git config user.name "upbit-scanner-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data/v7_signals.json docs/data/v7_latest.json
+          git diff --cached --quiet || git commit -m "V7 forward snapshot"
+          git pull --rebase
+          git push
