@@ -5,21 +5,80 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>V7.5 Phoenix Tournament</title>
 <style>
-body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;max-width:1100px;margin:auto;padding:18px;background:#0b0f14;color:#edf2f7}
-h1{font-size:25px;margin-bottom:6px}
-.muted{color:#97a6b5;font-size:13px}
+:root{
+  --bg:#0b0f14; --card:#121923; --line:#263241; --text:#edf2f7; --muted:#97a6b5;
+}
+*{box-sizing:border-box}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;
+  max-width:1150px;margin:auto;padding:18px;background:var(--bg);color:var(--text)
+}
+h1{font-size:25px;margin:0 0 8px}
+.muted{color:var(--muted);font-size:13px}
 .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:15px}
 @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
-.card{background:#121923;border:1px solid #263241;border-radius:15px;padding:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px}
 .good{font-weight:750}
-.tag{display:inline-block;border:1px solid #3a4a5e;border-radius:999px;padding:4px 8px;font-size:12px;margin:3px}
+.tag{
+  display:inline-block;border:1px solid #3a4a5e;border-radius:999px;
+  padding:4px 8px;font-size:12px;margin:3px
+}
 table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
-th,td{padding:8px 5px;border-bottom:1px solid #24303d;text-align:right}
+th,td{
+  padding:8px 5px;border-bottom:1px solid #24303d;text-align:right;
+  vertical-align:middle
+}
 th:first-child,td:first-child{text-align:left}
 .section{margin-top:20px}
 .leader{border-width:2px}
-.warn{font-size:12px;padding:10px;border:1px solid #3a4a5e;border-radius:12px;margin-top:10px}
+.warn{
+  font-size:12px;padding:10px;border:1px solid #3a4a5e;
+  border-radius:12px;margin-top:10px
+}
 .stale{font-weight:700}
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+#candidateTable{
+  min-width:980px;
+}
+.time-col{
+  min-width:175px;
+  width:175px;
+  white-space:nowrap;
+  text-align:center!important;
+}
+.market-col{min-width:70px}
+.status-col{min-width:90px}
+.abc-hit{
+  font-weight:800;
+  border:1px solid #5b6f8a;
+  border-radius:999px;
+  padding:2px 7px;
+  display:inline-block;
+}
+.abc-card{
+  margin-top:20px;
+  border:1px solid #36506d;
+}
+.abc-metrics{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-top:12px;
+}
+.metric{
+  text-align:center;
+  padding:10px 6px;
+  border-right:1px solid #263241;
+}
+.metric:last-child{border-right:0}
+.metric .n{font-size:22px;font-weight:800;margin-top:4px}
+@media(max-width:560px){
+  .abc-metrics{grid-template-columns:1fr 1fr}
+  .metric{border-right:0;border-bottom:1px solid #263241}
+}
 </style>
 </head>
 <body>
@@ -35,25 +94,64 @@ A/B/C &#49464; &#51204;&#47029;&#51012; &#46041;&#49884;&#50640; &#44256;&#51221
 <div id="meta" class="warn"></div>
 <div id="cards" class="grid"></div>
 
+<div class="card abc-card">
+  <div style="font-size:19px;font-weight:800">
+    ABC &#46041;&#49884; &#52649;&#51313; (A+B+C)
+  </div>
+  <div class="muted" style="margin-top:5px">
+    A, B, C &#49464; &#51204;&#47029; &#51312;&#44148;&#51012; &#47784;&#46160; &#47564;&#51313;&#54620; &#44221;&#50864;&#47564; &#48324;&#46020; &#51665;&#44228;
+  </div>
+
+  <div class="abc-metrics">
+    <div class="metric">
+      <div class="muted">&#44277;&#49885; &#54364;&#48376;</div>
+      <div id="abcEpisodes" class="n">-</div>
+    </div>
+    <div class="metric">
+      <div class="muted">Sleeper &#54217;&#44032;</div>
+      <div id="abcSleepers" class="n">-</div>
+    </div>
+    <div class="metric">
+      <div class="muted">+3%</div>
+      <div id="abc3" class="n">-</div>
+    </div>
+    <div class="metric">
+      <div class="muted">+5%</div>
+      <div id="abc5" class="n">-</div>
+    </div>
+    <div class="metric">
+      <div class="muted">+10%</div>
+      <div id="abc10" class="n">-</div>
+    </div>
+  </div>
+</div>
+
 <div class="section card">
-  <b>&#52572;&#44540; Phoenix &#54980;&#48372;</b>
-  <table>
-    <thead>
-      <tr>
-        <th>&#51204;&#47029;</th>
-        <th>&#53076;&#51064;</th>
-        <th>&#49884;&#44033;(KST)</th>
-        <th>&#49345;&#53468;</th>
-        <th>SCORE</th>
-        <th>5m</th>
-        <th>15m &#44032;&#49549;</th>
-        <th>30m &#44032;&#49549;</th>
-        <th>6h MAX</th>
-        <th>h24 MAX</th>
-      </tr>
-    </thead>
-    <tbody id="rows"></tbody>
-  </table>
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+    <b style="font-size:18px">&#52572;&#44540; Phoenix &#54980;&#48372;</b>
+    <span id="candidateCount" class="muted"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="candidateTable">
+      <thead>
+        <tr>
+          <th>&#51204;&#47029;</th>
+          <th class="market-col">&#53076;&#51064;</th>
+          <th class="time-col">&#49884;&#44033; (KST)</th>
+          <th class="status-col">&#49345;&#53468;</th>
+          <th>SCORE</th>
+          <th>5m</th>
+          <th>15m &#44032;&#49549;</th>
+          <th>30m &#44032;&#49549;</th>
+          <th>6h MAX</th>
+          <th>h24 MAX</th>
+          <th>ABC</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
 </div>
 
 <script>
@@ -85,6 +183,11 @@ function ageMinutes(iso){
   const t = new Date(iso).getTime();
   if(Number.isNaN(t)) return null;
   return Math.floor((Date.now() - t) / 60000);
+}
+
+function compactKst(s){
+  if(!s) return '-';
+  return s.replace(' KST','');
 }
 
 function statsBlock(title,s){
@@ -133,38 +236,45 @@ async function load(){
         <span class="tag">${KO.strategy} ${id}</span>
         ${m.leader===id ? '<span class="tag">LEADER</span>' : ''}
       </div>
-
-      <div style="font-size:18px;font-weight:750;margin-top:8px">
-        ${x.name}
-      </div>
-
+      <div style="font-size:18px;font-weight:750;margin-top:8px">${x.name}</div>
       <div class="muted">${x.description}</div>
-
       ${statsBlock(KO.officialForward, x.official_forward)}
       ${statsBlock(KO.historical, x.historical_in_sample)}
     </div>`;
   }).join('');
 
-  document.getElementById('rows').innerHTML =
-    (d.signals || []).slice(0,120).map(x => {
-      const h6 = x.h6?.max_pct;
-      const h24 = x.h24?.max_pct;
+  const abc = d.abc_overlap?.official_forward || {};
+  document.getElementById('abcEpisodes').textContent = abc.episodes ?? 0;
+  document.getElementById('abcSleepers').textContent = abc.sleeper_evaluated_n ?? 0;
+  document.getElementById('abc3').textContent = fmt(abc.sleeper_hit3_pct,'%');
+  document.getElementById('abc5').textContent = fmt(abc.sleeper_hit5_pct,'%');
+  document.getElementById('abc10').textContent = fmt(abc.sleeper_hit10_pct,'%');
 
-      return `<tr>
-        <td>${x.strategy}</td>
-        <td>${x.market?.replace('KRW-','')}</td>
-        <td>${x.ts_kst || '-'}</td>
-        <td class="${String(x.status).startsWith('PHOENIX')?'good':''}">
-          ${x.status}
-        </td>
-        <td>${fmt(Number(x.score))}</td>
-        <td>${fmt(Number(x.ret_5m),'%')}</td>
-        <td>${fmt(Number(x.value_accel_15m),'x')}</td>
-        <td>${fmt(Number(x.value_accel_30m),'x')}</td>
-        <td>${fmt(h6,'%')}</td>
-        <td>${fmt(h24,'%')}</td>
-      </tr>`;
-    }).join('');
+  const sigs = (d.signals || []).slice(0,50);
+  document.getElementById('candidateCount').textContent =
+    `\ucd1d ${sigs.length}\uac1c (\ucd5c\uadfc 50\uac1c\ub9cc \ud45c\uc2dc)`;
+
+  document.getElementById('rows').innerHTML = sigs.map(x => {
+    const h6 = x.h6?.max_pct;
+    const h24 = x.h24?.max_pct;
+    const abcMark = x.abc_all ? '<span class="abc-hit">ALL</span>' : '-';
+
+    return `<tr>
+      <td>${x.strategy}</td>
+      <td>${x.market?.replace('KRW-','')}</td>
+      <td class="time-col">${compactKst(x.ts_kst)}</td>
+      <td class="${String(x.status).startsWith('PHOENIX')?'good':''}">
+        ${x.status}
+      </td>
+      <td>${fmt(Number(x.score))}</td>
+      <td>${fmt(Number(x.ret_5m),'%')}</td>
+      <td>${fmt(Number(x.value_accel_15m),'x')}</td>
+      <td>${fmt(Number(x.value_accel_30m),'x')}</td>
+      <td>${fmt(h6,'%')}</td>
+      <td>${fmt(h24,'%')}</td>
+      <td>${abcMark}</td>
+    </tr>`;
+  }).join('');
 }
 
 load().catch(e => {
