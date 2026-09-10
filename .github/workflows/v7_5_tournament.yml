@@ -3,10 +3,14 @@ name: V7.5 Phoenix Tournament
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: write
+
+concurrency:
+  group: v7-5-phoenix-tournament
+  cancel-in-progress: false
 
 jobs:
   tournament:
