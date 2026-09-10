@@ -1,0 +1,33 @@
+name: V7.5 Phoenix Tournament
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  tournament:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run Phoenix Tournament
+        run: python src/v7_5_tournament.py
+
+      - name: Commit tournament result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/v7_5_tournament.json
+          git diff --cached --quiet || git commit -m "Update V7.5 Phoenix tournament"
+          git push
