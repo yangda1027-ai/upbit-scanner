@@ -2,15 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-V7.5 Project Phoenix - 3 Strategy Forward Tournament
-KST + 5-minute dashboard version
-
+V7.5 Project Phoenix - 3 Strategy Forward Tournament + ABC overlap
 - V7.3 로직/점수는 수정하지 않음
-- docs/data/v7_3_signals.json만 읽음
-- A/B/C 전략을 동시에 고정해서 Forward Test
+- A/B/C 전략은 그대로 유지
+- ABC 동시충족은 "별도 통계 태그"로만 집계
 - 첫 실행 시각 이전 = Historical(In-sample)
 - 첫 실행 시각 이후 = Official Forward
-- 모든 표시용 시각은 KST(Asia/Seoul, UTC+9)도 함께 저장
+- 표시용 시간은 KST
 """
 
 from __future__ import annotations
@@ -86,6 +84,10 @@ def strategy_c(r: Dict[str, Any]) -> bool:
         and -2.0 <= r15 <= 1.0
         and r30 <= 0.5
     )
+
+
+def strategy_abc(r: Dict[str, Any]) -> bool:
+    return strategy_a(r) and strategy_b(r) and strategy_c(r)
 
 
 STRATEGIES: Dict[str, Dict[str, Any]] = {
@@ -169,6 +171,7 @@ def row_to_signal(r: Dict[str, Any], strategy_id: str) -> Dict[str, Any]:
         "ts_kst": to_kst_string(ts),
         "rank": r.get("rank"),
         "btc": r.get("btc"),
+        "abc_all": strategy_abc(r),
         "h1": outcome(r, "h1"),
         "h3": outcome(r, "h3"),
         "h6": outcome(r, "h6"),
@@ -305,6 +308,24 @@ def main() -> None:
 
         all_signals.extend(episodes)
 
+    # ABC overlap: separate observation only, does not change A/B/C logic
+    abc_episodes = build_episodes(rows, "ABC", strategy_abc)
+
+    abc_historical = [
+        x for x in abc_episodes
+        if parse_ts(x["ts"]) < forward_start
+    ]
+
+    abc_forward = [
+        x for x in abc_episodes
+        if parse_ts(x["ts"]) >= forward_start
+    ]
+
+    abc_stats = {
+        "historical_in_sample": stats_for(abc_historical),
+        "official_forward": stats_for(abc_forward),
+    }
+
     all_signals.sort(
         key=lambda x: parse_ts(x["ts"]),
         reverse=True
@@ -341,8 +362,10 @@ def main() -> None:
             "h24_note": "h24는 V7.3 evaluator가 기록한 기존 정의를 그대로 사용.",
             "leader_rule": "공식 sleeper_evaluated_n >= 30인 전략만 +5% 적중률로 임시 리더 선정",
             "leader": leader,
+            "abc_note": "ABC는 A/B/C 세 조건을 모두 만족한 별도 관찰 집계이며 A/B/C 전략 자체는 변경하지 않음.",
         },
         "strategies": strategy_output,
+        "abc_overlap": abc_stats,
         "signals": all_signals[:1000],
     }
 
@@ -357,6 +380,7 @@ def main() -> None:
     print("Generated KST:", payload["meta"]["generated_at_kst"])
     print("Forward start KST:", payload["meta"]["forward_start_kst"])
     print("Leader:", leader)
+    print("ABC forward episodes:", abc_stats["official_forward"]["episodes"])
     print("Output:", OUT)
 
 
