@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>V7.5 Phoenix Tournament</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:1100px;margin:auto;padding:18px;background:#0b0f14;color:#edf2f7}
+h1{font-size:25px;margin-bottom:6px}.muted{color:#97a6b5;font-size:13px}.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:15px}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:#121923;border:1px solid #263241;border-radius:15px;padding:15px}
+.big{font-size:28px;font-weight:750}.good{font-weight:750}.tag{display:inline-block;border:1px solid #3a4a5e;border-radius:999px;padding:4px 8px;font-size:12px;margin:3px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}th,td{padding:8px 5px;border-bottom:1px solid #24303d;text-align:right}
+th:first-child,td:first-child{text-align:left}.section{margin-top:20px}
+.leader{border-width:2px}.warn{font-size:12px;padding:10px;border:1px solid #3a4a5e;border-radius:12px;margin-top:10px}
+</style>
+</head>
+<body>
+<h1>ð¥ V7.5 Project Phoenix â Forward Tournament</h1>
+<div class="muted">V7.3ì ê·¸ëë¡ ì ì§ Â· A/B/C ì¸ ì ëµì ëìì ê³ ì  Â· ë°°í¬ ì´í ë°ì´í°ë§ ê³µì Forward ì±ì ì¼ë¡ ê³ì°</div>
+
+<div id="meta" class="warn"></div>
+<div id="cards" class="grid"></div>
+
+<div class="section card">
+  <b>ìµê·¼ Phoenix íë³´</b>
+  <table>
+    <thead>
+      <tr>
+        <th>ì ëµ</th><th>ì½ì¸</th><th>ìí</th><th>SCORE</th><th>5m</th><th>15m ê°ì</th><th>30m ê°ì</th><th>6h MAX</th><th>h24 MAX</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+
+<script>
+function fmt(v, suffix=''){
+  return v===null || v===undefined ? '-' : (typeof v==='number' ? v.toFixed(2)+suffix : v+suffix);
+}
+function statsBlock(title,s){
+  return `
+    <div class="muted" style="margin-top:10px">${title}</div>
+    <table>
+      <tr><td>Episodes</td><td>${s.episodes}</td></tr>
+      <tr><td>6h FAST</td><td>${fmt(s.fast_move_rate_pct,'%')} (${s.fast_move_n}/${s.h6_matured})</td></tr>
+      <tr><td>Sleeper íê°</td><td>${s.sleeper_evaluated_n}</td></tr>
+      <tr><td>Sleeper +3%</td><td>${fmt(s.sleeper_hit3_pct,'%')}</td></tr>
+      <tr><td>Sleeper +5%</td><td>${fmt(s.sleeper_hit5_pct,'%')}</td></tr>
+      <tr><td>Sleeper +10%</td><td>${fmt(s.sleeper_hit10_pct,'%')}</td></tr>
+    </table>`;
+}
+async function load(){
+  const r=await fetch('./data/v7_5_tournament.json?ts='+Date.now());
+  const d=await r.json();
+  const m=d.meta;
+
+  document.getElementById('meta').innerHTML=
+    `ê³µì Forward ìì: <b>${m.forward_start_utc}</b><br>`+
+    `ë¦¬ë ì ì  ìµì ì¡°ê±´: ê³µì Sleeper íê° 30ê° ì´ì. `+
+    `íì¬ ë¦¬ë: <b>${m.leader ?? 'ìì§ ìì'}</b><br>`+
+    `<span class="muted">â» h24ë V7.3 evaluatorê° ê¸°ë¡í ê¸°ì¡´ ì ìë¥¼ ê·¸ëë¡ ì¬ì©.</span>`;
+
+  const ids=['A','B','C'];
+  document.getElementById('cards').innerHTML=ids.map(id=>{
+    const x=d.strategies[id];
+    const lead=m.leader===id ? ' leader' : '';
+    return `<div class="card${lead}">
+      <div><span class="tag">ì ëµ ${id}</span>${m.leader===id?'<span class="tag">LEADER</span>':''}</div>
+      <div style="font-size:18px;font-weight:750;margin-top:8px">${x.name}</div>
+      <div class="muted">${x.description}</div>
+      ${statsBlock('ê³µì Forward',x.official_forward)}
+      ${statsBlock('ê³¼ê±° ì°¸ê³ (In-sample)',x.historical_in_sample)}
+    </div>`;
+  }).join('');
+
+  document.getElementById('rows').innerHTML=(d.signals||[]).slice(0,120).map(x=>{
+    const h6=x.h6?.max_pct, h24=x.h24?.max_pct;
+    return `<tr>
+      <td>${x.strategy}</td>
+      <td>${x.market?.replace('KRW-','')}</td>
+      <td class="${String(x.status).startsWith('PHOENIX')?'good':''}">${x.status}</td>
+      <td>${fmt(Number(x.score))}</td>
+      <td>${fmt(Number(x.ret_5m),'%')}</td>
+      <td>${fmt(Number(x.value_accel_15m),'x')}</td>
+      <td>${fmt(Number(x.value_accel_30m),'x')}</td>
+      <td>${fmt(h6,'%')}</td>
+      <td>${fmt(h24,'%')}</td>
+    </tr>`;
+  }).join('');
+}
+load().catch(e=>{
+  document.body.insertAdjacentHTML('beforeend',`<pre>${e}</pre>`);
+});
+</script>
+</body>
+</html>
