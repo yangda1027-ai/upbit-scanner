@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>V7.5 Phoenix Tournament</title>
 <style>
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:1100px;margin:auto;padding:18px;background:#0b0f14;color:#edf2f7}
+body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;max-width:1100px;margin:auto;padding:18px;background:#0b0f14;color:#edf2f7}
 h1{font-size:25px;margin-bottom:6px}.muted{color:#97a6b5;font-size:13px}.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:15px}
 @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
 .card{background:#121923;border:1px solid #263241;border-radius:15px;padding:15px}
@@ -16,18 +16,29 @@ th:first-child,td:first-child{text-align:left}.section{margin-top:20px}
 </style>
 </head>
 <body>
-<h1>ð¥ V7.5 Project Phoenix â Forward Tournament</h1>
-<div class="muted">V7.3ì ê·¸ëë¡ ì ì§ Â· A/B/C ì¸ ì ëµì ëìì ê³ ì  Â· ë°°í¬ ì´í ë°ì´í°ë§ ê³µì Forward ì±ì ì¼ë¡ ê³ì°</div>
+
+<h1>&#x1F525; V7.5 Project Phoenix &#8212; Forward Tournament</h1>
+<div class="muted">
+V7.3&#51008; &#44536;&#45824;&#47196; &#50976;&#51648; &#183; A/B/C &#49464; &#51204;&#47029;&#51012; &#46041;&#49884;&#50640; &#44256;&#51221; &#183; &#48176;&#54252; &#51060;&#54980; &#45936;&#51060;&#53552;&#47564; &#44277;&#49885; Forward &#49457;&#51201;&#51004;&#47196; &#44228;&#49328;
+</div>
 
 <div id="meta" class="warn"></div>
 <div id="cards" class="grid"></div>
 
 <div class="section card">
-  <b>ìµê·¼ Phoenix íë³´</b>
+  <b>&#52572;&#44540; Phoenix &#54980;&#48372;</b>
   <table>
     <thead>
       <tr>
-        <th>ì ëµ</th><th>ì½ì¸</th><th>ìí</th><th>SCORE</th><th>5m</th><th>15m ê°ì</th><th>30m ê°ì</th><th>6h MAX</th><th>h24 MAX</th>
+        <th>&#51204;&#47029;</th>
+        <th>&#53076;&#51064;</th>
+        <th>&#49345;&#53468;</th>
+        <th>SCORE</th>
+        <th>5m</th>
+        <th>15m &#44032;&#49549;</th>
+        <th>30m &#44032;&#49549;</th>
+        <th>6h MAX</th>
+        <th>h24 MAX</th>
       </tr>
     </thead>
     <tbody id="rows"></tbody>
@@ -38,39 +49,58 @@ th:first-child,td:first-child{text-align:left}.section{margin-top:20px}
 function fmt(v, suffix=''){
   return v===null || v===undefined ? '-' : (typeof v==='number' ? v.toFixed(2)+suffix : v+suffix);
 }
+
+const KO = {
+  officialStart: "\uacf5\uc2dd Forward \uc2dc\uc791",
+  leaderRule: "\ub9ac\ub354 \uc120\uc815 \ucd5c\uc18c \uc870\uac74",
+  currentLeader: "\ud604\uc7ac \ub9ac\ub354",
+  noneYet: "\uc544\uc9c1 \uc5c6\uc74c",
+  h24note: "\u203b h24\ub294 V7.3 evaluator\uac00 \uae30\ub85d\ud55c \uae30\uc874 \uc815\uc758\ub97c \uadf8\ub300\ub85c \uc0ac\uc6a9.",
+  strategy: "\uc804\ub7b5",
+  officialForward: "\uacf5\uc2dd Forward",
+  historical: "\uacfc\uac70 \ucc38\uace0(In-sample)",
+  episodes: "Episodes",
+  fast6h: "6h FAST",
+  sleeperEval: "Sleeper \ud3c9\uac00",
+  sleeper3: "Sleeper +3%",
+  sleeper5: "Sleeper +5%",
+  sleeper10: "Sleeper +10%"
+};
+
 function statsBlock(title,s){
   return `
     <div class="muted" style="margin-top:10px">${title}</div>
     <table>
-      <tr><td>Episodes</td><td>${s.episodes}</td></tr>
-      <tr><td>6h FAST</td><td>${fmt(s.fast_move_rate_pct,'%')} (${s.fast_move_n}/${s.h6_matured})</td></tr>
-      <tr><td>Sleeper íê°</td><td>${s.sleeper_evaluated_n}</td></tr>
-      <tr><td>Sleeper +3%</td><td>${fmt(s.sleeper_hit3_pct,'%')}</td></tr>
-      <tr><td>Sleeper +5%</td><td>${fmt(s.sleeper_hit5_pct,'%')}</td></tr>
-      <tr><td>Sleeper +10%</td><td>${fmt(s.sleeper_hit10_pct,'%')}</td></tr>
+      <tr><td>${KO.episodes}</td><td>${s.episodes}</td></tr>
+      <tr><td>${KO.fast6h}</td><td>${fmt(s.fast_move_rate_pct,'%')} (${s.fast_move_n}/${s.h6_matured})</td></tr>
+      <tr><td>${KO.sleeperEval}</td><td>${s.sleeper_evaluated_n}</td></tr>
+      <tr><td>${KO.sleeper3}</td><td>${fmt(s.sleeper_hit3_pct,'%')}</td></tr>
+      <tr><td>${KO.sleeper5}</td><td>${fmt(s.sleeper_hit5_pct,'%')}</td></tr>
+      <tr><td>${KO.sleeper10}</td><td>${fmt(s.sleeper_hit10_pct,'%')}</td></tr>
     </table>`;
 }
+
 async function load(){
   const r=await fetch('./data/v7_5_tournament.json?ts='+Date.now());
   const d=await r.json();
   const m=d.meta;
 
   document.getElementById('meta').innerHTML=
-    `ê³µì Forward ìì: <b>${m.forward_start_utc}</b><br>`+
-    `ë¦¬ë ì ì  ìµì ì¡°ê±´: ê³µì Sleeper íê° 30ê° ì´ì. `+
-    `íì¬ ë¦¬ë: <b>${m.leader ?? 'ìì§ ìì'}</b><br>`+
-    `<span class="muted">â» h24ë V7.3 evaluatorê° ê¸°ë¡í ê¸°ì¡´ ì ìë¥¼ ê·¸ëë¡ ì¬ì©.</span>`;
+    `${KO.officialStart}: <b>${m.forward_start_utc}</b><br>`+
+    `${KO.leaderRule}: ${m.leader_rule || 'Forward Sleeper 30+'}<br>`+
+    `${KO.currentLeader}: <b>${m.leader ?? KO.noneYet}</b><br>`+
+    `<span class="muted">${KO.h24note}</span>`;
 
   const ids=['A','B','C'];
   document.getElementById('cards').innerHTML=ids.map(id=>{
     const x=d.strategies[id];
     const lead=m.leader===id ? ' leader' : '';
     return `<div class="card${lead}">
-      <div><span class="tag">ì ëµ ${id}</span>${m.leader===id?'<span class="tag">LEADER</span>':''}</div>
+      <div><span class="tag">${KO.strategy} ${id}</span>${m.leader===id?'<span class="tag">LEADER</span>':''}</div>
       <div style="font-size:18px;font-weight:750;margin-top:8px">${x.name}</div>
       <div class="muted">${x.description}</div>
-      ${statsBlock('ê³µì Forward',x.official_forward)}
-      ${statsBlock('ê³¼ê±° ì°¸ê³ (In-sample)',x.historical_in_sample)}
+      ${statsBlock(KO.officialForward,x.official_forward)}
+      ${statsBlock(KO.historical,x.historical_in_sample)}
     </div>`;
   }).join('');
 
@@ -89,6 +119,7 @@ async function load(){
     </tr>`;
   }).join('');
 }
+
 load().catch(e=>{
   document.body.insertAdjacentHTML('beforeend',`<pre>${e}</pre>`);
 });
