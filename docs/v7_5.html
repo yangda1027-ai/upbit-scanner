@@ -6,20 +6,30 @@
 <title>V7.5 Phoenix Tournament</title>
 <style>
 body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;max-width:1100px;margin:auto;padding:18px;background:#0b0f14;color:#edf2f7}
-h1{font-size:25px;margin-bottom:6px}.muted{color:#97a6b5;font-size:13px}.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:15px}
+h1{font-size:25px;margin-bottom:6px}
+.muted{color:#97a6b5;font-size:13px}
+.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:15px}
 @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
 .card{background:#121923;border:1px solid #263241;border-radius:15px;padding:15px}
-.big{font-size:28px;font-weight:750}.good{font-weight:750}.tag{display:inline-block;border:1px solid #3a4a5e;border-radius:999px;padding:4px 8px;font-size:12px;margin:3px}
-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}th,td{padding:8px 5px;border-bottom:1px solid #24303d;text-align:right}
-th:first-child,td:first-child{text-align:left}.section{margin-top:20px}
-.leader{border-width:2px}.warn{font-size:12px;padding:10px;border:1px solid #3a4a5e;border-radius:12px;margin-top:10px}
+.good{font-weight:750}
+.tag{display:inline-block;border:1px solid #3a4a5e;border-radius:999px;padding:4px 8px;font-size:12px;margin:3px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+th,td{padding:8px 5px;border-bottom:1px solid #24303d;text-align:right}
+th:first-child,td:first-child{text-align:left}
+.section{margin-top:20px}
+.leader{border-width:2px}
+.warn{font-size:12px;padding:10px;border:1px solid #3a4a5e;border-radius:12px;margin-top:10px}
+.stale{font-weight:700}
 </style>
 </head>
 <body>
 
 <h1>&#x1F525; V7.5 Project Phoenix &#8212; Forward Tournament</h1>
+
 <div class="muted">
-V7.3&#51008; &#44536;&#45824;&#47196; &#50976;&#51648; &#183; A/B/C &#49464; &#51204;&#47029;&#51012; &#46041;&#49884;&#50640; &#44256;&#51221; &#183; &#48176;&#54252; &#51060;&#54980; &#45936;&#51060;&#53552;&#47564; &#44277;&#49885; Forward &#49457;&#51201;&#51004;&#47196; &#44228;&#49328;
+V7.3&#51008; &#44536;&#45824;&#47196; &#50976;&#51648; &#183;
+A/B/C &#49464; &#51204;&#47029;&#51012; &#46041;&#49884;&#50640; &#44256;&#51221; &#183;
+5&#48516;&#47560;&#45796; &#51088;&#46041; &#44081;&#49888;
 </div>
 
 <div id="meta" class="warn"></div>
@@ -32,6 +42,7 @@ V7.3&#51008; &#44536;&#45824;&#47196; &#50976;&#51648; &#183; A/B/C &#49464; &#5
       <tr>
         <th>&#51204;&#47029;</th>
         <th>&#53076;&#51064;</th>
+        <th>&#49884;&#44033;(KST)</th>
         <th>&#49345;&#53468;</th>
         <th>SCORE</th>
         <th>5m</th>
@@ -46,83 +57,124 @@ V7.3&#51008; &#44536;&#45824;&#47196; &#50976;&#51648; &#183; A/B/C &#49464; &#5
 </div>
 
 <script>
-function fmt(v, suffix=''){
-  return v===null || v===undefined ? '-' : (typeof v==='number' ? v.toFixed(2)+suffix : v+suffix);
-}
+const REFRESH_MS = 5 * 60 * 1000;
 
 const KO = {
-  officialStart: "\uacf5\uc2dd Forward \uc2dc\uc791",
+  lastUpdate: "\ub9c8\uc9c0\ub9c9 \uc5c5\ub370\uc774\ud2b8",
+  forwardStart: "\uacf5\uc2dd Forward \uc2dc\uc791",
   leaderRule: "\ub9ac\ub354 \uc120\uc815 \ucd5c\uc18c \uc870\uac74",
-  currentLeader: "\ud604\uc7ac \ub9ac\ub354",
-  noneYet: "\uc544\uc9c1 \uc5c6\uc74c",
-  h24note: "\u203b h24\ub294 V7.3 evaluator\uac00 \uae30\ub85d\ud55c \uae30\uc874 \uc815\uc758\ub97c \uadf8\ub300\ub85c \uc0ac\uc6a9.",
+  leader: "\ud604\uc7ac \ub9ac\ub354",
+  none: "\uc544\uc9c1 \uc5c6\uc74c",
+  nextRefresh: "\ud398\uc774\uc9c0 \uc790\ub3d9 \uc0c8\ub85c\uace0\uce68",
+  stale: "\u26a0 \ub370\uc774\ud130\uac00 10\ubd84 \uc774\uc0c1 \uc5c5\ub370\uc774\ud2b8\ub418\uc9c0 \uc54a\uc558\uc74c",
+  h24: "\u203b h24\ub294 V7.3 evaluator\uac00 \uae30\ub85d\ud55c \uae30\uc874 \uc815\uc758\ub97c \uadf8\ub300\ub85c \uc0ac\uc6a9.",
   strategy: "\uc804\ub7b5",
   officialForward: "\uacf5\uc2dd Forward",
   historical: "\uacfc\uac70 \ucc38\uace0(In-sample)",
-  episodes: "Episodes",
-  fast6h: "6h FAST",
-  sleeperEval: "Sleeper \ud3c9\uac00",
-  sleeper3: "Sleeper +3%",
-  sleeper5: "Sleeper +5%",
-  sleeper10: "Sleeper +10%"
+  sleeperEval: "Sleeper \ud3c9\uac00"
 };
+
+function fmt(v, suffix=''){
+  return v===null || v===undefined || Number.isNaN(v)
+    ? '-'
+    : (typeof v==='number' ? v.toFixed(2)+suffix : v+suffix);
+}
+
+function ageMinutes(iso){
+  if(!iso) return null;
+  const t = new Date(iso).getTime();
+  if(Number.isNaN(t)) return null;
+  return Math.floor((Date.now() - t) / 60000);
+}
 
 function statsBlock(title,s){
   return `
     <div class="muted" style="margin-top:10px">${title}</div>
     <table>
-      <tr><td>${KO.episodes}</td><td>${s.episodes}</td></tr>
-      <tr><td>${KO.fast6h}</td><td>${fmt(s.fast_move_rate_pct,'%')} (${s.fast_move_n}/${s.h6_matured})</td></tr>
+      <tr><td>Episodes</td><td>${s.episodes}</td></tr>
+      <tr><td>6h FAST</td><td>${fmt(s.fast_move_rate_pct,'%')} (${s.fast_move_n}/${s.h6_matured})</td></tr>
       <tr><td>${KO.sleeperEval}</td><td>${s.sleeper_evaluated_n}</td></tr>
-      <tr><td>${KO.sleeper3}</td><td>${fmt(s.sleeper_hit3_pct,'%')}</td></tr>
-      <tr><td>${KO.sleeper5}</td><td>${fmt(s.sleeper_hit5_pct,'%')}</td></tr>
-      <tr><td>${KO.sleeper10}</td><td>${fmt(s.sleeper_hit10_pct,'%')}</td></tr>
+      <tr><td>Sleeper +3%</td><td>${fmt(s.sleeper_hit3_pct,'%')}</td></tr>
+      <tr><td>Sleeper +5%</td><td>${fmt(s.sleeper_hit5_pct,'%')}</td></tr>
+      <tr><td>Sleeper +10%</td><td>${fmt(s.sleeper_hit10_pct,'%')}</td></tr>
     </table>`;
 }
 
 async function load(){
-  const r=await fetch('./data/v7_5_tournament.json?ts='+Date.now());
-  const d=await r.json();
-  const m=d.meta;
+  const r = await fetch('./data/v7_5_tournament.json?ts='+Date.now(), {
+    cache: 'no-store'
+  });
 
-  document.getElementById('meta').innerHTML=
-    `${KO.officialStart}: <b>${m.forward_start_utc}</b><br>`+
-    `${KO.leaderRule}: ${m.leader_rule || 'Forward Sleeper 30+'}<br>`+
-    `${KO.currentLeader}: <b>${m.leader ?? KO.noneYet}</b><br>`+
-    `<span class="muted">${KO.h24note}</span>`;
+  const d = await r.json();
+  const m = d.meta;
+  const age = ageMinutes(m.generated_at_utc);
 
-  const ids=['A','B','C'];
-  document.getElementById('cards').innerHTML=ids.map(id=>{
-    const x=d.strategies[id];
-    const lead=m.leader===id ? ' leader' : '';
+  const staleText = (age !== null && age >= 10)
+    ? `<br><span class="stale">${KO.stale} (${age}\ubd84)</span>`
+    : '';
+
+  document.getElementById('meta').innerHTML =
+    `${KO.lastUpdate}: <b>${m.generated_at_kst || '-'}</b><br>` +
+    `${KO.forwardStart}: <b>${m.forward_start_kst || '-'}</b><br>` +
+    `${KO.leaderRule}: ${m.leader_rule || '-'}<br>` +
+    `${KO.leader}: <b>${m.leader ?? KO.none}</b><br>` +
+    `${KO.nextRefresh}: <b>5\ubd84</b><br>` +
+    `<span class="muted">${KO.h24}</span>` +
+    staleText;
+
+  const ids = ['A','B','C'];
+
+  document.getElementById('cards').innerHTML = ids.map(id => {
+    const x = d.strategies[id];
+    const lead = m.leader === id ? ' leader' : '';
+
     return `<div class="card${lead}">
-      <div><span class="tag">${KO.strategy} ${id}</span>${m.leader===id?'<span class="tag">LEADER</span>':''}</div>
-      <div style="font-size:18px;font-weight:750;margin-top:8px">${x.name}</div>
+      <div>
+        <span class="tag">${KO.strategy} ${id}</span>
+        ${m.leader===id ? '<span class="tag">LEADER</span>' : ''}
+      </div>
+
+      <div style="font-size:18px;font-weight:750;margin-top:8px">
+        ${x.name}
+      </div>
+
       <div class="muted">${x.description}</div>
-      ${statsBlock(KO.officialForward,x.official_forward)}
-      ${statsBlock(KO.historical,x.historical_in_sample)}
+
+      ${statsBlock(KO.officialForward, x.official_forward)}
+      ${statsBlock(KO.historical, x.historical_in_sample)}
     </div>`;
   }).join('');
 
-  document.getElementById('rows').innerHTML=(d.signals||[]).slice(0,120).map(x=>{
-    const h6=x.h6?.max_pct, h24=x.h24?.max_pct;
-    return `<tr>
-      <td>${x.strategy}</td>
-      <td>${x.market?.replace('KRW-','')}</td>
-      <td class="${String(x.status).startsWith('PHOENIX')?'good':''}">${x.status}</td>
-      <td>${fmt(Number(x.score))}</td>
-      <td>${fmt(Number(x.ret_5m),'%')}</td>
-      <td>${fmt(Number(x.value_accel_15m),'x')}</td>
-      <td>${fmt(Number(x.value_accel_30m),'x')}</td>
-      <td>${fmt(h6,'%')}</td>
-      <td>${fmt(h24,'%')}</td>
-    </tr>`;
-  }).join('');
+  document.getElementById('rows').innerHTML =
+    (d.signals || []).slice(0,120).map(x => {
+      const h6 = x.h6?.max_pct;
+      const h24 = x.h24?.max_pct;
+
+      return `<tr>
+        <td>${x.strategy}</td>
+        <td>${x.market?.replace('KRW-','')}</td>
+        <td>${x.ts_kst || '-'}</td>
+        <td class="${String(x.status).startsWith('PHOENIX')?'good':''}">
+          ${x.status}
+        </td>
+        <td>${fmt(Number(x.score))}</td>
+        <td>${fmt(Number(x.ret_5m),'%')}</td>
+        <td>${fmt(Number(x.value_accel_15m),'x')}</td>
+        <td>${fmt(Number(x.value_accel_30m),'x')}</td>
+        <td>${fmt(h6,'%')}</td>
+        <td>${fmt(h24,'%')}</td>
+      </tr>`;
+    }).join('');
 }
 
-load().catch(e=>{
-  document.body.insertAdjacentHTML('beforeend',`<pre>${e}</pre>`);
+load().catch(e => {
+  document.getElementById('meta').innerHTML =
+    `<span class="stale">LOAD ERROR: ${e}</span>`;
 });
+
+setInterval(() => {
+  load().catch(()=>{});
+}, REFRESH_MS);
 </script>
 </body>
 </html>
