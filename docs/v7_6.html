@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Upbit V7.6 ALL KRW</title>
 <style>
@@ -24,8 +25,8 @@ th:first-child,td:first-child{text-align:left}
 </head>
 <body>
 <div class="w">
-<h1>&#129514; V7.6 &#8212; ALL KRW Scanner</h1>
-<p class="muted">V7.3 &#51216;&#49688;&#183;EARLY &#44508;&#52825; &#50976;&#51648; &#183; 24h &#44144;&#47000;&#45824;&#44552; TOP120 &#51228;&#54620;&#47564; &#51228;&#44144;</p>
+<h1>&#129514; V7.6 &mdash; ALL KRW Scanner</h1>
+<p class="muted">V7.3 &#51216;&#49688;&middot;EARLY &#44508;&#52825; &#50976;&#51648; &middot; 24h &#44144;&#47000;&#45824;&#44552; TOP120 &#51228;&#54620;&#47564; &#51228;&#44144;</p>
 
 <div id="stale" class="warn"></div>
 
@@ -47,8 +48,8 @@ th:first-child,td:first-child{text-align:left}
 </div>
 
 <script>
-const n=x=>x==null?'&#8212;':Number(x).toFixed(2);
-const p=x=>x==null?'&#8212;':Number(x).toFixed(2)+'%';
+const n=x=>x==null?'-':Number(x).toFixed(2);
+const p=x=>x==null?'-':Number(x).toFixed(2)+'%';
 const kst=s=>new Intl.DateTimeFormat('ko-KR',{
   timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',
   hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
@@ -89,15 +90,16 @@ async function load(){
   const d=await r.json();
 
   const age=(Date.now()-new Date(d.updated_at).getTime())/60000;
+
   document.getElementById('meta').innerHTML=
-    `&#47560;&#51648;&#47561; &#49688;&#51665;: <b>${kst(d.updated_at)} KST</b> &#183; ${age.toFixed(1)}&#48516; &#51204;<br>`+
-    `BTC 15m ${p(d.btc?.ret_15m)} &#183; BTC 60m ${p(d.btc?.ret_60m)}<br>`+
-    `<span class="muted">V7.3 &#51216;&#49688;&#183;EARLY &#44508;&#52825; &#50976;&#51648; &#183; 24h &#44144;&#47000;&#45824;&#44552; TOP120 &#51228;&#54620;&#47564; &#51228;&#44144; &#183; trade_value_rank_24h&#45716; &#48708;&#44368;&#50857; &#44592;&#47197;</span>`;
+    `&#47560;&#51648;&#47561; &#49688;&#51665;: <b>${kst(d.updated_at)} KST</b> &middot; ${age.toFixed(1)}&#48516; &#51204;<br>`+
+    `BTC 15m ${p(d.btc?.ret_15m)} &middot; BTC 60m ${p(d.btc?.ret_60m)}<br>`+
+    `<span class="muted">V7.3 &#51216;&#49688;&middot;EARLY &#44508;&#52825; &#50976;&#51648; &middot; 24h &#44144;&#47000;&#45824;&#44552; TOP120 &#51228;&#54620;&#47564; &#51228;&#44144; &middot; trade_value_rank_24h&#45716; &#48708;&#44368;&#50857; &#44592;&#47197;</span>`;
 
   if(age>10){
     const s=document.getElementById('stale');
     s.style.display='block';
-    s.textContent=`&#9888; STALE DATA &#183; &#47560;&#51648;&#47561; &#49688;&#51665;&#51060; ${age.toFixed(1)}&#48516; &#51204;&#51077;&#45768;&#45796;.`;
+    s.innerHTML=`STALE DATA &middot; &#47560;&#51648;&#47561; &#49688;&#51665;&#51060; ${age.toFixed(1)}&#48516; &#51204;&#51077;&#45768;&#45796;.`;
   }
 
   document.getElementById('kpis').innerHTML=
@@ -125,7 +127,7 @@ async function load(){
 load().catch(e=>{
   const s=document.getElementById('stale');
   s.style.display='block';
-  s.textContent='&#45936;&#51060;&#53552; &#47196;&#46300; &#49892;&#54056;: '+e;
+  s.textContent='DATA LOAD FAILED: '+e;
 });
 </script>
 </body>
