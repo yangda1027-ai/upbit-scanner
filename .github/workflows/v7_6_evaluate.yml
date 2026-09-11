@@ -1,0 +1,81 @@
+name: V7.6 Evaluate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v7-6-evaluate
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Sync latest repository
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Run V7.6 evaluator
+        run: python src/v7_6_evaluate.py
+
+      - name: Commit evaluated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add docs/data/v7_6_signals.json
+
+          if git diff --cached --quiet; then
+            echo "No evaluation changes."
+            exit 0
+          fi
+
+          git commit -m "evaluate v7.6 outcomes"
+
+      - name: Rebase latest main and push with retry
+        run: |
+          for i in 1 2 3 4 5; do
+            echo "Push attempt $i"
+            git fetch origin main
+
+            if ! git rebase origin/main; then
+              echo "Rebase conflict. Prefer evaluator version of V7.6 signals."
+              git checkout --theirs docs/data/v7_6_signals.json || true
+              git add docs/data/v7_6_signals.json || true
+              GIT_EDITOR=true git rebase --continue || {
+                git rebase --abort || true
+                exit 1
+              }
+            fi
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded."
+              exit 0
+            fi
+
+            echo "Remote changed during push. Retrying..."
+            sleep 3
+          done
+
+          echo "Push failed after 5 attempts."
+          exit 1
