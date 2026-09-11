@@ -38,7 +38,7 @@ jobs:
       - name: Run V7.6 ALL KRW scanner
         run: python src/v7_6_forward.py
 
-      - name: Commit and push data safely
+      - name: Commit V7.6 data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -51,4 +51,28 @@ jobs:
           fi
 
           git commit -m "update v7.6 all-krw data"
-          git push origin HEAD:main
+
+      - name: Rebase latest main and push with retry
+        run: |
+          for i in 1 2 3 4 5; do
+            echo "Push attempt $i"
+
+            git fetch origin main
+
+            if ! git rebase origin/main; then
+              echo "Rebase failed."
+              git rebase --abort || true
+              exit 1
+            fi
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded."
+              exit 0
+            fi
+
+            echo "Remote changed during push. Retrying..."
+            sleep 3
+          done
+
+          echo "Push failed after 5 attempts."
+          exit 1
