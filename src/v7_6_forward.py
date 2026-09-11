@@ -7,9 +7,12 @@ API = "https://api.upbit.com"
 OUT = Path("docs/data/v7_6_signals.json")
 LATEST = Path("docs/data/v7_6_latest.json")
 
-STABLE = {"USDT", "USDC", "DAI"}
+STABLE = {"USDT", "USDC", "DAI", "USD1", "USDE", "FDUSD", "TUSD"}
 TOP_N = 10
-MAX_ROWS = 20000
+HISTORY_RANK_N = 30
+EARLY_DIAG_SCORE = 65
+EPISODE_GAP_MIN = 60
+MAX_ROWS = 50000
 
 S = requests.Session()
 S.headers.update({"User-Agent": "upbit-v7-6-all-krw/1.0"})
@@ -234,23 +237,70 @@ def main():
         and (x["A"] or x["B"] or x["C"])
     ]
 
-    recs = []
-    for rank, z in enumerate(top, 1):
+    # V7.6 history íì¥:
+    # 1) ì ì²´ ì ë ¬ TOP30
+    # 2) ììì ë¬´ê´íê² A/B/C íµê³¼ íë³´ ì ë¶
+    # 3) ììì ë¬´ê´íê² EARLY + score>=65 ì§ë¨ íë³´
+    # ë¥¼ ì ì¥ ëìì¼ë¡ ì¡ëë¤.
+    selected = []
+    for rank, z in enumerate(rows, 1):
+        in_top30 = rank <= HISTORY_RANK_N
+        abc_candidate = z["label"] == "EARLY" and (z["A"] or z["B"] or z["C"])
+        early_diag = z["label"] == "EARLY" and z["score"] >= EARLY_DIAG_SCORE
+        if not (in_top30 or abc_candidate or early_diag):
+            continue
+
         q = dict(z)
+        sources = []
+        if in_top30:
+            sources.append("TOP30")
+        if abc_candidate:
+            sources.append("ABC")
+        if early_diag:
+            sources.append("EARLY65")
+
         q.update({
             "ts": now.isoformat(),
             "rank": rank,
+            "selection_source": "+".join(sources),
             "btc": btc,
             "h1": None,
             "h3": None,
             "h6": None,
             "h24": None,
         })
-        recs.append(q)
+        selected.append(q)
 
     hist = load_json(OUT, [])
     if not isinstance(hist, list):
         hist = []
+
+    # ê°ì ì¢ëª©/ê°ì A-B-C ìíë¥¼ 5ë¶ë§ë¤ ì¤ë³µ ì ì¥íì§ ìê³ 
+    # 60ë¶ì í ë²ë§ ì episodeë¡ ì ì¥íë¤.
+    # ë¨, A/B/C ìíê° ë°ëë©´ ê°ì 60ë¶ ììë ì ê¸°ë¡ì ë¨ê¸´ë¤.
+    from datetime import timedelta
+    cutoff = now - timedelta(minutes=EPISODE_GAP_MIN)
+    recent_keys = set()
+    for old in hist:
+        try:
+            ots = datetime.fromisoformat(str(old.get("ts", "")).replace("Z", "+00:00"))
+            if ots >= cutoff:
+                recent_keys.add((
+                    old.get("market"),
+                    bool(old.get("A")),
+                    bool(old.get("B")),
+                    bool(old.get("C")),
+                ))
+        except Exception:
+            pass
+
+    recs = []
+    for q in selected:
+        key = (q.get("market"), bool(q.get("A")), bool(q.get("B")), bool(q.get("C")))
+        if key in recent_keys:
+            continue
+        recs.append(q)
+        recent_keys.add(key)
 
     hist = recs + hist
     hist = hist[:MAX_ROWS]
@@ -266,6 +316,10 @@ def main():
         "scanned_markets": len(rows),
         "market_count": len(ms),
         "top_n": TOP_N,
+        "history_rank_n": HISTORY_RANK_N,
+        "early_diag_score": EARLY_DIAG_SCORE,
+        "episode_gap_min": EPISODE_GAP_MIN,
+        "new_history_records": len(recs),
         "btc": btc,
         "top": top,
         "outside_top120_candidates": outside_candidates[:30],
@@ -273,6 +327,7 @@ def main():
         "note": (
             "V7.3 score/EARLY ê·ì¹ì ê·¸ëë¡ ì ì§. "
             "24h ê±°ëëê¸ TOP120 ì íë§ ì ê±°. "
+            "historyë TOP30 + A/B/C ì ì²´ + EARLY score>=65ë¥¼ 60ë¶ episodeë¡ ì ì¥. "
             "trade_value_rank_24hë íí°ê° ìëë¼ ë¹êµì© ê¸°ë¡."
         ),
     }
@@ -286,6 +341,7 @@ def main():
     print("markets:", len(ms))
     print("feature rows:", len(rows))
     print("outside top120 A/B/C candidates:", len(outside_candidates))
+    print("history selected:", len(selected), "new records:", len(recs))
     for x in top:
         print(
             x["market"],
