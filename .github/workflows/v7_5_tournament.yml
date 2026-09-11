@@ -2,8 +2,6 @@ name: V7.5 Phoenix Tournament
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/5 * * * *"
 
 permissions:
   contents: write
@@ -36,3 +34,4 @@ jobs:
           git diff --cached --quiet || git commit -m "Update V7.5 Phoenix tournament"
           git pull --rebase
           git push
+
