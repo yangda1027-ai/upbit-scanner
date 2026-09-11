@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Upbit V7.6 ALL KRW</title>
 <style>
@@ -25,8 +24,8 @@ th:first-child,td:first-child{text-align:left}
 </head>
 <body>
 <div class="w">
-<h1>ð§ª V7.6 â ALL KRW Scanner</h1>
-<p class="muted">V7.3 ì ìÂ·EARLY ê·ì¹ ì ì§ Â· 24h ê±°ëëê¸ TOP120 ì íë§ ì ê±°</p>
+<h1>&#129514; V7.6 &#8212; ALL KRW Scanner</h1>
+<p class="muted">V7.3 &#51216;&#49688;&#183;EARLY &#44508;&#52825; &#50976;&#51648; &#183; 24h &#44144;&#47000;&#45824;&#44552; TOP120 &#51228;&#54620;&#47564; &#51228;&#44144;</p>
 
 <div id="stale" class="warn"></div>
 
@@ -36,20 +35,20 @@ th:first-child,td:first-child{text-align:left}
 </div>
 
 <div class="card">
-<h2>íì¬ TOP 10</h2>
+<h2>&#54788;&#51116; TOP 10</h2>
 <div style="overflow:auto"><table id="top"></table></div>
 </div>
 
 <div class="card">
-<h2>TOP120 ë° A/B/C íë³´</h2>
-<p class="muted">ì´ íê° V7.6ì íµì¬ ì¤íêµ°ìëë¤. ê¸°ì¡´ V7.3ì´ ìì ë³´ì§ ìë ì¢ëª© ì¤ íì¬ ì¡°ê±´ì íµê³¼í íë³´ìëë¤.</p>
+<h2>TOP120 &#48150; A/B/C &#54980;&#48372;</h2>
+<p class="muted">&#51060; &#54364;&#44032; V7.6&#51032; &#54645;&#49900; &#49892;&#54744;&#44400;&#51077;&#45768;&#45796;. &#44592;&#51316; V7.3&#51060; &#50500;&#50696; &#48372;&#51648; &#50506;&#45912; &#51333;&#47785; &#51473; &#54788;&#51116; &#51312;&#44148;&#51012; &#53685;&#44284;&#54620; &#54980;&#48372;&#51077;&#45768;&#45796;.</p>
 <div style="overflow:auto"><table id="outside"></table></div>
 </div>
 </div>
 
 <script>
-const n=x=>x==null?'â':Number(x).toFixed(2);
-const p=x=>x==null?'â':Number(x).toFixed(2)+'%';
+const n=x=>x==null?'&#8212;':Number(x).toFixed(2);
+const p=x=>x==null?'&#8212;':Number(x).toFixed(2)+'%';
 const kst=s=>new Intl.DateTimeFormat('ko-KR',{
   timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',
   hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
@@ -91,27 +90,27 @@ async function load(){
 
   const age=(Date.now()-new Date(d.updated_at).getTime())/60000;
   document.getElementById('meta').innerHTML=
-    `ë§ì§ë§ ìì§: <b>${kst(d.updated_at)} KST</b> Â· ${age.toFixed(1)}ë¶ ì <br>`+
-    `BTC 15m ${p(d.btc?.ret_15m)} Â· BTC 60m ${p(d.btc?.ret_60m)}<br>`+
+    `&#47560;&#51648;&#47561; &#49688;&#51665;: <b>${kst(d.updated_at)} KST</b> &#183; ${age.toFixed(1)}&#48516; &#51204;<br>`+
+    `BTC 15m ${p(d.btc?.ret_15m)} &#183; BTC 60m ${p(d.btc?.ret_60m)}<br>`+
     `<span class="muted">${d.note??''}</span>`;
 
   if(age>10){
     const s=document.getElementById('stale');
     s.style.display='block';
-    s.textContent=`â  STALE DATA Â· ë§ì§ë§ ìì§ì´ ${age.toFixed(1)}ë¶ ì ìëë¤.`;
+    s.textContent=`&#9888; STALE DATA &#183; &#47560;&#51648;&#47561; &#49688;&#51665;&#51060; ${age.toFixed(1)}&#48516; &#51204;&#51077;&#45768;&#45796;.`;
   }
 
   document.getElementById('kpis').innerHTML=
-    `<div class="kpi"><div class="muted">KRW ìì¥ ì</div><div class="big">${d.market_count??'-'}</div></div>`+
-    `<div class="kpi"><div class="muted">Feature ê³ì° ìë£</div><div class="big">${d.scanned_markets??'-'}</div></div>`+
-    `<div class="kpi"><div class="muted">TOP120 ë° A/B/C</div><div class="big">${d.outside_top120_candidate_count??0}</div></div>`+
-    `<div class="kpi"><div class="muted">íì¬ ë°©ì</div><div class="big">ALL KRW</div></div>`;
+    `<div class="kpi"><div class="muted">KRW &#49884;&#51109; &#49688;</div><div class="big">${d.market_count??'-'}</div></div>`+
+    `<div class="kpi"><div class="muted">Feature &#44228;&#49328; &#50756;&#47308;</div><div class="big">${d.scanned_markets??'-'}</div></div>`+
+    `<div class="kpi"><div class="muted">TOP120 &#48150; A/B/C</div><div class="big">${d.outside_top120_candidate_count??0}</div></div>`+
+    `<div class="kpi"><div class="muted">&#54788;&#51116; &#48169;&#49885;</div><div class="big">ALL KRW</div></div>`;
 
   const head=`<tr>
-    <th>ì¢ëª©</th><th>ìí</th><th>Score</th>
+    <th>&#51333;&#47785;</th><th>&#49345;&#53468;</th><th>Score</th>
     <th>5m</th><th>15m</th><th>30m</th><th>60m</th>
     <th>5m Ratio</th><th>15m Accel</th><th>30m Accel</th>
-    <th>24h ê±°ëëê¸ ìì</th><th>120ì ë°</th><th>A/B/C</th>
+    <th>24h &#44144;&#47000;&#45824;&#44552; &#49692;&#50948;</th><th>120&#50948; &#48150;</th><th>A/B/C</th>
   </tr>`;
 
   let t=head;
@@ -126,7 +125,7 @@ async function load(){
 load().catch(e=>{
   const s=document.getElementById('stale');
   s.style.display='block';
-  s.textContent='ë°ì´í° ë¡ë ì¤í¨: '+e;
+  s.textContent='&#45936;&#51060;&#53552; &#47196;&#46300; &#49892;&#54056;: '+e;
 });
 </script>
 </body>
