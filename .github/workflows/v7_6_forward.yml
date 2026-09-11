@@ -1,0 +1,41 @@
+name: V7.6 ALL KRW Forward
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v7-6-all-krw
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run V7.6 ALL KRW scanner
+        run: python src/v7_6_forward.py
+
+      - name: Commit data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/v7_6_signals.json docs/data/v7_6_latest.json
+          git diff --cached --quiet && exit 0
+          git commit -m "update v7.6 all-krw data"
+          git pull --rebase origin main
+          git push
