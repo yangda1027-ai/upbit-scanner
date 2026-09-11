@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upbit V7.6 ALL KRW</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif;background:#f4f6f8;margin:0;color:#111827}
+.w{max-width:1180px;margin:28px auto;padding:0 16px}
+.card{background:#fff;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 1px 5px #0001}
+.warn{padding:12px;border-radius:12px;font-weight:700;display:none;background:#ffe3e3}
+.muted{color:#6b7280}
+.pill{padding:4px 8px;border-radius:999px;font-weight:700;font-size:12px}
+.early{background:#dcfce7}.watch{background:#e5e7eb}.chase{background:#fee2e2}
+.out{background:#fff7ed;font-weight:800}
+table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:right}
+th:first-child,td:first-child{text-align:left}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:#f8fafc;border-radius:14px;padding:14px}
+.big{font-size:22px;font-weight:800}
+@media(max-width:760px){.grid{grid-template-columns:1fr 1fr}table{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>ð§ª V7.6 â ALL KRW Scanner</h1>
+<p class="muted">V7.3 ì ìÂ·EARLY ê·ì¹ ì ì§ Â· 24h ê±°ëëê¸ TOP120 ì íë§ ì ê±°</p>
+
+<div id="stale" class="warn"></div>
+
+<div class="card">
+  <div id="meta"></div>
+  <div id="kpis" class="grid"></div>
+</div>
+
+<div class="card">
+<h2>íì¬ TOP 10</h2>
+<div style="overflow:auto"><table id="top"></table></div>
+</div>
+
+<div class="card">
+<h2>TOP120 ë° A/B/C íë³´</h2>
+<p class="muted">ì´ íê° V7.6ì íµì¬ ì¤íêµ°ìëë¤. ê¸°ì¡´ V7.3ì´ ìì ë³´ì§ ìë ì¢ëª© ì¤ íì¬ ì¡°ê±´ì íµê³¼í íë³´ìëë¤.</p>
+<div style="overflow:auto"><table id="outside"></table></div>
+</div>
+</div>
+
+<script>
+const n=x=>x==null?'â':Number(x).toFixed(2);
+const p=x=>x==null?'â':Number(x).toFixed(2)+'%';
+const kst=s=>new Intl.DateTimeFormat('ko-KR',{
+  timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',
+  hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false
+}).format(new Date(s));
+
+function cls(x){return x==='EARLY'?'early':(x==='CHASE'?'chase':'watch')}
+
+function flags(x){
+  const a=[];
+  if(x.A)a.push('A');
+  if(x.B)a.push('B');
+  if(x.C)a.push('C');
+  if(x.ABC_ALL)a.push('ALL');
+  return a.length?a.join(' / '):'-';
+}
+
+function row(x,rank){
+  const out=x.outside_top120?' class="out"':'';
+  return `<tr${out}>
+  <td>${rank??''} ${x.market}</td>
+  <td><span class="pill ${cls(x.label)}">${x.label}</span></td>
+  <td><b>${n(x.score)}</b></td>
+  <td>${p(x.ret_5m)}</td>
+  <td>${p(x.ret_15m)}</td>
+  <td>${p(x.ret_30m)}</td>
+  <td>${p(x.ret_60m)}</td>
+  <td>${n(x.value_ratio_5m)}</td>
+  <td>${n(x.value_accel_15m)}</td>
+  <td>${n(x.value_accel_30m)}</td>
+  <td>${x.trade_value_rank_24h??'-'}</td>
+  <td>${x.outside_top120?'YES':'NO'}</td>
+  <td>${flags(x)}</td>
+  </tr>`;
+}
+
+async function load(){
+  const r=await fetch('./data/v7_6_latest.json?ts='+Date.now());
+  const d=await r.json();
+
+  const age=(Date.now()-new Date(d.updated_at).getTime())/60000;
+  document.getElementById('meta').innerHTML=
+    `ë§ì§ë§ ìì§: <b>${kst(d.updated_at)} KST</b> Â· ${age.toFixed(1)}ë¶ ì <br>`+
+    `BTC 15m ${p(d.btc?.ret_15m)} Â· BTC 60m ${p(d.btc?.ret_60m)}<br>`+
+    `<span class="muted">${d.note??''}</span>`;
+
+  if(age>10){
+    const s=document.getElementById('stale');
+    s.style.display='block';
+    s.textContent=`â  STALE DATA Â· ë§ì§ë§ ìì§ì´ ${age.toFixed(1)}ë¶ ì ìëë¤.`;
+  }
+
+  document.getElementById('kpis').innerHTML=
+    `<div class="kpi"><div class="muted">KRW ìì¥ ì</div><div class="big">${d.market_count??'-'}</div></div>`+
+    `<div class="kpi"><div class="muted">Feature ê³ì° ìë£</div><div class="big">${d.scanned_markets??'-'}</div></div>`+
+    `<div class="kpi"><div class="muted">TOP120 ë° A/B/C</div><div class="big">${d.outside_top120_candidate_count??0}</div></div>`+
+    `<div class="kpi"><div class="muted">íì¬ ë°©ì</div><div class="big">ALL KRW</div></div>`;
+
+  const head=`<tr>
+    <th>ì¢ëª©</th><th>ìí</th><th>Score</th>
+    <th>5m</th><th>15m</th><th>30m</th><th>60m</th>
+    <th>5m Ratio</th><th>15m Accel</th><th>30m Accel</th>
+    <th>24h ê±°ëëê¸ ìì</th><th>120ì ë°</th><th>A/B/C</th>
+  </tr>`;
+
+  let t=head;
+  (d.top||[]).forEach((x,i)=>t+=row(x,i+1));
+  document.getElementById('top').innerHTML=t;
+
+  let o=head;
+  (d.outside_top120_candidates||[]).forEach((x,i)=>o+=row(x,i+1));
+  document.getElementById('outside').innerHTML=o;
+}
+
+load().catch(e=>{
+  const s=document.getElementById('stale');
+  s.style.display='block';
+  s.textContent='ë°ì´í° ë¡ë ì¤í¨: '+e;
+});
+</script>
+</body>
+</html>
