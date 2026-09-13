@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Live Ranker v0.6.4 FULL DEBUG + SEARCH</title>
+<title>Live Ranker v0.7 SPLIT POTENTIAL-LAUNCH</title>
 <style>
 body{margin:0;background:#0b0f14;color:#eef4fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 .wrap{max-width:980px;margin:auto;padding:16px}
@@ -29,7 +29,7 @@ button.active{border-color:#59a7ff}
 </head>
 <body>
 <div class="wrap">
-<h1>Live Ranker v0.6.4 FULL DEBUG + SEARCH</h1>
+<h1>Live Ranker v0.7 SPLIT POTENTIAL-LAUNCH</h1>
 <div class="sub">Potential = 축적/잠복 후보 · Launch = 실제 가격 움직임 확인 후보</div>
 <div class="sub" id="updated">불러오는 중…</div>
 
@@ -53,7 +53,7 @@ button.active{border-color:#59a7ff}
 
 <section id="debug" style="display:none">
 <h2>🔎 Debug — 왜 빠졌나</h2>
-<div class="sub">v0.6 점수·필터는 그대로. 전체 KRW 종목이 파이프라인 어느 단계에서 빠졌는지 추적.</div>
+<div class="sub">v0.7 · Potential은 실패이력을 약하게, Launch는 강하게 반영 · 전체 KRW 파이프라인 추적.</div>
 <div class="searchBox">
   <input id="tickerSearch" type="search" placeholder="티커 검색 — 예: BIO, RENDER, KAITO" autocomplete="off" autocapitalize="characters">
   <button onclick="searchTicker()">검색</button>
@@ -92,7 +92,9 @@ function card(x,i,mode){
    <div><span>전조 / 재점화</span><b>${n(x.precursor_n_72h,0)} / ${n(x.reignition_n_24h,0)}</b></div>
    <div><span>Ignition 성공/실패</span><b>${n(x.successful_ignitions_72h,0)} / ${n(x.failed_ignitions_72h,0)}</b></div>
    <div><span>반응률</span><b>${n(x.ignition_response_rate)}%</b></div>
-   <div><span>실패 감점</span><b>-${n(x.failed_ignition_penalty)}</b></div>
+   <div><span>실패 감점 원값</span><b>-${n(x.failed_ignition_penalty)}</b></div>
+   <div><span>Potential 적용 감점</span><b>-${n(x.potential_failed_penalty_applied)}</b></div>
+   <div><span>Launch reliability</span><b>${n(x.launch_reliability_score)}</b></div>
    <div><span>과거 최대 VR</span><b>${n(x.max_prior_value_ratio_5m)}</b></div>
    <div><span>Early bonus</span><b>${n(x.early_launch_bonus)}</b></div>
    <div><span>신호 나이</span><b>${n(x.latest_signal_age_h)}h</b></div>
@@ -117,7 +119,9 @@ function debugCard(x,i){
      <div><span>Transition 조정</span><b>${n(x.transition_adjustment)}</b></div>
      <div><span>Ignition 성공/실패</span><b>${n(x.successful_ignitions_72h,0)} / ${n(x.failed_ignitions_72h,0)}</b></div>
      <div><span>반응률</span><b>${n(x.ignition_response_rate)}%</b></div>
-     <div><span>실패 감점</span><b>-${n(x.failed_ignition_penalty)}</b></div>
+     <div><span>실패 감점 원값</span><b>-${n(x.failed_ignition_penalty)}</b></div>
+     <div><span>Potential 적용 감점</span><b>-${n(x.potential_failed_penalty_applied)}</b></div>
+     <div><span>Launch reliability</span><b>${n(x.launch_reliability_score)}</b></div>
      <div><span>파이프라인 상태</span><b>${x.pipeline_status||"-"}</b></div>
      <div><span>탈락 단계</span><b>${x.pipeline_fail_stage||"-"}</b></div>
      <div style="display:block"><span>파이프라인 탈락 사유</span><br><b>${x.pipeline_fail_reason||"없음"}</b></div>
