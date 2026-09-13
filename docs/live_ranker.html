@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Ranker v0.6.1 DEBUG</title>
+<style>
+body{margin:0;background:#0b0f14;color:#eef4fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:980px;margin:auto;padding:16px}
+h1{margin:0 0 6px;font-size:24px}.sub{color:#8e9bab;font-size:13px}
+.tabs{display:flex;gap:8px;position:sticky;top:0;background:#0b0f14;padding:12px 0}
+button{background:#121821;color:#eef4fb;border:1px solid #263242;padding:10px 12px;border-radius:10px;font-weight:700}
+button.active{border-color:#59a7ff}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.card{background:#121821;border:1px solid #263242;border-radius:14px;padding:13px}
+.coin{font-size:22px;font-weight:800;margin-bottom:8px}.rank{color:#8e9bab;font-size:12px}
+.scoreRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.metric{background:#171f2a;padding:8px;border-radius:10px}.k{color:#8e9bab;font-size:11px}.v{font-size:17px;font-weight:800}
+.launch{color:#ff6b6b}.potential{color:#59a7ff}
+.rows{margin-top:8px;font-size:13px}.rows div{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #222c38}.rows div:last-child{border-bottom:0}
+.stage{font-size:12px;font-weight:800;margin-bottom:8px;display:inline-block}
+.empty{padding:18px;border:1px dashed #263242;border-radius:12px;color:#8e9bab;text-align:center}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Live Ranker v0.6.1 DEBUG</h1>
+<div class="sub">Potential = 축적/잠복 후보 · Launch = 실제 가격 움직임 확인 후보</div>
+<div class="sub" id="updated">불러오는 중…</div>
+
+<div class="tabs">
+<button id="bLaunch" class="active" onclick="showTab('launch')">🚀 Launch TOP5</button>
+<button id="bPotential" onclick="showTab('potential')">🧲 Potential TOP5</button>
+<button id="bDebug" onclick="showTab('debug')">🔎 Debug</button>
+</div>
+
+<section id="launch">
+<h2>🚀 Launch TOP5</h2>
+<div class="sub">잠재력 + 5·15·30·60분 가격 확인이 동시에 잡힌 종목</div>
+<div class="grid" id="launchGrid"></div>
+</section>
+
+<section id="potential" style="display:none">
+<h2>🧲 Potential TOP5</h2>
+<div class="sub">아직 크게 오르지 않았지만 72시간 축적·재점화가 강한 종목</div>
+<div class="grid" id="potentialGrid"></div>
+</section>
+
+<section id="debug" style="display:none">
+<h2>🔎 Debug — 왜 빠졌나</h2>
+<div class="sub">v0.6 점수·필터는 그대로. 탈락 사유만 보여줌. BIO/RENDER 같은 후보 확인용.</div>
+<div class="grid" id="debugGrid"></div>
+</section>
+</div>
+
+<script>
+const DATA_URL="./data/live_ranker.json?ts="+Date.now();
+function n(v,d=2){const x=Number(v);return Number.isFinite(x)?x.toLocaleString(undefined,{maximumFractionDigits:d}):"-"}
+function p(v){const x=Number(v);return (x>=0?"+":"")+n(x,2)+"%"}
+function card(x,i,mode){
+ const m=(x.market||"").replace("KRW-","");
+ const a=mode==="launch"?["Launch",x.launch_score,"launch"]:["Potential",x.potential_score,"potential"];
+ const b=mode==="launch"?["Potential",x.potential_score,"potential"]:["Launch",x.launch_score,"launch"];
+ return `<div class="card">
+ <div class="rank">#${i+1}</div><div class="coin">${m}</div>
+ <div class="stage">${x.stage||"-"}</div>
+ <div class="scoreRow">
+   <div class="metric"><div class="k">${a[0]}</div><div class="v ${a[2]}">${n(a[1])}</div></div>
+   <div class="metric"><div class="k">${b[0]}</div><div class="v ${b[2]}">${n(b[1])}</div></div>
+ </div>
+ <div class="metric" style="margin-top:8px"><div class="k">Transition</div><div class="v">${n(x.transition_score)}</div></div>
+ <div class="rows">
+   <div><span>현재가</span><b>${n(x.current_price,8)}</b></div>
+   <div><span>24h</span><b>${p(x.change_rate_24h)}</b></div>
+   <div><span>최신신호 대비</span><b>${p(x.price_from_latest_pct)}</b></div>
+   <div><span>5m / 15m</span><b>${p(x.latest_ret5)} / ${p(x.latest_ret15)}</b></div>
+   <div><span>30m / 60m</span><b>${p(x.latest_ret30)} / ${p(x.latest_ret60)}</b></div>
+   <div><span>Latest score</span><b>${n(x.latest_score)}</b></div>
+   <div><span>a15 / a30</span><b>${n(x.latest_a15)} / ${n(x.latest_a30)}</b></div>
+   <div><span>72h episodes</span><b>${n(x.episode_n_72h,0)}</b></div>
+   <div><span>전조 / 재점화</span><b>${n(x.precursor_n_72h,0)} / ${n(x.reignition_n_24h,0)}</b></div>
+   <div><span>Ignition 성공/실패</span><b>${n(x.successful_ignitions_72h,0)} / ${n(x.failed_ignitions_72h,0)}</b></div>
+   <div><span>반응률</span><b>${n(x.ignition_response_rate)}%</b></div>
+   <div><span>실패 감점</span><b>-${n(x.failed_ignition_penalty)}</b></div>
+   <div><span>과거 최대 VR</span><b>${n(x.max_prior_value_ratio_5m)}</b></div>
+   <div><span>Early bonus</span><b>${n(x.early_launch_bonus)}</b></div>
+   <div><span>신호 나이</span><b>${n(x.latest_signal_age_h)}h</b></div>
+ </div></div>`;
+}
+
+function debugCard(x,i){
+ const m=(x.market||"").replace("KRW-","");
+ const pr=x.potential_candidate_rank==null?"-":x.potential_candidate_rank;
+ const lr=x.launch_candidate_rank==null?"-":x.launch_candidate_rank;
+ const preasons=(x.potential_fail_reasons||[]).join(" · ")||"필터 통과";
+ const lreasons=(x.launch_fail_reasons||[]).join(" · ")||"필터 통과";
+ return `<div class="card">
+   <div class="rank">#${i+1}</div><div class="coin">${m}</div>
+   <div class="stage">${x.stage||"-"}</div>
+   <div class="scoreRow">
+     <div class="metric"><div class="k">Potential 원점수 → 최종</div><div class="v potential">${n(x.raw_potential_score)} → ${n(x.potential_score)}</div></div>
+     <div class="metric"><div class="k">Transition 원점수 → 최종</div><div class="v">${n(x.raw_transition_score)} → ${n(x.transition_score)}</div></div>
+   </div>
+   <div class="rows">
+     <div><span>Potential 조정</span><b>${n(x.potential_adjustment)}</b></div>
+     <div><span>Transition 조정</span><b>${n(x.transition_adjustment)}</b></div>
+     <div><span>Ignition 성공/실패</span><b>${n(x.successful_ignitions_72h,0)} / ${n(x.failed_ignitions_72h,0)}</b></div>
+     <div><span>반응률</span><b>${n(x.ignition_response_rate)}%</b></div>
+     <div><span>실패 감점</span><b>-${n(x.failed_ignition_penalty)}</b></div>
+     <div><span>Potential 후보순위</span><b>${pr}</b></div>
+     <div><span>Launch 후보순위</span><b>${lr}</b></div>
+     <div><span>Potential 상태</span><b>${x.potential_status||"-"}</b></div>
+     <div><span>Launch 상태</span><b>${x.launch_status||"-"}</b></div>
+     <div style="display:block"><span>Potential 탈락사유</span><br><b>${preasons}</b></div>
+     <div style="display:block"><span>Launch 탈락사유</span><br><b>${lreasons}</b></div>
+     <div><span>24h / 최신신호</span><b>${p(x.change_rate_24h)} / ${p(x.price_from_latest_pct)}</b></div>
+     <div><span>5/15/30/60m</span><b>${p(x.latest_ret5)} / ${p(x.latest_ret15)} / ${p(x.latest_ret30)} / ${p(x.latest_ret60)}</b></div>
+   </div>
+ </div>`;
+}
+function renderDebug(arr){
+ const el=document.getElementById("debugGrid");
+ el.innerHTML=(arr&&arr.length)?arr.map((x,i)=>debugCard(x,i)).join(""):'<div class="empty">Debug 데이터가 없습니다.</div>';
+}
+
+function render(id,arr,mode){
+ const el=document.getElementById(id);
+ el.innerHTML=(arr&&arr.length)?arr.map((x,i)=>card(x,i,mode)).join(""):'<div class="empty">현재 조건을 통과한 후보가 없습니다.</div>';
+}
+function showTab(w){
+ document.getElementById("launch").style.display=w==="launch"?"":"none";
+ document.getElementById("potential").style.display=w==="potential"?"":"none";
+ document.getElementById("debug").style.display=w==="debug"?"":"none";
+ document.getElementById("bLaunch").classList.toggle("active",w==="launch");
+ document.getElementById("bPotential").classList.toggle("active",w==="potential");
+ document.getElementById("bDebug").classList.toggle("active",w==="debug");
+}
+fetch(DATA_URL,{cache:"no-store"}).then(r=>r.json()).then(d=>{
+ const dt=d.generated_at_utc?new Date(d.generated_at_utc):null;
+ document.getElementById("updated").textContent=dt?"마지막 생성: "+dt.toLocaleString("ko-KR"):"생성 시간 없음";
+ render("launchGrid",d.launch_top5||d.top5||[],"launch");
+ render("potentialGrid",d.potential_top5||[],"potential");
+ renderDebug(d.debug_ranked||[]);
+}).catch(e=>{
+ document.getElementById("updated").textContent="데이터 로드 실패: "+e.message;
+});
+</script>
+</body>
+</html>
