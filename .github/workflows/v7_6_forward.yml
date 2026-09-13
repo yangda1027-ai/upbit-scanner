@@ -38,40 +38,33 @@ jobs:
       - name: Run V7.6 ALL KRW scanner
         run: python src/v7_6_forward.py
 
-      - name: Commit V7.6 data
+      - name: Build live re-ignition ranking
+        run: python src/live_ranker.py
+
+      - name: Commit and push data safely
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add docs/data/v7_6_signals.json docs/data/v7_6_latest.json
+          git add \
+            docs/data/v7_6_signals.json \
+            docs/data/v7_6_latest.json \
+            docs/data/live_ranker.json
 
           if git diff --cached --quiet; then
-            echo "No V7.6 data changes."
+            echo "No data changes."
             exit 0
           fi
 
-          git commit -m "update v7.6 all-krw data"
+          git commit -m "update v7.6 and live ranking"
 
-      - name: Rebase latest main and push with retry
-        run: |
           for i in 1 2 3 4 5; do
-            echo "Push attempt $i"
-
             git fetch origin main
-
-            if ! git rebase origin/main; then
-              echo "Rebase failed."
-              git rebase --abort || true
-              exit 1
-            fi
-
-            if git push origin HEAD:main; then
-              echo "Push succeeded."
+            if git rebase origin/main && git push origin HEAD:main; then
               exit 0
             fi
-
-            echo "Remote changed during push. Retrying..."
-            sleep 3
+            git rebase --abort || true
+            sleep $((i * 2))
           done
 
           echo "Push failed after 5 attempts."
