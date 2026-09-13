@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-09-13T09:40:24+00:00",
-    "generated_at_kst": "2026-09-13 18:40:24 KST",
+    "generated_at_utc": "2026-09-13T09:45:31+00:00",
+    "generated_at_kst": "2026-09-13 18:45:31 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -30,10 +30,10 @@
         "sleeper_hit10_pct": 3.83
       },
       "official_forward": {
-        "episodes": 586,
-        "h6_matured": 567,
+        "episodes": 587,
+        "h6_matured": 568,
         "fast_move_n": 148,
-        "fast_move_rate_pct": 26.1,
+        "fast_move_rate_pct": 26.06,
         "sleeper_evaluated_n": 264,
         "sleeper_hit3_n": 110,
         "sleeper_hit3_pct": 41.67,
@@ -64,13 +64,13 @@
         "h6_matured": 461,
         "fast_move_n": 126,
         "fast_move_rate_pct": 27.33,
-        "sleeper_evaluated_n": 214,
+        "sleeper_evaluated_n": 215,
         "sleeper_hit3_n": 94,
-        "sleeper_hit3_pct": 43.93,
+        "sleeper_hit3_pct": 43.72,
         "sleeper_hit5_n": 45,
-        "sleeper_hit5_pct": 21.03,
+        "sleeper_hit5_pct": 20.93,
         "sleeper_hit10_n": 8,
-        "sleeper_hit10_pct": 3.74
+        "sleeper_hit10_pct": 3.72
       }
     },
     "C": {
@@ -133,6 +133,33 @@
     }
   },
   "signals": [
+    {
+      "strategy": "A",
+      "market": "KRW-PUMP",
+      "price": 5.07,
+      "score": 100,
+      "source_label": "EARLY",
+      "ret_5m": 2.424,
+      "ret_15m": 1.807,
+      "ret_30m": 0.795,
+      "ret_60m": 0.595,
+      "value_ratio_5m": 3.026,
+      "value_accel_15m": 3.79,
+      "value_accel_30m": 2.485,
+      "ts": "2026-09-13T09:40:00+00:00",
+      "ts_kst": "2026-09-13 18:40:00 KST",
+      "rank": 1,
+      "btc": {
+        "ret_15m": 0.167,
+        "ret_60m": -0.062
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "B",
       "market": "KRW-VET",
@@ -2477,9 +2504,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -3.826,
+        "max_pct": 2.957,
+        "min_pct": -6.087,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "A",
@@ -30894,8 +30928,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -1.949,
+        "max_pct": 0.244,
+        "min_pct": -3.532,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
@@ -49544,61 +49585,6 @@
     },
     {
       "strategy": "A",
-      "market": "KRW-HBAR",
-      "price": 101.0,
-      "score": 92.0,
-      "source_label": "EARLY",
-      "ret_5m": 0.0,
-      "ret_15m": 0.0,
-      "ret_30m": -0.98,
-      "ret_60m": -0.98,
-      "value_ratio_5m": 2.691,
-      "value_accel_15m": 4.948,
-      "value_accel_30m": 4.697,
-      "ts": "2026-09-11T21:55:00+00:00",
-      "ts_kst": "2026-09-12 06:55:00 KST",
-      "rank": 2,
-      "btc": {
-        "ret_15m": -0.196,
-        "ret_60m": -0.108
-      },
-      "abc_all": true,
-      "h1": {
-        "close_pct": -0.99,
-        "max_pct": 0.99,
-        "min_pct": -0.99,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 0.0,
-        "max_pct": 0.99,
-        "min_pct": -0.99,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 0.99,
-        "max_pct": 0.99,
-        "min_pct": -0.99,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 0.99,
-        "max_pct": 0.99,
-        "min_pct": -0.99,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "FAILED_LATE"
-    },
-    {
-      "strategy": "B",
       "market": "KRW-HBAR",
       "price": 101.0,
       "score": 92.0,
