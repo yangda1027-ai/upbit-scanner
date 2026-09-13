@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Live Ranker v0.6.3 FULL PIPELINE DEBUG</title>
+<title>Live Ranker v0.6.4 FULL DEBUG + SEARCH</title>
 <style>
 body{margin:0;background:#0b0f14;color:#eef4fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 .wrap{max-width:980px;margin:auto;padding:16px}
@@ -20,12 +20,16 @@ button.active{border-color:#59a7ff}
 .rows{margin-top:8px;font-size:13px}.rows div{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #222c38}.rows div:last-child{border-bottom:0}
 .stage{font-size:12px;font-weight:800;margin-bottom:8px;display:inline-block}
 .empty{padding:18px;border:1px dashed #263242;border-radius:12px;color:#8e9bab;text-align:center}
-@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.searchBox{display:flex;gap:8px;margin:14px 0 8px}
+.searchBox input{flex:1;min-width:0;background:#121821;color:#eef4fb;border:1px solid #263242;padding:12px;border-radius:10px;font-size:16px;text-transform:uppercase}
+.searchBox input:focus{outline:none;border-color:#59a7ff}
+.searchMsg{color:#8e9bab;font-size:13px;margin:0 0 12px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.searchBox{flex-direction:column}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1>Live Ranker v0.6.3 FULL PIPELINE DEBUG</h1>
+<h1>Live Ranker v0.6.4 FULL DEBUG + SEARCH</h1>
 <div class="sub">Potential = 축적/잠복 후보 · Launch = 실제 가격 움직임 확인 후보</div>
 <div class="sub" id="updated">불러오는 중…</div>
 
@@ -50,6 +54,12 @@ button.active{border-color:#59a7ff}
 <section id="debug" style="display:none">
 <h2>🔎 Debug — 왜 빠졌나</h2>
 <div class="sub">v0.6 점수·필터는 그대로. 전체 KRW 종목이 파이프라인 어느 단계에서 빠졌는지 추적.</div>
+<div class="searchBox">
+  <input id="tickerSearch" type="search" placeholder="티커 검색 — 예: BIO, RENDER, KAITO" autocomplete="off" autocapitalize="characters">
+  <button onclick="searchTicker()">검색</button>
+  <button onclick="clearTickerSearch()">전체</button>
+</div>
+<div class="searchMsg" id="searchMsg">전체 KRW Debug에서 티커를 검색할 수 있습니다.</div>
 <div class="grid" id="debugGrid"></div>
 </section>
 </div>
@@ -125,9 +135,37 @@ function debugCard(x,i){
    </div>
  </div>`;
 }
+let DEBUG_ROWS=[];
 function renderDebug(arr){
  const el=document.getElementById("debugGrid");
  el.innerHTML=(arr&&arr.length)?arr.map((x,i)=>debugCard(x,i)).join(""):'<div class="empty">Debug 데이터가 없습니다.</div>';
+}
+function normalizeTicker(v){
+ return String(v||"").trim().toUpperCase().replace(/^KRW-/,"");
+}
+function searchTicker(){
+ const q=normalizeTicker(document.getElementById("tickerSearch").value);
+ const msg=document.getElementById("searchMsg");
+ if(!q){
+   msg.textContent="티커를 입력해주세요. 예: BIO, RENDER, KAITO";
+   renderDebug(DEBUG_ROWS);
+   return;
+ }
+ const exact=DEBUG_ROWS.filter(x=>normalizeTicker(x.market)===q);
+ const partial=exact.length?exact:DEBUG_ROWS.filter(x=>normalizeTicker(x.market).includes(q));
+ if(partial.length){
+   msg.textContent=`${q}: 전체 KRW Debug에서 ${partial.length}개 찾음.`;
+   renderDebug(partial);
+ }else{
+   msg.innerHTML=`<b>${q}</b>를 debug_all_krw에서 찾지 못했습니다. 현재 Upbit KRW 마켓이 아니거나 전체 Debug 생성에 실패한 경우입니다.`;
+   document.getElementById("debugGrid").innerHTML=`<div class="empty">${q} — 전체 KRW Debug에도 없음</div>`;
+ }
+}
+function clearTickerSearch(){
+ const inp=document.getElementById("tickerSearch");
+ inp.value="";
+ document.getElementById("searchMsg").textContent="전체 KRW Debug를 표시합니다.";
+ renderDebug(DEBUG_ROWS);
 }
 
 function render(id,arr,mode){
@@ -147,7 +185,16 @@ fetch(DATA_URL,{cache:"no-store"}).then(r=>r.json()).then(d=>{
  document.getElementById("updated").textContent=dt?"마지막 생성: "+dt.toLocaleString("ko-KR"):"생성 시간 없음";
  render("launchGrid",d.launch_top5||d.top5||[],"launch");
  render("potentialGrid",d.potential_top5||[],"potential");
- renderDebug(d.debug_ranked||[]);
+ DEBUG_ROWS=(d.debug_all_krw&&d.debug_all_krw.length)?d.debug_all_krw:(d.debug_ranked||[]);
+ renderDebug(DEBUG_ROWS);
+ const s=d.debug_pipeline_summary||{};
+ if(Object.keys(s).length){
+   document.getElementById("searchMsg").textContent=
+     `전체 KRW ${n(s.all_krw_markets,0)}개 · 저장신호 존재 ${n(s.markets_with_any_saved_signal,0)}개 · 최근72h 신호 ${n(s.markets_with_recent_72h_signal,0)}개 · scored ${n(s.scored_markets,0)}개`;
+ }
+ const inp=document.getElementById("tickerSearch");
+ inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();searchTicker();}});
+ inp.addEventListener("input",()=>{if(!inp.value.trim()){clearTickerSearch();}});
 }).catch(e=>{
  document.getElementById("updated").textContent="데이터 로드 실패: "+e.message;
 });
