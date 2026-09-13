@@ -661,16 +661,30 @@ def main():
         raw_transition_score = round(f(transition.get("transition_score")), 2)
         response = calc_response_quality(rs, latest, now)
 
-        # 실패한 ignition 이력은 Potential/Transition에서 직접 차감.
+        # v0.7 핵심:
+        # Potential은 "아직 안 갔지만 축적될 수 있는가"를 보므로 failed ignition을 약하게만 반영.
+        # Launch는 "지금 실제로 출발했는가"를 보므로 failed ignition을 강하게 반영.
+        potential_failed_penalty_applied = response["failed_ignition_penalty"] * 0.15
+        transition_failed_penalty_applied = response["failed_ignition_penalty"] * 0.25
+
         pot["potential_score"] = round(clamp(
-            pot["potential_score"]
-            - response["failed_ignition_penalty"] * 0.55
+            raw_potential_score
+            - potential_failed_penalty_applied
+            + response["response_bonus"] * 0.25,
+            0, 100
+        ), 2)
+
+        transition["transition_score"] = round(clamp(
+            raw_transition_score
+            - transition_failed_penalty_applied
             + response["response_bonus"] * 0.35,
             0, 100
         ), 2)
-        transition["transition_score"] = round(clamp(
-            transition["transition_score"]
-            - response["failed_ignition_penalty"] * 0.65
+
+        # Launch 전용 신뢰도: 현재 가격확인 점수에서 과거 실패를 강하게 차감.
+        launch_reliability_score = round(clamp(
+            launch
+            - response["failed_ignition_penalty"] * 0.75
             + response["response_bonus"] * 0.50,
             0, 100
         ), 2)
@@ -682,9 +696,9 @@ def main():
         # v0.5 stage 재정의: Launch는 실제 가격확인 + 과거 전조가 동시에 있어야 함
         if (
             launch >= 55
+            and launch_reliability_score >= 50
             and transition["transition_score"] >= 50
             and pot["potential_score"] >= 55
-            and response["failed_ignitions_72h"] <= 5
             and latest.get("label") != "CHASE"
         ):
             stage = "LAUNCH"
@@ -702,7 +716,9 @@ def main():
             "raw_potential_score": raw_potential_score,
             "potential_score": pot["potential_score"],
             "potential_adjustment": round(pot["potential_score"] - raw_potential_score, 2),
+            "potential_failed_penalty_applied": round(potential_failed_penalty_applied, 2),
             "launch_score": launch,
+            "launch_reliability_score": launch_reliability_score,
             "raw_transition_score": raw_transition_score,
             "transition_score": transition["transition_score"],
             "transition_adjustment": round(transition["transition_score"] - raw_transition_score, 2),
@@ -752,6 +768,8 @@ def main():
             "potential_score": x["potential_score"],
             "potential_adjustment": x["potential_adjustment"],
             "launch_score": x["launch_score"],
+            "launch_reliability_score": x["launch_reliability_score"],
+            "potential_failed_penalty_applied": x["potential_failed_penalty_applied"],
             "raw_transition_score": x["raw_transition_score"],
             "transition_score": x["transition_score"],
             "transition_adjustment": x["transition_adjustment"],
@@ -791,7 +809,6 @@ def main():
         and x["change_rate_24h"] < 12
         and x["price_from_latest_pct"] < 6
         and x["price_from_first_pct"] < 15
-        and x["failed_ignition_penalty"] < 30
     ]
     potential_candidates.sort(
         key=lambda x: (
@@ -808,19 +825,20 @@ def main():
         x for x in ranked
         if x["stage"] == "LAUNCH"
         and x["launch_score"] >= 55
-        and x["transition_score"] >= 55
+        and x["launch_reliability_score"] >= 50
+        and x["transition_score"] >= 50
         and x["latest_label"] != "CHASE"
         and x["change_rate_24h"] < 12
         and x["price_from_latest_pct"] < 7
-        and x["failed_ignition_penalty"] < 26
+        and x["failed_ignition_penalty"] < 32
     ]
 
     # 상태전이 점수를 1순위, 그 다음 실제 Launch, 그 다음 Potential.
     # 이미 +8% 이상 간 종목은 early_launch_bonus로 자연스럽게 밀린다.
     launch_candidates.sort(
         key=lambda x: (
+            -x["launch_reliability_score"],
             -x["transition_score"],
-            x["failed_ignitions_72h"],
             -x["ignition_response_rate"],
             -x["launch_score"],
             -x["potential_score"],
@@ -866,8 +884,6 @@ def main():
             reasons.append(f"latest_signal_delta>=6% ({x['price_from_latest_pct']}%)")
         if x["price_from_first_pct"] >= 15:
             reasons.append(f"first_signal_delta>=15% ({x['price_from_first_pct']}%)")
-        if x["failed_ignition_penalty"] >= 30:
-            reasons.append(f"failed_penalty>=30 ({x['failed_ignition_penalty']})")
         return reasons
 
     def launch_fail_reasons(x):
@@ -876,16 +892,18 @@ def main():
             reasons.append(f"stage={x['stage']}")
         if x["launch_score"] < 55:
             reasons.append(f"launch<55 ({x['launch_score']})")
-        if x["transition_score"] < 55:
-            reasons.append(f"transition<55 ({x['transition_score']})")
+        if x["transition_score"] < 50:
+            reasons.append(f"transition<50 ({x['transition_score']})")
+        if x.get("launch_reliability_score", 0) < 50:
+            reasons.append(f"launch_reliability<50 ({x.get('launch_reliability_score')})")
         if x["latest_label"] == "CHASE":
             reasons.append("latest_label=CHASE")
         if x["change_rate_24h"] >= 12:
             reasons.append(f"24h>=12% ({x['change_rate_24h']}%)")
         if x["price_from_latest_pct"] >= 7:
             reasons.append(f"latest_signal_delta>=7% ({x['price_from_latest_pct']}%)")
-        if x["failed_ignition_penalty"] >= 26:
-            reasons.append(f"failed_penalty>=26 ({x['failed_ignition_penalty']})")
+        if x["failed_ignition_penalty"] >= 32:
+            reasons.append(f"failed_penalty>=32 ({x['failed_ignition_penalty']})")
         return reasons
 
     debug_rows = []
@@ -915,6 +933,8 @@ def main():
             "potential_score": x["potential_score"],
             "potential_adjustment": x["potential_adjustment"],
             "launch_score": x["launch_score"],
+            "launch_reliability_score": x["launch_reliability_score"],
+            "potential_failed_penalty_applied": x["potential_failed_penalty_applied"],
             "raw_transition_score": x["raw_transition_score"],
             "transition_score": x["transition_score"],
             "transition_adjustment": x["transition_adjustment"],
@@ -975,13 +995,13 @@ def main():
     debug_all_krw = [pipeline_debug[m] for m in all_krw_markets]
 
     payload = {
-        "version": "Live Ranker v0.6.3 FULL PIPELINE DEBUG",
+        "version": "Live Ranker v0.7 SPLIT POTENTIAL-LAUNCH",
         "generated_at_utc": now.isoformat(),
         "lookback_hours": LOOKBACK_HOURS,
         "top_n": TOP_N,
         "method_note": (
-            "실험용 비교점수이며 확률이 아님. v0.6.3 FULL PIPELINE DEBUG는 v0.6 점수/필터/순위를 변경하지 않고 "
-            "전체 Upbit KRW 종목이 어느 단계에서 제외됐는지 추적한다. "
+            "실험용 비교점수이며 확률이 아님. v0.7은 Potential과 Launch의 failed ignition 처리 방식을 분리하고 "
+            "전체 Upbit KRW 종목의 파이프라인 Debug를 유지한다. Potential에는 실패이력을 약하게, Launch에는 강하게 반영한다. "
             "Launch TOP5는 실제 LAUNCH stage만 허용하고, 과거 가격미반응 강신호와 최근 거래량 재점화가 있었던 종목을 우대한다. "
             "24시간 이미 많이 오른 종목은 감점해 초기 Launch를 우선한다."
         ),
