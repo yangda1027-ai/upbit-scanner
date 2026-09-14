@@ -6,6 +6,9 @@ import requests
 API = "https://api.upbit.com"
 OUT = Path("docs/data/v7_6_signals.json")
 LATEST = Path("docs/data/v7_6_latest.json")
+LIVE = Path("docs/data/v7_6_live.json")
+TOP20 = Path("docs/data/v7_6_top20.json")
+HISTORY_DIR = Path("docs/data/v7_6_history")
 
 STABLE = {"USDT", "USDC", "DAI", "USD1", "USDE", "FDUSD", "TUSD"}
 TOP_N = 10
@@ -13,6 +16,10 @@ HISTORY_RANK_N = 30
 EARLY_DIAG_SCORE = 65
 EPISODE_GAP_MIN = 60
 MAX_ROWS = 50000
+LIVE_TOP_N = 20
+PER_MARKET_HISTORY_MAX = 250
+IGNITION_HORIZON_HOURS = 3
+IGNITION_SUCCESS_PCT = 1.5
 
 S = requests.Session()
 S.headers.update({"User-Agent": "upbit-v7-6-all-krw/1.0"})
@@ -71,7 +78,7 @@ def candles(m, unit, count):
 
 
 def features(m):
-    # V7.3ì ëì¼í 5ë¶ë´ feature / score / EARLY ê·ì¹
+    # V7.3Ã¬ÂÂ Ã«ÂÂÃ¬ÂÂ¼Ã­ÂÂ 5Ã«Â¶ÂÃ«Â´Â feature / score / EARLY ÃªÂ·ÂÃ¬Â¹Â
     c = candles(m, 5, 30)
     if len(c) < 25:
         return None
@@ -142,13 +149,171 @@ def load_json(path, default):
         return default
 
 
+
+def iso_dt(x):
+    try:
+        return datetime.fromisoformat(str(x).replace("Z", "+00:00"))
+    except Exception:
+        return None
+
+
+def nearest_price_change(history_rows, market, now, current_price, hours):
+    """Approximate return versus the stored episode closest to N hours ago."""
+    target = now.timestamp() - hours * 3600
+    best = None
+    best_gap = None
+    for r in history_rows:
+        if r.get("market") != market:
+            continue
+        dt = iso_dt(r.get("ts"))
+        if not dt:
+            continue
+        gap = abs(dt.timestamp() - target)
+        if best_gap is None or gap < best_gap:
+            best_gap = gap
+            best = r
+    # Ignore very stale substitutes: tolerance grows with the requested horizon.
+    tolerance = max(45 * 60, hours * 3600 * 0.35)
+    if not best or best_gap is None or best_gap > tolerance:
+        return None
+    old_price = f(best.get("price"))
+    if not old_price:
+        return None
+    return round(pct(current_price, old_price), 3)
+
+
+def summarize_market_history(history_rows, market, now, current_price):
+    """Build a compact 72h signal/episode/ignition summary for monitoring."""
+    items = []
+    for r in history_rows:
+        if r.get("market") != market:
+            continue
+        dt = iso_dt(r.get("ts"))
+        if dt:
+            items.append((dt, r))
+    items.sort(key=lambda x: x[0])
+
+    windows = {}
+    for h in (1, 3, 6, 12, 24, 72):
+        cutoff = now.timestamp() - h * 3600
+        rs = [r for dt, r in items if dt.timestamp() >= cutoff]
+        windows[str(h)] = {
+            "signals": len(rs),
+            "A": sum(bool(r.get("A")) for r in rs),
+            "B": sum(bool(r.get("B")) for r in rs),
+            "C": sum(bool(r.get("C")) for r in rs),
+            "ABC_ALL": sum(bool(r.get("ABC_ALL")) for r in rs),
+            "avg_score": round(sum(f(r.get("score")) for r in rs) / len(rs), 2) if rs else None,
+        }
+
+    last72 = [(dt, r) for dt, r in items if (now - dt).total_seconds() <= 72 * 3600]
+    latest_signal_age_min = None
+    if items:
+        latest_signal_age_min = round((now - items[-1][0]).total_seconds() / 60, 1)
+
+    # Each stored history row is already episode-deduplicated by the main script.
+    episode_count_72h = len(last72)
+
+    # Historical ignition quality from future stored episode prices within 3h.
+    success = fail = 0
+    reactions = []
+    seq = items[-300:]
+    for i, (dt, r) in enumerate(seq):
+        p0 = f(r.get("price"))
+        if not p0:
+            continue
+        end_ts = dt.timestamp() + IGNITION_HORIZON_HOURS * 3600
+        future_prices = [f(rr.get("price")) for d2, rr in seq[i+1:] if d2.timestamp() <= end_ts and f(rr.get("price")) > 0]
+        if not future_prices:
+            continue
+        reaction = pct(max(future_prices), p0)
+        reactions.append(reaction)
+        if reaction >= IGNITION_SUCCESS_PCT:
+            success += 1
+        else:
+            fail += 1
+
+    total_eval = success + fail
+    ignition = {
+        "success": success,
+        "fail": fail,
+        "evaluated": total_eval,
+        "rate": round(success / total_eval, 4) if total_eval else None,
+        "success_threshold_pct": IGNITION_SUCCESS_PCT,
+        "horizon_hours": IGNITION_HORIZON_HOURS,
+        "avg_max_reaction_pct": round(sum(reactions) / len(reactions), 3) if reactions else None,
+        "median_max_reaction_pct": round(sorted(reactions)[len(reactions)//2], 3) if reactions else None,
+    }
+
+    price_changes = {
+        f"{h}h": nearest_price_change(history_rows, market, now, current_price, h)
+        for h in (1, 3, 6, 12, 24, 72)
+    }
+
+    return {
+        "windows": windows,
+        "independent_episodes_72h": episode_count_72h,
+        "latest_signal_age_min": latest_signal_age_min,
+        "ignition": ignition,
+        "price_change": price_changes,
+    }
+
+
+def daily_extension(m):
+    """Fetch 31 daily candles only for shortlisted names and calculate extension."""
+    try:
+        ds = list(reversed(get("/v1/candles/days", {"market": m, "count": 31})))
+        closes = [f(x.get("trade_price")) for x in ds]
+        lows = [f(x.get("low_price")) for x in ds]
+        if len(closes) < 2:
+            return {}
+        cur = closes[-1]
+        def ret_days(n):
+            if len(closes) <= n or not closes[-1-n]:
+                return None
+            return round(pct(cur, closes[-1-n]), 3)
+        low14 = min(lows[-14:]) if len(lows) >= 14 else min(lows)
+        low30 = min(lows[-30:]) if len(lows) >= 30 else min(lows)
+        return {
+            "ret_3d": ret_days(3),
+            "ret_7d": ret_days(7),
+            "ret_14d": ret_days(14),
+            "ret_30d": ret_days(30),
+            "from_14d_low_pct": round(pct(cur, low14), 3) if low14 else None,
+            "from_30d_low_pct": round(pct(cur, low30), 3) if low30 else None,
+            "low_14d": low14,
+            "low_30d": low30,
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def monitor_score(row, hist_summary):
+    """Monitoring priority, not a trading signal. Penalizes weak repeated ignitions."""
+    score = f(row.get("score"))
+    ign = hist_summary.get("ignition", {})
+    rate = ign.get("rate")
+    evaluated = ign.get("evaluated", 0) or 0
+    episodes = hist_summary.get("independent_episodes_72h", 0) or 0
+    abc72 = hist_summary.get("windows", {}).get("72", {}).get("ABC_ALL", 0) or 0
+
+    if rate is not None and evaluated >= 3:
+        score += (rate - 0.5) * 24
+        if rate < 0.30 and episodes >= 4:
+            score -= 12
+    score += min(abc72, 5) * 1.5
+    if row.get("label") == "CHASE":
+        score -= 20
+    return round(clamp(score, 0, 100), 2)
+
+
 def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     now = datetime.now(timezone.utc).replace(second=0, microsecond=0)
 
     ms = markets()
 
-    # 24h ê±°ëëê¸ ììë "íí°"ê° ìëë¼ ê¸°ë¡/ë¹êµì©ì¼ë¡ë§ ì¬ì©
+    # 24h ÃªÂ±Â°Ã«ÂÂÃ«ÂÂÃªÂ¸Â Ã¬ÂÂÃ¬ÂÂÃ«ÂÂ "Ã­ÂÂÃ­ÂÂ°"ÃªÂ°Â Ã¬ÂÂÃ«ÂÂÃ«ÂÂ¼ ÃªÂ¸Â°Ã«Â¡Â/Ã«Â¹ÂÃªÂµÂÃ¬ÂÂ©Ã¬ÂÂ¼Ã«Â¡ÂÃ«Â§Â Ã¬ÂÂ¬Ã¬ÂÂ©
     tick = []
     for i in range(0, len(ms), 100):
         tick += get("/v1/ticker", {"markets": ",".join(ms[i:i + 100])})
@@ -162,9 +327,9 @@ def main():
     rank24 = {x["market"]: i + 1 for i, x in enumerate(ranked)}
     value24 = {x["market"]: f(x.get("acc_trade_price_24h")) for x in ranked}
 
-    # íµì¬ ë³ê²½ì :
-    # V7.3 = ê±°ëëê¸ ìì 120ê°ë§ feature ê³ì°
-    # V7.6 = KRW ì ì²´ ì¢ëª©ì feature ê³ì°
+    # Ã­ÂÂµÃ¬ÂÂ¬ Ã«Â³ÂÃªÂ²Â½Ã¬Â Â:
+    # V7.3 = ÃªÂ±Â°Ã«ÂÂÃ«ÂÂÃªÂ¸Â Ã¬ÂÂÃ¬ÂÂ 120ÃªÂ°ÂÃ«Â§Â feature ÃªÂ³ÂÃ¬ÂÂ°
+    # V7.6 = KRW Ã¬Â ÂÃ¬Â²Â´ Ã¬Â¢ÂÃ«ÂªÂ©Ã¬ÂÂ feature ÃªÂ³ÂÃ¬ÂÂ°
     rows = []
     total = len(ms)
 
@@ -177,7 +342,7 @@ def main():
                 z["trade_value_24h"] = round(value24.get(m, 0.0), 2)
                 z["outside_top120"] = bool(r and r > 120)
 
-                # A/B/Cë V7.5ì ëì¼í ê´ì°° ì¡°ê±´
+                # A/B/CÃ«ÂÂ V7.5Ã¬ÂÂ Ã«ÂÂÃ¬ÂÂ¼Ã­ÂÂ ÃªÂ´ÂÃ¬Â°Â° Ã¬Â¡Â°ÃªÂ±Â´
                 is_early = z["label"] == "EARLY"
                 not_chase = z["label"] != "CHASE"
 
@@ -211,7 +376,7 @@ def main():
         except Exception as e:
             print("skip", m, e)
 
-        # Upbit public API ë¶ë´ ìí
+        # Upbit public API Ã«Â¶ÂÃ«ÂÂ´ Ã¬ÂÂÃ­ÂÂ
         time.sleep(0.07)
 
         if idx % 25 == 0 or idx == total:
@@ -229,7 +394,7 @@ def main():
     top = rows[:TOP_N]
     btc = btc_state()
 
-    # ì ì²´ ìì¥ìì TOP120 ë°ì¸ë° ì¡°ê±´ì íµê³¼í íë³´ë¥¼ ë³ë ì ì¥
+    # Ã¬Â ÂÃ¬Â²Â´ Ã¬ÂÂÃ¬ÂÂ¥Ã¬ÂÂÃ¬ÂÂ TOP120 Ã«Â°ÂÃ¬ÂÂ¸Ã«ÂÂ° Ã¬Â¡Â°ÃªÂ±Â´Ã¬ÂÂ Ã­ÂÂµÃªÂ³Â¼Ã­ÂÂ Ã­ÂÂÃ«Â³Â´Ã«Â¥Â¼ Ã«Â³ÂÃ«ÂÂ Ã¬Â ÂÃ¬ÂÂ¥
     outside_candidates = [
         x for x in rows
         if x.get("outside_top120")
@@ -237,11 +402,11 @@ def main():
         and (x["A"] or x["B"] or x["C"])
     ]
 
-    # V7.6 history íì¥:
-    # 1) ì ì²´ ì ë ¬ TOP30
-    # 2) ììì ë¬´ê´íê² A/B/C íµê³¼ íë³´ ì ë¶
-    # 3) ììì ë¬´ê´íê² EARLY + score>=65 ì§ë¨ íë³´
-    # ë¥¼ ì ì¥ ëìì¼ë¡ ì¡ëë¤.
+    # V7.6 history Ã­ÂÂÃ¬ÂÂ¥:
+    # 1) Ã¬Â ÂÃ¬Â²Â´ Ã¬Â ÂÃ«Â Â¬ TOP30
+    # 2) Ã¬ÂÂÃ¬ÂÂÃ¬ÂÂ Ã«Â¬Â´ÃªÂ´ÂÃ­ÂÂÃªÂ²Â A/B/C Ã­ÂÂµÃªÂ³Â¼ Ã­ÂÂÃ«Â³Â´ Ã¬Â ÂÃ«Â¶Â
+    # 3) Ã¬ÂÂÃ¬ÂÂÃ¬ÂÂ Ã«Â¬Â´ÃªÂ´ÂÃ­ÂÂÃªÂ²Â EARLY + score>=65 Ã¬Â§ÂÃ«ÂÂ¨ Ã­ÂÂÃ«Â³Â´
+    # Ã«Â¥Â¼ Ã¬Â ÂÃ¬ÂÂ¥ Ã«ÂÂÃ¬ÂÂÃ¬ÂÂ¼Ã«Â¡Â Ã¬ÂÂ¡Ã«ÂÂÃ«ÂÂ¤.
     selected = []
     for rank, z in enumerate(rows, 1):
         in_top30 = rank <= HISTORY_RANK_N
@@ -275,9 +440,9 @@ def main():
     if not isinstance(hist, list):
         hist = []
 
-    # ê°ì ì¢ëª©/ê°ì A-B-C ìíë¥¼ 5ë¶ë§ë¤ ì¤ë³µ ì ì¥íì§ ìê³ 
-    # 60ë¶ì í ë²ë§ ì episodeë¡ ì ì¥íë¤.
-    # ë¨, A/B/C ìíê° ë°ëë©´ ê°ì 60ë¶ ììë ì ê¸°ë¡ì ë¨ê¸´ë¤.
+    # ÃªÂ°ÂÃ¬ÂÂ Ã¬Â¢ÂÃ«ÂªÂ©/ÃªÂ°ÂÃ¬ÂÂ A-B-C Ã¬ÂÂÃ­ÂÂÃ«Â¥Â¼ 5Ã«Â¶ÂÃ«Â§ÂÃ«ÂÂ¤ Ã¬Â¤ÂÃ«Â³Âµ Ã¬Â ÂÃ¬ÂÂ¥Ã­ÂÂÃ¬Â§Â Ã¬ÂÂÃªÂ³Â 
+    # 60Ã«Â¶ÂÃ¬ÂÂ Ã­ÂÂ Ã«Â²ÂÃ«Â§Â Ã¬ÂÂ episodeÃ«Â¡Â Ã¬Â ÂÃ¬ÂÂ¥Ã­ÂÂÃ«ÂÂ¤.
+    # Ã«ÂÂ¨, A/B/C Ã¬ÂÂÃ­ÂÂÃªÂ°Â Ã«Â°ÂÃ«ÂÂÃ«Â©Â´ ÃªÂ°ÂÃ¬ÂÂ 60Ã«Â¶Â Ã¬ÂÂÃ¬ÂÂÃ«ÂÂ Ã¬ÂÂ ÃªÂ¸Â°Ã«Â¡ÂÃ¬ÂÂ Ã«ÂÂ¨ÃªÂ¸Â´Ã«ÂÂ¤.
     from datetime import timedelta
     cutoff = now - timedelta(minutes=EPISODE_GAP_MIN)
     recent_keys = set()
@@ -325,10 +490,10 @@ def main():
         "outside_top120_candidates": outside_candidates[:30],
         "outside_top120_candidate_count": len(outside_candidates),
         "note": (
-            "V7.3 score/EARLY ê·ì¹ì ê·¸ëë¡ ì ì§. "
-            "24h ê±°ëëê¸ TOP120 ì íë§ ì ê±°. "
-            "historyë TOP30 + A/B/C ì ì²´ + EARLY score>=65ë¥¼ 60ë¶ episodeë¡ ì ì¥. "
-            "trade_value_rank_24hë íí°ê° ìëë¼ ë¹êµì© ê¸°ë¡."
+            "V7.3 score/EARLY ÃªÂ·ÂÃ¬Â¹ÂÃ¬ÂÂ ÃªÂ·Â¸Ã«ÂÂÃ«Â¡Â Ã¬ÂÂ Ã¬Â§Â. "
+            "24h ÃªÂ±Â°Ã«ÂÂÃ«ÂÂÃªÂ¸Â TOP120 Ã¬Â ÂÃ­ÂÂÃ«Â§Â Ã¬Â ÂÃªÂ±Â°. "
+            "historyÃ«ÂÂ TOP30 + A/B/C Ã¬Â ÂÃ¬Â²Â´ + EARLY score>=65Ã«Â¥Â¼ 60Ã«Â¶Â episodeÃ«Â¡Â Ã¬Â ÂÃ¬ÂÂ¥. "
+            "trade_value_rank_24hÃ«ÂÂ Ã­ÂÂÃ­ÂÂ°ÃªÂ°Â Ã¬ÂÂÃ«ÂÂÃ«ÂÂ¼ Ã«Â¹ÂÃªÂµÂÃ¬ÂÂ© ÃªÂ¸Â°Ã«Â¡Â."
         ),
     }
 
@@ -336,6 +501,92 @@ def main():
         json.dumps(latest, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+    # ---- Compact monitoring outputs (designed to stay small) ----
+    HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+    by_market = {}
+    for r in hist:
+        m = r.get("market")
+        if m:
+            by_market.setdefault(m, []).append(r)
+
+    live_coins = {}
+    for z in rows:
+        m = z["market"]
+        hs = summarize_market_history(hist, m, now, f(z.get("price")))
+        compact = {
+            "price": z.get("price"),
+            "score": z.get("score"),
+            "label": z.get("label"),
+            "A": z.get("A"),
+            "B": z.get("B"),
+            "C": z.get("C"),
+            "ABC_ALL": z.get("ABC_ALL"),
+            "ret_5m": z.get("ret_5m"),
+            "ret_15m": z.get("ret_15m"),
+            "ret_30m": z.get("ret_30m"),
+            "ret_60m": z.get("ret_60m"),
+            "value_ratio_5m": z.get("value_ratio_5m"),
+            "value_accel_15m": z.get("value_accel_15m"),
+            "value_accel_30m": z.get("value_accel_30m"),
+            "trade_value_rank_24h": z.get("trade_value_rank_24h"),
+            "trade_value_24h": z.get("trade_value_24h"),
+            **hs,
+        }
+        compact["monitor_score"] = monitor_score(z, hs)
+        live_coins[m] = compact
+
+    live = {
+        "generated_at": now.isoformat(),
+        "version": "V7.6 MONITOR_COMPACT",
+        "market_count": len(live_coins),
+        "ignition_definition": {
+            "success_threshold_pct": IGNITION_SUCCESS_PCT,
+            "horizon_hours": IGNITION_HORIZON_HOURS,
+            "note": "Based on future stored episode prices; for ranking/quality filtering, not exact OHLCV backtest.",
+        },
+        "coins": live_coins,
+    }
+    LIVE.write_text(json.dumps(live, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
+    ranked_monitor = sorted(
+        live_coins.items(),
+        key=lambda kv: (
+            -f(kv[1].get("monitor_score")),
+            -f(kv[1].get("score")),
+            -f(kv[1].get("value_accel_15m")),
+        ),
+    )[:LIVE_TOP_N]
+
+    top20_items = []
+    for m, data in ranked_monitor:
+        q = dict(data)
+        q["market"] = m
+        q["extension"] = daily_extension(m)
+        top20_items.append(q)
+        time.sleep(0.08)
+
+    top20_payload = {
+        "generated_at": now.isoformat(),
+        "version": "V7.6 MONITOR_TOP20",
+        "count": len(top20_items),
+        "ranking_note": "monitor_score rewards current signal strength and historical ignition quality; CHASE/weak-repeat patterns are penalized.",
+        "items": top20_items,
+    }
+    TOP20.write_text(json.dumps(top20_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # Per-market episode files: only markets present in retained history.
+    for m, items in by_market.items():
+        items = sorted(items, key=lambda r: str(r.get("ts", "")), reverse=True)[:PER_MARKET_HISTORY_MAX]
+        safe_name = m.replace("KRW-", "") + ".json"
+        (HISTORY_DIR / safe_name).write_text(
+            json.dumps({
+                "market": m,
+                "generated_at": now.isoformat(),
+                "episodes": items,
+            }, ensure_ascii=False, separators=(",", ":")),
+            encoding="utf-8",
+        )
 
     print("done")
     print("markets:", len(ms))
