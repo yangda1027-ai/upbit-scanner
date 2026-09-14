@@ -1,0 +1,39 @@
+name: Manual Hybrid 1-Month Backtest
+on:
+  workflow_dispatch:
+    inputs:
+      start_kst:
+        description: "Start KST (YYYY-MM-DD HH:MM)"
+        required: true
+        default: "2026-08-15 00:00"
+      end_kst:
+        description: "End KST (YYYY-MM-DD HH:MM)"
+        required: true
+        default: "2026-09-14 23:00"
+permissions:
+  contents: write
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests numpy pandas
+      - name: Run backtest
+        env:
+          BT_START_KST: ${{ inputs.start_kst }}
+          BT_END_KST: ${{ inputs.end_kst }}
+          BT_REQUEST_DELAY: "0.12"
+          BT_MAX_MARKETS: "0"
+        run: python src/backtest_hybrid_month.py
+      - name: Commit result
+        run: |
+          git config user.name "upbit-scanner-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data/hybrid_month_backtest_latest.json
+          git diff --cached --quiet || git commit -m "Update hybrid 1-month backtest"
+          git pull --rebase
+          git push
