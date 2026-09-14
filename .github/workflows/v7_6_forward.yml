@@ -49,7 +49,10 @@ jobs:
           git add \
             docs/data/v7_6_signals.json \
             docs/data/v7_6_latest.json \
-            docs/data/live_ranker.json
+            docs/data/live_ranker.json \
+            docs/data/v7_6_live.json \
+            docs/data/v7_6_top20.json \
+            docs/data/v7_6_history/
 
           if git diff --cached --quiet; then
             echo "No data changes."
