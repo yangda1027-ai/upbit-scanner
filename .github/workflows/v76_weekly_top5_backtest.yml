@@ -1,0 +1,68 @@
+name: Manual V7.6 Weekly TOP5 Backtest
+
+on:
+  workflow_dispatch:
+    inputs:
+      start_kst:
+        description: "Start KST (YYYY-MM-DD HH:MM)"
+        required: true
+        default: "2026-03-02 09:00"
+      end_kst:
+        description: "End KST (YYYY-MM-DD HH:MM)"
+        required: true
+        default: "2026-09-14 09:00"
+
+permissions:
+  contents: write
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests numpy
+
+      - name: Run weekly TOP5 backtest
+        env:
+          BT_START_KST: ${{ inputs.start_kst }}
+          BT_END_KST: ${{ inputs.end_kst }}
+          BT_WEEKDAY: "0"
+          BT_HOUR_KST: "9"
+          BT_TOP_K: "5"
+          BT_INITIAL_CAPITAL: "15000000"
+          BT_TARGET_PCT: "20"
+          BT_STOP_PCTS: "3,5,7,10"
+          BT_REQUEST_DELAY: "0.12"
+        run: python src/backtest_v76_weekly_top5.py
+
+      - name: Upload result artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v76-weekly-top5-backtest-result
+          path: docs/data/v76_weekly_top5_backtest_latest.json
+          if-no-files-found: warn
+
+      - name: Commit result safely
+        if: success()
+        shell: bash
+        run: |
+          git config user.name "upbit-scanner-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data/v76_weekly_top5_backtest_latest.json
+          if git diff --cached --quiet; then
+            echo "No result changes."
+            exit 0
+          fi
+          git commit -m "Update V7.6 weekly TOP5 backtest"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            echo "Push retry $i"
+            sleep $((i*3))
+          done
+          echo "Push failed, but artifact was already uploaded."
+          exit 0
