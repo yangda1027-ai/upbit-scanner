@@ -70,18 +70,29 @@ def markets():
 
 
 def candles(m, unit, count):
-    return list(
-        reversed(
-            get(
-                f"/v1/candles/minutes/{unit}",
-                {"market": m, "count": count},
-            )
-        )
+    """Return only fully closed minute candles, oldest first."""
+    raw = get(
+        f"/v1/candles/minutes/{unit}",
+        {"market": m, "count": min(count + 2, 200)},
     )
+    now = datetime.now(timezone.utc)
+    closed = []
+    for row in reversed(raw):
+        try:
+            started = datetime.fromisoformat(
+                str(row["candle_date_time_utc"]).replace("Z", "+00:00")
+            )
+            if started.tzinfo is None:
+                started = started.replace(tzinfo=timezone.utc)
+            if started + timedelta(minutes=unit) <= now:
+                closed.append(row)
+        except Exception:
+            continue
+    return closed[-count:]
 
 
 def features(m):
-    # V7.3Ã¬ÂÂ Ã«ÂÂÃ¬ÂÂ¼Ã­ÂÂ 5Ã«Â¶ÂÃ«Â´Â feature / score / EARLY ÃªÂ·ÂÃ¬Â¹Â
+    # V7.3ÃÂ¬ÃÂÃÂ ÃÂ«ÃÂÃÂÃÂ¬ÃÂÃÂ¼ÃÂ­ÃÂÃÂ 5ÃÂ«ÃÂ¶ÃÂÃÂ«ÃÂ´ÃÂ feature / score / EARLY ÃÂªÃÂ·ÃÂÃÂ¬ÃÂ¹ÃÂ
     c = candles(m, 5, 30)
     if len(c) < 25:
         return None
@@ -122,6 +133,9 @@ def features(m):
     return {
         "market": m,
         "price": cl[-1],
+        "closed_candle_time_utc": c[-1].get("candle_date_time_utc"),
+        "closed_candle_high": f(c[-1].get("high_price")),
+        "closed_candle_low": f(c[-1].get("low_price")),
         "score": round(clamp(score, 0, 100), 2),
         "label": label,
         "ret_5m": round(r5, 3),
@@ -316,7 +330,7 @@ def main():
 
     ms = markets()
 
-    # 24h ÃªÂ±Â°Ã«ÂÂÃ«ÂÂÃªÂ¸Â Ã¬ÂÂÃ¬ÂÂÃ«ÂÂ "Ã­ÂÂÃ­ÂÂ°"ÃªÂ°Â Ã¬ÂÂÃ«ÂÂÃ«ÂÂ¼ ÃªÂ¸Â°Ã«Â¡Â/Ã«Â¹ÂÃªÂµÂÃ¬ÂÂ©Ã¬ÂÂ¼Ã«Â¡ÂÃ«Â§Â Ã¬ÂÂ¬Ã¬ÂÂ©
+    # 24h ÃÂªÃÂ±ÃÂ°ÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂÃÂªÃÂ¸ÃÂ ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ«ÃÂÃÂ "ÃÂ­ÃÂÃÂÃÂ­ÃÂÃÂ°"ÃÂªÃÂ°ÃÂ ÃÂ¬ÃÂÃÂÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂ¼ ÃÂªÃÂ¸ÃÂ°ÃÂ«ÃÂ¡ÃÂ/ÃÂ«ÃÂ¹ÃÂÃÂªÃÂµÃÂÃÂ¬ÃÂÃÂ©ÃÂ¬ÃÂÃÂ¼ÃÂ«ÃÂ¡ÃÂÃÂ«ÃÂ§ÃÂ ÃÂ¬ÃÂÃÂ¬ÃÂ¬ÃÂÃÂ©
     tick = []
     for i in range(0, len(ms), 100):
         tick += get("/v1/ticker", {"markets": ",".join(ms[i:i + 100])})
@@ -330,9 +344,9 @@ def main():
     rank24 = {x["market"]: i + 1 for i, x in enumerate(ranked)}
     value24 = {x["market"]: f(x.get("acc_trade_price_24h")) for x in ranked}
 
-    # Ã­ÂÂµÃ¬ÂÂ¬ Ã«Â³ÂÃªÂ²Â½Ã¬Â Â:
-    # V7.3 = ÃªÂ±Â°Ã«ÂÂÃ«ÂÂÃªÂ¸Â Ã¬ÂÂÃ¬ÂÂ 120ÃªÂ°ÂÃ«Â§Â feature ÃªÂ³ÂÃ¬ÂÂ°
-    # V7.6 = KRW Ã¬Â ÂÃ¬Â²Â´ Ã¬Â¢ÂÃ«ÂªÂ©Ã¬ÂÂ feature ÃªÂ³ÂÃ¬ÂÂ°
+    # ÃÂ­ÃÂÃÂµÃÂ¬ÃÂÃÂ¬ ÃÂ«ÃÂ³ÃÂÃÂªÃÂ²ÃÂ½ÃÂ¬ÃÂ ÃÂ:
+    # V7.3 = ÃÂªÃÂ±ÃÂ°ÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂÃÂªÃÂ¸ÃÂ ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ 120ÃÂªÃÂ°ÃÂÃÂ«ÃÂ§ÃÂ feature ÃÂªÃÂ³ÃÂÃÂ¬ÃÂÃÂ°
+    # V7.6 = KRW ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂ²ÃÂ´ ÃÂ¬ÃÂ¢ÃÂÃÂ«ÃÂªÃÂ©ÃÂ¬ÃÂÃÂ feature ÃÂªÃÂ³ÃÂÃÂ¬ÃÂÃÂ°
     rows = []
     total = len(ms)
 
@@ -345,7 +359,7 @@ def main():
                 z["trade_value_24h"] = round(value24.get(m, 0.0), 2)
                 z["outside_top120"] = bool(r and r > 120)
 
-                # A/B/CÃ«ÂÂ V7.5Ã¬ÂÂ Ã«ÂÂÃ¬ÂÂ¼Ã­ÂÂ ÃªÂ´ÂÃ¬Â°Â° Ã¬Â¡Â°ÃªÂ±Â´
+                # A/B/CÃÂ«ÃÂÃÂ V7.5ÃÂ¬ÃÂÃÂ ÃÂ«ÃÂÃÂÃÂ¬ÃÂÃÂ¼ÃÂ­ÃÂÃÂ ÃÂªÃÂ´ÃÂÃÂ¬ÃÂ°ÃÂ° ÃÂ¬ÃÂ¡ÃÂ°ÃÂªÃÂ±ÃÂ´
                 is_early = z["label"] == "EARLY"
                 not_chase = z["label"] != "CHASE"
 
@@ -379,7 +393,7 @@ def main():
         except Exception as e:
             print("skip", m, e)
 
-        # Upbit public API Ã«Â¶ÂÃ«ÂÂ´ Ã¬ÂÂÃ­ÂÂ
+        # Upbit public API ÃÂ«ÃÂ¶ÃÂÃÂ«ÃÂÃÂ´ ÃÂ¬ÃÂÃÂÃÂ­ÃÂÃÂ
         time.sleep(0.07)
 
         if idx % 25 == 0 or idx == total:
@@ -395,8 +409,9 @@ def main():
     )
 
     # ---- Full-universe rank snapshot history (logging only; V7.6 logic unchanged) ----
-    # Save every scanned market's exact V7.6 rank/features on every run.
-    # Files are split by UTC date to avoid one ever-growing multi-MB JSON file.
+    # The scanner may run every 10 minutes, but a full-market snapshot is large.
+    # Keep the full diagnostic snapshot hourly; fast candidate events are still
+    # retained below whenever they first appear or their A/B/C state changes.
     SNAPSHOT_HISTORY_DIR.mkdir(parents=True, exist_ok=True)
     snapshot_rows = []
     for rank, z in enumerate(rows, 1):
@@ -406,13 +421,15 @@ def main():
 
     day_key = now.strftime("%Y-%m-%d")
     snapshot_path = SNAPSHOT_HISTORY_DIR / f"{day_key}.jsonl"
-    snapshot_record = {
-        "ts": now.isoformat(),
-        "market_count": len(snapshot_rows),
-        "rows": snapshot_rows,
-    }
-    with snapshot_path.open("a", encoding="utf-8") as fp:
-        fp.write(json.dumps(snapshot_record, ensure_ascii=False, separators=(",", ":")) + "\n")
+    full_snapshot_written = now.minute < 10
+    if full_snapshot_written:
+        snapshot_record = {
+            "ts": now.isoformat(),
+            "market_count": len(snapshot_rows),
+            "rows": snapshot_rows,
+        }
+        with snapshot_path.open("a", encoding="utf-8") as fp:
+            fp.write(json.dumps(snapshot_record, ensure_ascii=False, separators=(",", ":")) + "\n")
 
     # Keep disk/GitHub growth bounded. This only deletes old diagnostic snapshots.
     retention_cutoff = (now - timedelta(days=SNAPSHOT_RETENTION_DAYS)).date()
@@ -427,7 +444,7 @@ def main():
     top = rows[:TOP_N]
     btc = btc_state()
 
-    # Ã¬Â ÂÃ¬Â²Â´ Ã¬ÂÂÃ¬ÂÂ¥Ã¬ÂÂÃ¬ÂÂ TOP120 Ã«Â°ÂÃ¬ÂÂ¸Ã«ÂÂ° Ã¬Â¡Â°ÃªÂ±Â´Ã¬ÂÂ Ã­ÂÂµÃªÂ³Â¼Ã­ÂÂ Ã­ÂÂÃ«Â³Â´Ã«Â¥Â¼ Ã«Â³ÂÃ«ÂÂ Ã¬Â ÂÃ¬ÂÂ¥
+    # ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂ²ÃÂ´ ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ¥ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ TOP120 ÃÂ«ÃÂ°ÃÂÃÂ¬ÃÂÃÂ¸ÃÂ«ÃÂÃÂ° ÃÂ¬ÃÂ¡ÃÂ°ÃÂªÃÂ±ÃÂ´ÃÂ¬ÃÂÃÂ ÃÂ­ÃÂÃÂµÃÂªÃÂ³ÃÂ¼ÃÂ­ÃÂÃÂ ÃÂ­ÃÂÃÂÃÂ«ÃÂ³ÃÂ´ÃÂ«ÃÂ¥ÃÂ¼ ÃÂ«ÃÂ³ÃÂÃÂ«ÃÂÃÂ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥
     outside_candidates = [
         x for x in rows
         if x.get("outside_top120")
@@ -435,11 +452,11 @@ def main():
         and (x["A"] or x["B"] or x["C"])
     ]
 
-    # V7.6 history Ã­ÂÂÃ¬ÂÂ¥:
-    # 1) Ã¬Â ÂÃ¬Â²Â´ Ã¬Â ÂÃ«Â Â¬ TOP30
-    # 2) Ã¬ÂÂÃ¬ÂÂÃ¬ÂÂ Ã«Â¬Â´ÃªÂ´ÂÃ­ÂÂÃªÂ²Â A/B/C Ã­ÂÂµÃªÂ³Â¼ Ã­ÂÂÃ«Â³Â´ Ã¬Â ÂÃ«Â¶Â
-    # 3) Ã¬ÂÂÃ¬ÂÂÃ¬ÂÂ Ã«Â¬Â´ÃªÂ´ÂÃ­ÂÂÃªÂ²Â EARLY + score>=65 Ã¬Â§ÂÃ«ÂÂ¨ Ã­ÂÂÃ«Â³Â´
-    # Ã«Â¥Â¼ Ã¬Â ÂÃ¬ÂÂ¥ Ã«ÂÂÃ¬ÂÂÃ¬ÂÂ¼Ã«Â¡Â Ã¬ÂÂ¡Ã«ÂÂÃ«ÂÂ¤.
+    # V7.6 history ÃÂ­ÃÂÃÂÃÂ¬ÃÂÃÂ¥:
+    # 1) ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂ²ÃÂ´ ÃÂ¬ÃÂ ÃÂÃÂ«ÃÂ ÃÂ¬ TOP30
+    # 2) ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ ÃÂ«ÃÂ¬ÃÂ´ÃÂªÃÂ´ÃÂÃÂ­ÃÂÃÂÃÂªÃÂ²ÃÂ A/B/C ÃÂ­ÃÂÃÂµÃÂªÃÂ³ÃÂ¼ ÃÂ­ÃÂÃÂÃÂ«ÃÂ³ÃÂ´ ÃÂ¬ÃÂ ÃÂÃÂ«ÃÂ¶ÃÂ
+    # 3) ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ ÃÂ«ÃÂ¬ÃÂ´ÃÂªÃÂ´ÃÂÃÂ­ÃÂÃÂÃÂªÃÂ²ÃÂ EARLY + score>=65 ÃÂ¬ÃÂ§ÃÂÃÂ«ÃÂÃÂ¨ ÃÂ­ÃÂÃÂÃÂ«ÃÂ³ÃÂ´
+    # ÃÂ«ÃÂ¥ÃÂ¼ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥ ÃÂ«ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ¼ÃÂ«ÃÂ¡ÃÂ ÃÂ¬ÃÂÃÂ¡ÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂ¤.
     selected = []
     for rank, z in enumerate(rows, 1):
         in_top30 = rank <= HISTORY_RANK_N
@@ -473,9 +490,9 @@ def main():
     if not isinstance(hist, list):
         hist = []
 
-    # ÃªÂ°ÂÃ¬ÂÂ Ã¬Â¢ÂÃ«ÂªÂ©/ÃªÂ°ÂÃ¬ÂÂ A-B-C Ã¬ÂÂÃ­ÂÂÃ«Â¥Â¼ 5Ã«Â¶ÂÃ«Â§ÂÃ«ÂÂ¤ Ã¬Â¤ÂÃ«Â³Âµ Ã¬Â ÂÃ¬ÂÂ¥Ã­ÂÂÃ¬Â§Â Ã¬ÂÂÃªÂ³Â 
-    # 60Ã«Â¶ÂÃ¬ÂÂ Ã­ÂÂ Ã«Â²ÂÃ«Â§Â Ã¬ÂÂ episodeÃ«Â¡Â Ã¬Â ÂÃ¬ÂÂ¥Ã­ÂÂÃ«ÂÂ¤.
-    # Ã«ÂÂ¨, A/B/C Ã¬ÂÂÃ­ÂÂÃªÂ°Â Ã«Â°ÂÃ«ÂÂÃ«Â©Â´ ÃªÂ°ÂÃ¬ÂÂ 60Ã«Â¶Â Ã¬ÂÂÃ¬ÂÂÃ«ÂÂ Ã¬ÂÂ ÃªÂ¸Â°Ã«Â¡ÂÃ¬ÂÂ Ã«ÂÂ¨ÃªÂ¸Â´Ã«ÂÂ¤.
+    # ÃÂªÃÂ°ÃÂÃÂ¬ÃÂÃÂ ÃÂ¬ÃÂ¢ÃÂÃÂ«ÃÂªÃÂ©/ÃÂªÃÂ°ÃÂÃÂ¬ÃÂÃÂ A-B-C ÃÂ¬ÃÂÃÂÃÂ­ÃÂÃÂÃÂ«ÃÂ¥ÃÂ¼ 5ÃÂ«ÃÂ¶ÃÂÃÂ«ÃÂ§ÃÂÃÂ«ÃÂÃÂ¤ ÃÂ¬ÃÂ¤ÃÂÃÂ«ÃÂ³ÃÂµ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥ÃÂ­ÃÂÃÂÃÂ¬ÃÂ§ÃÂ ÃÂ¬ÃÂÃÂÃÂªÃÂ³ÃÂ 
+    # 60ÃÂ«ÃÂ¶ÃÂÃÂ¬ÃÂÃÂ ÃÂ­ÃÂÃÂ ÃÂ«ÃÂ²ÃÂÃÂ«ÃÂ§ÃÂ ÃÂ¬ÃÂÃÂ episodeÃÂ«ÃÂ¡ÃÂ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥ÃÂ­ÃÂÃÂÃÂ«ÃÂÃÂ¤.
+    # ÃÂ«ÃÂÃÂ¨, A/B/C ÃÂ¬ÃÂÃÂÃÂ­ÃÂÃÂÃÂªÃÂ°ÃÂ ÃÂ«ÃÂ°ÃÂÃÂ«ÃÂÃÂÃÂ«ÃÂ©ÃÂ´ ÃÂªÃÂ°ÃÂÃÂ¬ÃÂÃÂ 60ÃÂ«ÃÂ¶ÃÂ ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ«ÃÂÃÂ ÃÂ¬ÃÂÃÂ ÃÂªÃÂ¸ÃÂ°ÃÂ«ÃÂ¡ÃÂÃÂ¬ÃÂÃÂ ÃÂ«ÃÂÃÂ¨ÃÂªÃÂ¸ÃÂ´ÃÂ«ÃÂÃÂ¤.
     cutoff = now - timedelta(minutes=EPISODE_GAP_MIN)
     recent_keys = set()
     for old in hist:
@@ -523,18 +540,20 @@ def main():
             "file": str(snapshot_path),
             "format": "jsonl",
             "retention_days": SNAPSHOT_RETENTION_DAYS,
-            "markets_logged_this_run": len(snapshot_rows),
-            "note": "Diagnostic logging only; does not alter V7.6 scoring, labels, ranking, or TOP selection.",
+            "markets_logged_this_run": len(snapshot_rows) if full_snapshot_written else 0,
+            "full_snapshot_written": full_snapshot_written,
+            "full_snapshot_interval_min": 60,
+            "note": "Full-market diagnostic snapshot is hourly; fast candidate history remains enabled. This does not alter V7.6 scoring, labels, ranking, or TOP selection.",
         },
         "btc": btc,
         "top": top,
         "outside_top120_candidates": outside_candidates[:30],
         "outside_top120_candidate_count": len(outside_candidates),
         "note": (
-            "V7.3 score/EARLY ÃªÂ·ÂÃ¬Â¹ÂÃ¬ÂÂ ÃªÂ·Â¸Ã«ÂÂÃ«Â¡Â Ã¬ÂÂ Ã¬Â§Â. "
-            "24h ÃªÂ±Â°Ã«ÂÂÃ«ÂÂÃªÂ¸Â TOP120 Ã¬Â ÂÃ­ÂÂÃ«Â§Â Ã¬Â ÂÃªÂ±Â°. "
-            "historyÃ«ÂÂ TOP30 + A/B/C Ã¬Â ÂÃ¬Â²Â´ + EARLY score>=65Ã«Â¥Â¼ 60Ã«Â¶Â episodeÃ«Â¡Â Ã¬Â ÂÃ¬ÂÂ¥. "
-            "trade_value_rank_24hÃ«ÂÂ Ã­ÂÂÃ­ÂÂ°ÃªÂ°Â Ã¬ÂÂÃ«ÂÂÃ«ÂÂ¼ Ã«Â¹ÂÃªÂµÂÃ¬ÂÂ© ÃªÂ¸Â°Ã«Â¡Â."
+            "V7.3 score/EARLY ÃÂªÃÂ·ÃÂÃÂ¬ÃÂ¹ÃÂÃÂ¬ÃÂÃÂ ÃÂªÃÂ·ÃÂ¸ÃÂ«ÃÂÃÂÃÂ«ÃÂ¡ÃÂ ÃÂ¬ÃÂÃÂ ÃÂ¬ÃÂ§ÃÂ. "
+            "24h ÃÂªÃÂ±ÃÂ°ÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂÃÂªÃÂ¸ÃÂ TOP120 ÃÂ¬ÃÂ ÃÂÃÂ­ÃÂÃÂÃÂ«ÃÂ§ÃÂ ÃÂ¬ÃÂ ÃÂÃÂªÃÂ±ÃÂ°. "
+            "historyÃÂ«ÃÂÃÂ TOP30 + A/B/C ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂ²ÃÂ´ + EARLY score>=65ÃÂ«ÃÂ¥ÃÂ¼ 60ÃÂ«ÃÂ¶ÃÂ episodeÃÂ«ÃÂ¡ÃÂ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥. "
+            "trade_value_rank_24hÃÂ«ÃÂÃÂ ÃÂ­ÃÂÃÂÃÂ­ÃÂÃÂ°ÃÂªÃÂ°ÃÂ ÃÂ¬ÃÂÃÂÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂ¼ ÃÂ«ÃÂ¹ÃÂÃÂªÃÂµÃÂÃÂ¬ÃÂÃÂ© ÃÂªÃÂ¸ÃÂ°ÃÂ«ÃÂ¡ÃÂ."
         ),
     }
 
@@ -634,7 +653,12 @@ def main():
     print("feature rows:", len(rows))
     print("outside top120 A/B/C candidates:", len(outside_candidates))
     print("history selected:", len(selected), "new records:", len(recs))
-    print("rank snapshot:", snapshot_path, "markets:", len(snapshot_rows))
+    print(
+        "rank snapshot:",
+        snapshot_path,
+        "markets:",
+        len(snapshot_rows) if full_snapshot_written else 0,
+    )
     for x in top:
         print(
             x["market"],
