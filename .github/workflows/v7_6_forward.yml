@@ -3,7 +3,8 @@ name: V7.6 ALL KRW Forward
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 * * * *"
+    # Every 10 minutes, two minutes after a 5-minute candle boundary.
+    - cron: "2,12,22,32,42,52 * * * *"
 
 permissions:
   contents: write
