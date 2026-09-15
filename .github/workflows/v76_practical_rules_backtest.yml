@@ -1,0 +1,95 @@
+name: Manual V7.6 Practical Rules Backtest
+
+on:
+  workflow_dispatch:
+    inputs:
+      start_kst:
+        description: "Start KST"
+        required: false
+        default: "2026-03-02 09:00"
+      end_kst:
+        description: "End KST"
+        required: false
+        default: "2026-09-14 23:00"
+      step_hours:
+        description: "Historical decision checkpoint interval"
+        required: false
+        default: "6"
+
+permissions:
+  contents: write
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests numpy
+
+      - name: Run V7.6 practical-rules backtest
+        env:
+          BT_START_KST: ${{ inputs.start_kst }}
+          BT_END_KST: ${{ inputs.end_kst }}
+          BT_STEP_HOURS: ${{ inputs.step_hours }}
+          BT_RET3_MIN: "5"
+          BT_RET3_MAX: "10"
+          BT_COOLDOWN_HOURS: "72"
+          BT_TARGET_PCT: "20"
+          BT_STOP_PCTS: "3,5,7,10"
+          BT_RANDOM_RUNS: "1000"
+          BT_RANDOM_SEED: "7610"
+          BT_REQUEST_DELAY: "0.11"
+        run: |
+          python src/backtest_v76_practical_rules.py
+
+      - name: Upload result artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v76-practical-rules-backtest-result
+          path: docs/data/v76_practical_rules_backtest_latest.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Commit and push result safely
+        if: success()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add docs/data/v76_practical_rules_backtest_latest.json
+          if git diff --cached --quiet; then
+            echo "No result changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Update V7.6 practical rules backtest"
+
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then
+              echo "Push succeeded."
+              exit 0
+            fi
+            git rebase --abort || true
+            sleep $((i * 3))
+          done
+
+          echo "Result artifact was uploaded, but git push did not succeed."
+          exit 0
