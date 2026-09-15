@@ -1,0 +1,94 @@
+{
+  "version": "V76_PRACTICAL_RULES_PREREG_V1",
+  "created_at_utc": "2026-09-15T11:03:41Z",
+  "config": {
+    "start_kst": "2026-03-02T09:00:00+09:00",
+    "end_kst": "2026-09-14T23:00:00+09:00",
+    "step_hours": 6,
+    "top_n": 3,
+    "ret3_band_pct": [
+      5.0,
+      10.0
+    ],
+    "early_only": true,
+    "chase_excluded": true,
+    "repeat_top3_72h": "tie_break_only_not_filter",
+    "same_market_cooldown_hours": 72,
+    "hold_days": 7,
+    "target_pct": 20.0,
+    "stop_pcts": [
+      3.0,
+      5.0,
+      7.0,
+      10.0
+    ],
+    "random_runs": 1000,
+    "fees_slippage_included": false
+  },
+  "warnings": [
+    "Historical replay; not clean prospective OOS.",
+    "Current KRW market list creates survivorship bias.",
+    "Do not retune the +5~10% ret_3d band after seeing this result.",
+    "Random benchmark is paired within the same filtered V7.6 TOP3 pool; it tests ordering/choice, not V7.6 universe discovery versus all KRW coins.",
+    "Decision checkpoints default to every 6 hours for runtime; this is evaluation sampling, not a change to live V7.6."
+  ],
+  "events": [],
+  "v76_trades": [],
+  "summary": {
+    "no_stop": {
+      "v76": {
+        "n": 0
+      },
+      "v76_time_split": {},
+      "random_runs": 1000,
+      "random_compounded_return_median_pct": 0.0,
+      "random_compounded_return_p10_pct": 0.0,
+      "random_compounded_return_p90_pct": 0.0,
+      "v76_percentile_vs_random": null
+    },
+    "sl_3": {
+      "v76": {
+        "n": 0
+      },
+      "v76_time_split": {},
+      "random_runs": 1000,
+      "random_compounded_return_median_pct": 0.0,
+      "random_compounded_return_p10_pct": 0.0,
+      "random_compounded_return_p90_pct": 0.0,
+      "v76_percentile_vs_random": null
+    },
+    "sl_5": {
+      "v76": {
+        "n": 0
+      },
+      "v76_time_split": {},
+      "random_runs": 1000,
+      "random_compounded_return_median_pct": 0.0,
+      "random_compounded_return_p10_pct": 0.0,
+      "random_compounded_return_p90_pct": 0.0,
+      "v76_percentile_vs_random": null
+    },
+    "sl_7": {
+      "v76": {
+        "n": 0
+      },
+      "v76_time_split": {},
+      "random_runs": 1000,
+      "random_compounded_return_median_pct": 0.0,
+      "random_compounded_return_p10_pct": 0.0,
+      "random_compounded_return_p90_pct": 0.0,
+      "v76_percentile_vs_random": null
+    },
+    "sl_10": {
+      "v76": {
+        "n": 0
+      },
+      "v76_time_split": {},
+      "random_runs": 1000,
+      "random_compounded_return_median_pct": 0.0,
+      "random_compounded_return_p10_pct": 0.0,
+      "random_compounded_return_p90_pct": 0.0,
+      "v76_percentile_vs_random": null
+    }
+  }
+}
