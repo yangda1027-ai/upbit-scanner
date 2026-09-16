@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-09-16T09:50:29+00:00",
-    "generated_at_kst": "2026-09-16 18:50:29 KST",
+    "generated_at_utc": "2026-09-16T09:55:27+00:00",
+    "generated_at_kst": "2026-09-16 18:55:27 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -90,15 +90,15 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1253,
+        "episodes": 1254,
         "h6_matured": 1185,
         "fast_move_n": 283,
         "fast_move_rate_pct": 23.88,
-        "sleeper_evaluated_n": 769,
+        "sleeper_evaluated_n": 770,
         "sleeper_hit3_n": 233,
-        "sleeper_hit3_pct": 30.3,
+        "sleeper_hit3_pct": 30.26,
         "sleeper_hit5_n": 118,
-        "sleeper_hit5_pct": 15.34,
+        "sleeper_hit5_pct": 15.32,
         "sleeper_hit10_n": 35,
         "sleeper_hit10_pct": 4.55
       }
@@ -133,6 +133,33 @@
     }
   },
   "signals": [
+    {
+      "strategy": "C",
+      "market": "KRW-HIVE",
+      "price": 69.4,
+      "score": 78.91,
+      "source_label": "EARLY",
+      "ret_5m": -0.857,
+      "ret_15m": -0.43,
+      "ret_30m": -0.857,
+      "ret_60m": -0.999,
+      "value_ratio_5m": 1.832,
+      "value_accel_15m": 3.168,
+      "value_accel_30m": 2.228,
+      "ts": "2026-09-16T09:50:00+00:00",
+      "ts_kst": "2026-09-16 18:50:00 KST",
+      "rank": 6,
+      "btc": {
+        "ret_15m": 0.0,
+        "ret_60m": 0.413
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "C",
       "market": "KRW-LIT",
@@ -3764,7 +3791,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": -0.842,
+        "max_pct": 0.241,
+        "min_pct": -1.925,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -3798,7 +3832,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": -0.842,
+        "max_pct": 0.241,
+        "min_pct": -1.925,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -27153,8 +27194,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -5.357,
+        "max_pct": 2.679,
+        "min_pct": -8.036,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "B",
@@ -48770,61 +48818,6 @@
         "hit_10": false
       },
       "status": "FAILED_LATE"
-    },
-    {
-      "strategy": "A",
-      "market": "KRW-BERA",
-      "price": 250.0,
-      "score": 86.62,
-      "source_label": "EARLY",
-      "ret_5m": 0.0,
-      "ret_15m": -1.186,
-      "ret_30m": -1.186,
-      "ret_60m": -1.186,
-      "value_ratio_5m": 2.802,
-      "value_accel_15m": 3.472,
-      "value_accel_30m": 2.075,
-      "ts": "2026-09-14T19:15:00+00:00",
-      "ts_kst": "2026-09-15 04:15:00 KST",
-      "rank": 4,
-      "btc": {
-        "ret_15m": -0.047,
-        "ret_60m": -0.169
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": 1.2,
-        "max_pct": 1.2,
-        "min_pct": -0.4,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 0.0,
-        "max_pct": 1.2,
-        "min_pct": -0.4,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": -0.4,
-        "max_pct": 1.2,
-        "min_pct": -0.8,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 0.0,
-        "max_pct": 3.2,
-        "min_pct": -3.2,
-        "hit_3": true,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "PHOENIX_3"
     }
   ]
 }
