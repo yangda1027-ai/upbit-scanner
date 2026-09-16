@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-09-16T10:00:41+00:00",
-    "generated_at_kst": "2026-09-16 19:00:41 KST",
+    "generated_at_utc": "2026-09-16T10:05:58+00:00",
+    "generated_at_kst": "2026-09-16 19:05:58 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -31,9 +31,9 @@
       },
       "official_forward": {
         "episodes": 1107,
-        "h6_matured": 1041,
+        "h6_matured": 1042,
         "fast_move_n": 252,
-        "fast_move_rate_pct": 24.21,
+        "fast_move_rate_pct": 24.18,
         "sleeper_evaluated_n": 678,
         "sleeper_hit3_n": 198,
         "sleeper_hit3_pct": 29.2,
@@ -60,7 +60,7 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 883,
+        "episodes": 885,
         "h6_matured": 840,
         "fast_move_n": 219,
         "fast_move_rate_pct": 26.07,
@@ -91,9 +91,9 @@
       },
       "official_forward": {
         "episodes": 1255,
-        "h6_matured": 1185,
-        "fast_move_n": 283,
-        "fast_move_rate_pct": 23.88,
+        "h6_matured": 1187,
+        "fast_move_n": 284,
+        "fast_move_rate_pct": 23.93,
         "sleeper_evaluated_n": 770,
         "sleeper_hit3_n": 233,
         "sleeper_hit3_pct": 30.26,
@@ -133,6 +133,60 @@
     }
   },
   "signals": [
+    {
+      "strategy": "B",
+      "market": "KRW-FIL",
+      "price": 1099.0,
+      "score": 91.46,
+      "source_label": "EARLY",
+      "ret_5m": 0.091,
+      "ret_15m": -0.453,
+      "ret_30m": -0.453,
+      "ret_60m": -0.182,
+      "value_ratio_5m": 4.285,
+      "value_accel_15m": 2.513,
+      "value_accel_30m": 3.465,
+      "ts": "2026-09-16T10:00:00+00:00",
+      "ts_kst": "2026-09-16 19:00:00 KST",
+      "rank": 1,
+      "btc": {
+        "ret_15m": 0.058,
+        "ret_60m": 0.137
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
+    {
+      "strategy": "B",
+      "market": "KRW-ARX",
+      "price": 219.0,
+      "score": 82.6,
+      "source_label": "EARLY",
+      "ret_5m": -0.455,
+      "ret_15m": 0.0,
+      "ret_30m": 0.459,
+      "ret_60m": 0.922,
+      "value_ratio_5m": 3.22,
+      "value_accel_15m": 1.942,
+      "value_accel_30m": 3.457,
+      "ts": "2026-09-16T10:00:00+00:00",
+      "ts_kst": "2026-09-16 19:00:00 KST",
+      "rank": 4,
+      "btc": {
+        "ret_15m": 0.058,
+        "ret_60m": 0.137
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "A",
       "market": "KRW-PIEVERSE",
@@ -3607,7 +3661,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": -0.602,
+        "max_pct": 0.241,
+        "min_pct": -1.807,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -6560,9 +6621,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 0.353,
+        "max_pct": 1.413,
+        "min_pct": -0.824,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "C",
@@ -6601,9 +6669,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 0.353,
+        "max_pct": 1.413,
+        "min_pct": -0.824,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "C",
@@ -6642,9 +6717,16 @@
         "hit_5": true,
         "hit_10": true
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 10.784,
+        "max_pct": 19.608,
+        "min_pct": 0.0,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": true
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "A",
@@ -48675,116 +48757,6 @@
         "close_pct": -5.583,
         "max_pct": 0.744,
         "min_pct": -5.583,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "FAILED_LATE"
-    },
-    {
-      "strategy": "C",
-      "market": "KRW-QUID",
-      "price": 80.6,
-      "score": 90.74,
-      "source_label": "EARLY",
-      "ret_5m": -0.124,
-      "ret_15m": -0.494,
-      "ret_30m": -0.617,
-      "ret_60m": 0.0,
-      "value_ratio_5m": 9.121,
-      "value_accel_15m": 2.941,
-      "value_accel_30m": 3.062,
-      "ts": "2026-09-14T19:30:00+00:00",
-      "ts_kst": "2026-09-15 04:30:00 KST",
-      "rank": 2,
-      "btc": {
-        "ret_15m": 0.017,
-        "ret_60m": -0.211
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": 0.0,
-        "max_pct": 0.744,
-        "min_pct": -0.124,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 0.372,
-        "max_pct": 0.744,
-        "min_pct": -0.372,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 0.62,
-        "max_pct": 1.737,
-        "min_pct": -0.372,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": -5.583,
-        "max_pct": 0.744,
-        "min_pct": -5.583,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "FAILED_LATE"
-    },
-    {
-      "strategy": "A",
-      "market": "KRW-ENS",
-      "price": 7845.0,
-      "score": 92.02,
-      "source_label": "EARLY",
-      "ret_5m": 0.128,
-      "ret_15m": 0.128,
-      "ret_30m": -0.191,
-      "ret_60m": -0.127,
-      "value_ratio_5m": 2.997,
-      "value_accel_15m": 3.257,
-      "value_accel_30m": 2.34,
-      "ts": "2026-09-14T19:25:00+00:00",
-      "ts_kst": "2026-09-15 04:25:00 KST",
-      "rank": 1,
-      "btc": {
-        "ret_15m": 0.071,
-        "ret_60m": -0.045
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": 0.829,
-        "max_pct": 1.338,
-        "min_pct": -0.51,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": -0.51,
-        "max_pct": 1.657,
-        "min_pct": -0.637,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": -1.466,
-        "max_pct": 1.657,
-        "min_pct": -1.657,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": -5.545,
-        "max_pct": -0.701,
-        "min_pct": -7.266,
         "hit_3": false,
         "hit_5": false,
         "hit_10": false
