@@ -8,6 +8,7 @@ OUT = Path("docs/data/v7_6_signals.json")
 LATEST = Path("docs/data/v7_6_latest.json")
 LIVE = Path("docs/data/v7_6_live.json")
 TOP20 = Path("docs/data/v7_6_top20.json")
+MARKET_SCAN = Path("docs/data/market_scan_latest.json")
 HISTORY_DIR = Path("docs/data/v7_6_history")
 SNAPSHOT_HISTORY_DIR = Path("docs/data/v7_6_rank_history")
 # Preserve rank snapshots long enough for prospective five-slot validation.
@@ -92,7 +93,7 @@ def candles(m, unit, count):
 
 
 def features(m):
-    # V7.3ÃÂ¬ÃÂÃÂ ÃÂ«ÃÂÃÂÃÂ¬ÃÂÃÂ¼ÃÂ­ÃÂÃÂ 5ÃÂ«ÃÂ¶ÃÂÃÂ«ÃÂ´ÃÂ feature / score / EARLY ÃÂªÃÂ·ÃÂÃÂ¬ÃÂ¹ÃÂ
+    # V7.3ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¼ÃÂÃÂ­ÃÂÃÂÃÂÃÂ 5ÃÂÃÂ«ÃÂÃÂ¶ÃÂÃÂÃÂÃÂ«ÃÂÃÂ´ÃÂÃÂ feature / score / EARLY ÃÂÃÂªÃÂÃÂ·ÃÂÃÂÃÂÃÂ¬ÃÂÃÂ¹ÃÂÃÂ
     c = candles(m, 5, 30)
     if len(c) < 25:
         return None
@@ -324,13 +325,150 @@ def monitor_score(row, hist_summary):
     return round(clamp(score, 0, 100), 2)
 
 
+
+def sma(xs, n):
+    return sum(xs[-n:]) / n if len(xs) >= n else None
+
+
+def rsi14(xs):
+    if len(xs) < 15:
+        return None
+    gains, losses = [], []
+    for a, b in zip(xs[-15:-1], xs[-14:]):
+        d = b - a
+        gains.append(max(d, 0.0))
+        losses.append(max(-d, 0.0))
+    ag = sum(gains) / 14
+    al = sum(losses) / 14
+    if al == 0:
+        return 100.0 if ag > 0 else 50.0
+    rs = ag / al
+    return 100 - 100 / (1 + rs)
+
+
+def tf_scan(m, unit, count=80):
+    c = candles(m, unit, count)
+    if len(c) < 35:
+        return None
+    cl = [f(x.get("trade_price")) for x in c]
+    hi = [f(x.get("high_price")) for x in c]
+    lo = [f(x.get("low_price")) for x in c]
+    tv = [f(x.get("candle_acc_trade_price")) for x in c]
+    ma5, ma10, ma20 = sma(cl,5), sma(cl,10), sma(cl,20)
+    ma60 = sma(cl,60)
+    recent_value = sum(tv[-3:]) / 3
+    base_value = sum(tv[-15:-3]) / 12 or 1
+    value_accel = recent_value / base_value
+    prev_high = max(hi[-13:-1])
+    support = min(lo[-7:])
+    resistance_dist = pct(prev_high, cl[-1]) if cl[-1] else 0
+    range6 = (max(hi[-6:]) - min(lo[-6:])) / cl[-1] * 100 if cl[-1] else 99
+    ret3 = pct(cl[-1], cl[-4])
+    ret12 = pct(cl[-1], cl[-13])
+    ma_reclaim = cl[-1] >= ma5 and cl[-1] >= ma10
+    aligned = ma5 >= ma10 >= ma20
+    return {
+        "price": cl[-1], "rsi": round(rsi14(cl),2),
+        "ma5": ma5, "ma10": ma10, "ma20": ma20, "ma60": ma60,
+        "ma_reclaim": ma_reclaim, "ma_aligned": aligned,
+        "value_accel": round(value_accel,3),
+        "prev_high": prev_high, "support": support,
+        "resistance_distance_pct": round(resistance_dist,3),
+        "compression_pct": round(range6,3),
+        "ret_3bars_pct": round(ret3,3), "ret_12bars_pct": round(ret12,3),
+    }
+
+
+def independent_market_scan(ms, rank24, value24, now):
+    """Independent 5m/15m/1h chart scanner. Does NOT alter V7.6 scoring."""
+    candidates = []
+    for idx, m in enumerate(ms, 1):
+        try:
+            t5 = tf_scan(m, 5)
+            t15 = tf_scan(m, 15)
+            t60 = tf_scan(m, 60)
+            if not (t5 and t15 and t60):
+                continue
+            price = t5["price"]
+            # Exclude obvious chase conditions. We want pre-breakout/recovery structures.
+            chase = (t5["ret_12bars_pct"] > 8 or t15["ret_12bars_pct"] > 14 or
+                     t60["ret_12bars_pct"] > 25 or t5["rsi"] >= 76 or t15["rsi"] >= 74)
+            if chase:
+                continue
+            score = 0.0
+            # volume/value acceleration
+            score += clamp((t5["value_accel"]-1)*16, -8, 24)
+            score += clamp((t15["value_accel"]-1)*12, -6, 18)
+            score += clamp((t60["value_accel"]-1)*6, -3, 9)
+            # trend/reclaim across timeframes
+            score += 7 if t5["ma_reclaim"] else -4
+            score += 8 if t15["ma_reclaim"] else -5
+            score += 9 if t60["ma_reclaim"] else -6
+            score += 5 if t5["ma_aligned"] else 0
+            score += 6 if t15["ma_aligned"] else 0
+            score += 6 if t60["ma_aligned"] else 0
+            # near resistance but not already extended
+            if -0.5 <= t5["resistance_distance_pct"] <= 2.5: score += 8
+            if -0.5 <= t15["resistance_distance_pct"] <= 3.5: score += 7
+            # compression
+            if t5["compression_pct"] <= 2.5: score += 6
+            if t15["compression_pct"] <= 4.5: score += 4
+            # RSI: constructive, not overheated
+            for t, bonus in ((t5,5),(t15,5),(t60,4)):
+                if 45 <= t["rsi"] <= 68: score += bonus
+                elif t["rsi"] >= 72: score -= bonus
+            score = round(clamp(score, 0, 100), 2)
+            # Need at least a credible multi-timeframe setup.
+            if score < 45:
+                continue
+            trigger = max(t5["prev_high"], t15["prev_high"])
+            support = min(t5["support"], t15["support"])
+            # observation zone around current/support, deliberately not a blind buy range
+            obs_low = max(support, price * 0.975)
+            obs_high = price * 1.005
+            invalid = min(t15["support"], price * 0.965)
+            state = "ì§ì ê²í " if (score >= 65 and t5["ma_reclaim"] and t15["ma_reclaim"] and t5["value_accel"] >= 1.15) else "ë§¤ììë¦¬ íì± ì¤"
+            reasons=[]
+            if t5["value_accel"] >= 1.2: reasons.append(f"5m ê±°ëëê¸ {t5['value_accel']:.2f}x")
+            if t15["value_accel"] >= 1.15: reasons.append(f"15m ê±°ëëê¸ {t15['value_accel']:.2f}x")
+            if t5["ma_aligned"]: reasons.append("5m MA ì ë°°ì´")
+            elif t5["ma_reclaim"]: reasons.append("5m MA5/10 íë³µ")
+            if t15["ma_aligned"]: reasons.append("15m MA ì ë°°ì´")
+            elif t15["ma_reclaim"]: reasons.append("15m MA5/10 íë³µ")
+            if t60["ma_reclaim"]: reasons.append("1h MA5/10 ì")
+            if t5["compression_pct"] <= 2.5: reasons.append("5m ê°ê²© ìì¶")
+            candidates.append({
+                "market":m, "symbol":m.split('-',1)[1], "price":price,
+                "status":state, "scan_score":score,
+                "trade_value_rank_24h":rank24.get(m), "trade_value_24h":round(value24.get(m,0),2),
+                "entry_observe_low":round(obs_low,8), "entry_observe_high":round(obs_high,8),
+                "trigger_price":round(trigger,8), "invalidation_price":round(invalid,8),
+                "reasons":reasons[:6], "5m":t5, "15m":t15, "1h":t60,
+            })
+        except Exception as e:
+            print("market-scan skip", m, e)
+        time.sleep(0.08)
+        if idx % 25 == 0 or idx == len(ms):
+            print(f"independent market scan {idx}/{len(ms)}")
+    candidates.sort(key=lambda x:(-x["scan_score"], x.get("trade_value_rank_24h") or 9999))
+    top = candidates[:5]
+    payload={
+        "generated_at":now.isoformat(),
+        "version":"INDEPENDENT_MARKET_SCAN_V1",
+        "note":"Independent from V7.6 score/ABC logic. Closed candles only; candidates are observation/trigger setups, not guaranteed buys.",
+        "universe_count":len(ms), "qualified_count":len(candidates), "top5":top,
+    }
+    MARKET_SCAN.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding="utf-8")
+    return top
+
+
 def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     now = datetime.now(timezone.utc).replace(second=0, microsecond=0)
 
     ms = markets()
 
-    # 24h ÃÂªÃÂ±ÃÂ°ÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂÃÂªÃÂ¸ÃÂ ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ«ÃÂÃÂ "ÃÂ­ÃÂÃÂÃÂ­ÃÂÃÂ°"ÃÂªÃÂ°ÃÂ ÃÂ¬ÃÂÃÂÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂ¼ ÃÂªÃÂ¸ÃÂ°ÃÂ«ÃÂ¡ÃÂ/ÃÂ«ÃÂ¹ÃÂÃÂªÃÂµÃÂÃÂ¬ÃÂÃÂ©ÃÂ¬ÃÂÃÂ¼ÃÂ«ÃÂ¡ÃÂÃÂ«ÃÂ§ÃÂ ÃÂ¬ÃÂÃÂ¬ÃÂ¬ÃÂÃÂ©
+    # 24h ÃÂÃÂªÃÂÃÂ±ÃÂÃÂ°ÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂªÃÂÃÂ¸ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ "ÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂ°"ÃÂÃÂªÃÂÃÂ°ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ¼ ÃÂÃÂªÃÂÃÂ¸ÃÂÃÂ°ÃÂÃÂ«ÃÂÃÂ¡ÃÂÃÂ/ÃÂÃÂ«ÃÂÃÂ¹ÃÂÃÂÃÂÃÂªÃÂÃÂµÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ©ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¼ÃÂÃÂ«ÃÂÃÂ¡ÃÂÃÂÃÂÃÂ«ÃÂÃÂ§ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¬ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ©
     tick = []
     for i in range(0, len(ms), 100):
         tick += get("/v1/ticker", {"markets": ",".join(ms[i:i + 100])})
@@ -344,9 +482,9 @@ def main():
     rank24 = {x["market"]: i + 1 for i, x in enumerate(ranked)}
     value24 = {x["market"]: f(x.get("acc_trade_price_24h")) for x in ranked}
 
-    # ÃÂ­ÃÂÃÂµÃÂ¬ÃÂÃÂ¬ ÃÂ«ÃÂ³ÃÂÃÂªÃÂ²ÃÂ½ÃÂ¬ÃÂ ÃÂ:
-    # V7.3 = ÃÂªÃÂ±ÃÂ°ÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂÃÂªÃÂ¸ÃÂ ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ 120ÃÂªÃÂ°ÃÂÃÂ«ÃÂ§ÃÂ feature ÃÂªÃÂ³ÃÂÃÂ¬ÃÂÃÂ°
-    # V7.6 = KRW ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂ²ÃÂ´ ÃÂ¬ÃÂ¢ÃÂÃÂ«ÃÂªÃÂ©ÃÂ¬ÃÂÃÂ feature ÃÂªÃÂ³ÃÂÃÂ¬ÃÂÃÂ°
+    # ÃÂÃÂ­ÃÂÃÂÃÂÃÂµÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¬ ÃÂÃÂ«ÃÂÃÂ³ÃÂÃÂÃÂÃÂªÃÂÃÂ²ÃÂÃÂ½ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂ:
+    # V7.3 = ÃÂÃÂªÃÂÃÂ±ÃÂÃÂ°ÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂªÃÂÃÂ¸ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ 120ÃÂÃÂªÃÂÃÂ°ÃÂÃÂÃÂÃÂ«ÃÂÃÂ§ÃÂÃÂ feature ÃÂÃÂªÃÂÃÂ³ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ°
+    # V7.6 = KRW ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ¬ÃÂÃÂ²ÃÂÃÂ´ ÃÂÃÂ¬ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ«ÃÂÃÂªÃÂÃÂ©ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ feature ÃÂÃÂªÃÂÃÂ³ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ°
     rows = []
     total = len(ms)
 
@@ -359,7 +497,7 @@ def main():
                 z["trade_value_24h"] = round(value24.get(m, 0.0), 2)
                 z["outside_top120"] = bool(r and r > 120)
 
-                # A/B/CÃÂ«ÃÂÃÂ V7.5ÃÂ¬ÃÂÃÂ ÃÂ«ÃÂÃÂÃÂ¬ÃÂÃÂ¼ÃÂ­ÃÂÃÂ ÃÂªÃÂ´ÃÂÃÂ¬ÃÂ°ÃÂ° ÃÂ¬ÃÂ¡ÃÂ°ÃÂªÃÂ±ÃÂ´
+                # A/B/CÃÂÃÂ«ÃÂÃÂÃÂÃÂ V7.5ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¼ÃÂÃÂ­ÃÂÃÂÃÂÃÂ ÃÂÃÂªÃÂÃÂ´ÃÂÃÂÃÂÃÂ¬ÃÂÃÂ°ÃÂÃÂ° ÃÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂ°ÃÂÃÂªÃÂÃÂ±ÃÂÃÂ´
                 is_early = z["label"] == "EARLY"
                 not_chase = z["label"] != "CHASE"
 
@@ -393,7 +531,7 @@ def main():
         except Exception as e:
             print("skip", m, e)
 
-        # Upbit public API ÃÂ«ÃÂ¶ÃÂÃÂ«ÃÂÃÂ´ ÃÂ¬ÃÂÃÂÃÂ­ÃÂÃÂ
+        # Upbit public API ÃÂÃÂ«ÃÂÃÂ¶ÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ´ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂ
         time.sleep(0.07)
 
         if idx % 25 == 0 or idx == total:
@@ -444,7 +582,7 @@ def main():
     top = rows[:TOP_N]
     btc = btc_state()
 
-    # ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂ²ÃÂ´ ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ¥ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ TOP120 ÃÂ«ÃÂ°ÃÂÃÂ¬ÃÂÃÂ¸ÃÂ«ÃÂÃÂ° ÃÂ¬ÃÂ¡ÃÂ°ÃÂªÃÂ±ÃÂ´ÃÂ¬ÃÂÃÂ ÃÂ­ÃÂÃÂµÃÂªÃÂ³ÃÂ¼ÃÂ­ÃÂÃÂ ÃÂ­ÃÂÃÂÃÂ«ÃÂ³ÃÂ´ÃÂ«ÃÂ¥ÃÂ¼ ÃÂ«ÃÂ³ÃÂÃÂ«ÃÂÃÂ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥
+    # ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ¬ÃÂÃÂ²ÃÂÃÂ´ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¥ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ TOP120 ÃÂÃÂ«ÃÂÃÂ°ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¸ÃÂÃÂ«ÃÂÃÂÃÂÃÂ° ÃÂÃÂ¬ÃÂÃÂ¡ÃÂÃÂ°ÃÂÃÂªÃÂÃÂ±ÃÂÃÂ´ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂ­ÃÂÃÂÃÂÃÂµÃÂÃÂªÃÂÃÂ³ÃÂÃÂ¼ÃÂÃÂ­ÃÂÃÂÃÂÃÂ ÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂ³ÃÂÃÂ´ÃÂÃÂ«ÃÂÃÂ¥ÃÂÃÂ¼ ÃÂÃÂ«ÃÂÃÂ³ÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¥
     outside_candidates = [
         x for x in rows
         if x.get("outside_top120")
@@ -452,11 +590,11 @@ def main():
         and (x["A"] or x["B"] or x["C"])
     ]
 
-    # V7.6 history ÃÂ­ÃÂÃÂÃÂ¬ÃÂÃÂ¥:
-    # 1) ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂ²ÃÂ´ ÃÂ¬ÃÂ ÃÂÃÂ«ÃÂ ÃÂ¬ TOP30
-    # 2) ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ ÃÂ«ÃÂ¬ÃÂ´ÃÂªÃÂ´ÃÂÃÂ­ÃÂÃÂÃÂªÃÂ²ÃÂ A/B/C ÃÂ­ÃÂÃÂµÃÂªÃÂ³ÃÂ¼ ÃÂ­ÃÂÃÂÃÂ«ÃÂ³ÃÂ´ ÃÂ¬ÃÂ ÃÂÃÂ«ÃÂ¶ÃÂ
-    # 3) ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ ÃÂ«ÃÂ¬ÃÂ´ÃÂªÃÂ´ÃÂÃÂ­ÃÂÃÂÃÂªÃÂ²ÃÂ EARLY + score>=65 ÃÂ¬ÃÂ§ÃÂÃÂ«ÃÂÃÂ¨ ÃÂ­ÃÂÃÂÃÂ«ÃÂ³ÃÂ´
-    # ÃÂ«ÃÂ¥ÃÂ¼ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥ ÃÂ«ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂ¼ÃÂ«ÃÂ¡ÃÂ ÃÂ¬ÃÂÃÂ¡ÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂ¤.
+    # V7.6 history ÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¥:
+    # 1) ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ¬ÃÂÃÂ²ÃÂÃÂ´ ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ«ÃÂÃÂ ÃÂÃÂ¬ TOP30
+    # 2) ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂ«ÃÂÃÂ¬ÃÂÃÂ´ÃÂÃÂªÃÂÃÂ´ÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂªÃÂÃÂ²ÃÂÃÂ A/B/C ÃÂÃÂ­ÃÂÃÂÃÂÃÂµÃÂÃÂªÃÂÃÂ³ÃÂÃÂ¼ ÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂ³ÃÂÃÂ´ ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ«ÃÂÃÂ¶ÃÂÃÂ
+    # 3) ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂ«ÃÂÃÂ¬ÃÂÃÂ´ÃÂÃÂªÃÂÃÂ´ÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂªÃÂÃÂ²ÃÂÃÂ EARLY + score>=65 ÃÂÃÂ¬ÃÂÃÂ§ÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ¨ ÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂ³ÃÂÃÂ´
+    # ÃÂÃÂ«ÃÂÃÂ¥ÃÂÃÂ¼ ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¥ ÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¼ÃÂÃÂ«ÃÂÃÂ¡ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¡ÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ¤.
     selected = []
     for rank, z in enumerate(rows, 1):
         in_top30 = rank <= HISTORY_RANK_N
@@ -490,9 +628,9 @@ def main():
     if not isinstance(hist, list):
         hist = []
 
-    # ÃÂªÃÂ°ÃÂÃÂ¬ÃÂÃÂ ÃÂ¬ÃÂ¢ÃÂÃÂ«ÃÂªÃÂ©/ÃÂªÃÂ°ÃÂÃÂ¬ÃÂÃÂ A-B-C ÃÂ¬ÃÂÃÂÃÂ­ÃÂÃÂÃÂ«ÃÂ¥ÃÂ¼ 5ÃÂ«ÃÂ¶ÃÂÃÂ«ÃÂ§ÃÂÃÂ«ÃÂÃÂ¤ ÃÂ¬ÃÂ¤ÃÂÃÂ«ÃÂ³ÃÂµ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥ÃÂ­ÃÂÃÂÃÂ¬ÃÂ§ÃÂ ÃÂ¬ÃÂÃÂÃÂªÃÂ³ÃÂ 
-    # 60ÃÂ«ÃÂ¶ÃÂÃÂ¬ÃÂÃÂ ÃÂ­ÃÂÃÂ ÃÂ«ÃÂ²ÃÂÃÂ«ÃÂ§ÃÂ ÃÂ¬ÃÂÃÂ episodeÃÂ«ÃÂ¡ÃÂ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥ÃÂ­ÃÂÃÂÃÂ«ÃÂÃÂ¤.
-    # ÃÂ«ÃÂÃÂ¨, A/B/C ÃÂ¬ÃÂÃÂÃÂ­ÃÂÃÂÃÂªÃÂ°ÃÂ ÃÂ«ÃÂ°ÃÂÃÂ«ÃÂÃÂÃÂ«ÃÂ©ÃÂ´ ÃÂªÃÂ°ÃÂÃÂ¬ÃÂÃÂ 60ÃÂ«ÃÂ¶ÃÂ ÃÂ¬ÃÂÃÂÃÂ¬ÃÂÃÂÃÂ«ÃÂÃÂ ÃÂ¬ÃÂÃÂ ÃÂªÃÂ¸ÃÂ°ÃÂ«ÃÂ¡ÃÂÃÂ¬ÃÂÃÂ ÃÂ«ÃÂÃÂ¨ÃÂªÃÂ¸ÃÂ´ÃÂ«ÃÂÃÂ¤.
+    # ÃÂÃÂªÃÂÃÂ°ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ«ÃÂÃÂªÃÂÃÂ©/ÃÂÃÂªÃÂÃÂ°ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ A-B-C ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂ¥ÃÂÃÂ¼ 5ÃÂÃÂ«ÃÂÃÂ¶ÃÂÃÂÃÂÃÂ«ÃÂÃÂ§ÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ¤ ÃÂÃÂ¬ÃÂÃÂ¤ÃÂÃÂÃÂÃÂ«ÃÂÃÂ³ÃÂÃÂµ ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¥ÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂ§ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂªÃÂÃÂ³ÃÂÃÂ 
+    # 60ÃÂÃÂ«ÃÂÃÂ¶ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂ­ÃÂÃÂÃÂÃÂ ÃÂÃÂ«ÃÂÃÂ²ÃÂÃÂÃÂÃÂ«ÃÂÃÂ§ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ episodeÃÂÃÂ«ÃÂÃÂ¡ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¥ÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ¤.
+    # ÃÂÃÂ«ÃÂÃÂÃÂÃÂ¨, A/B/C ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂªÃÂÃÂ°ÃÂÃÂ ÃÂÃÂ«ÃÂÃÂ°ÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂ©ÃÂÃÂ´ ÃÂÃÂªÃÂÃÂ°ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ 60ÃÂÃÂ«ÃÂÃÂ¶ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂªÃÂÃÂ¸ÃÂÃÂ°ÃÂÃÂ«ÃÂÃÂ¡ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂ«ÃÂÃÂÃÂÃÂ¨ÃÂÃÂªÃÂÃÂ¸ÃÂÃÂ´ÃÂÃÂ«ÃÂÃÂÃÂÃÂ¤.
     cutoff = now - timedelta(minutes=EPISODE_GAP_MIN)
     recent_keys = set()
     for old in hist:
@@ -550,10 +688,10 @@ def main():
         "outside_top120_candidates": outside_candidates[:30],
         "outside_top120_candidate_count": len(outside_candidates),
         "note": (
-            "V7.3 score/EARLY ÃÂªÃÂ·ÃÂÃÂ¬ÃÂ¹ÃÂÃÂ¬ÃÂÃÂ ÃÂªÃÂ·ÃÂ¸ÃÂ«ÃÂÃÂÃÂ«ÃÂ¡ÃÂ ÃÂ¬ÃÂÃÂ ÃÂ¬ÃÂ§ÃÂ. "
-            "24h ÃÂªÃÂ±ÃÂ°ÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂÃÂªÃÂ¸ÃÂ TOP120 ÃÂ¬ÃÂ ÃÂÃÂ­ÃÂÃÂÃÂ«ÃÂ§ÃÂ ÃÂ¬ÃÂ ÃÂÃÂªÃÂ±ÃÂ°. "
-            "historyÃÂ«ÃÂÃÂ TOP30 + A/B/C ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂ²ÃÂ´ + EARLY score>=65ÃÂ«ÃÂ¥ÃÂ¼ 60ÃÂ«ÃÂ¶ÃÂ episodeÃÂ«ÃÂ¡ÃÂ ÃÂ¬ÃÂ ÃÂÃÂ¬ÃÂÃÂ¥. "
-            "trade_value_rank_24hÃÂ«ÃÂÃÂ ÃÂ­ÃÂÃÂÃÂ­ÃÂÃÂ°ÃÂªÃÂ°ÃÂ ÃÂ¬ÃÂÃÂÃÂ«ÃÂÃÂÃÂ«ÃÂÃÂ¼ ÃÂ«ÃÂ¹ÃÂÃÂªÃÂµÃÂÃÂ¬ÃÂÃÂ© ÃÂªÃÂ¸ÃÂ°ÃÂ«ÃÂ¡ÃÂ."
+            "V7.3 score/EARLY ÃÂÃÂªÃÂÃÂ·ÃÂÃÂÃÂÃÂ¬ÃÂÃÂ¹ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂªÃÂÃÂ·ÃÂÃÂ¸ÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂ¡ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂ§ÃÂÃÂ. "
+            "24h ÃÂÃÂªÃÂÃÂ±ÃÂÃÂ°ÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂªÃÂÃÂ¸ÃÂÃÂ TOP120 ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂ§ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂªÃÂÃÂ±ÃÂÃÂ°. "
+            "historyÃÂÃÂ«ÃÂÃÂÃÂÃÂ TOP30 + A/B/C ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ¬ÃÂÃÂ²ÃÂÃÂ´ + EARLY score>=65ÃÂÃÂ«ÃÂÃÂ¥ÃÂÃÂ¼ 60ÃÂÃÂ«ÃÂÃÂ¶ÃÂÃÂ episodeÃÂÃÂ«ÃÂÃÂ¡ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂ ÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ¥. "
+            "trade_value_rank_24hÃÂÃÂ«ÃÂÃÂÃÂÃÂ ÃÂÃÂ­ÃÂÃÂÃÂÃÂÃÂÃÂ­ÃÂÃÂÃÂÃÂ°ÃÂÃÂªÃÂÃÂ°ÃÂÃÂ ÃÂÃÂ¬ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂÃÂÃÂ«ÃÂÃÂÃÂÃÂ¼ ÃÂÃÂ«ÃÂÃÂ¹ÃÂÃÂÃÂÃÂªÃÂÃÂµÃÂÃÂÃÂÃÂ¬ÃÂÃÂÃÂÃÂ© ÃÂÃÂªÃÂÃÂ¸ÃÂÃÂ°ÃÂÃÂ«ÃÂÃÂ¡ÃÂÃÂ."
         ),
     }
 
@@ -634,6 +772,13 @@ def main():
         "items": top20_items,
     }
     TOP20.write_text(json.dumps(top20_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # Independent chart/supply-demand scan. Failure here must never break V7.6.
+    try:
+        market_top5 = independent_market_scan(ms, rank24, value24, now)
+        print("independent market scan top5:", [x["market"] for x in market_top5])
+    except Exception as e:
+        print("independent market scan failed:", e)
 
     # Per-market episode files: only markets present in retained history.
     for m, items in by_market.items():
