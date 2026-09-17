@@ -3,7 +3,7 @@ name: V7.6 ALL KRW Forward
 on:
   workflow_dispatch:
   schedule:
-    # Every 10 minutes, two minutes after a 5-minute candle boundary.
+    # Every 10 minutes, two minutes after the clock interval
     - cron: "2,12,22,32,42,52 * * * *"
 
 permissions:
@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Sync latest repository before scan
+      - name: Sync latest repository before run
         run: |
           git fetch origin main
           git reset --hard origin/main
@@ -49,21 +49,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add \
-            docs/data/v7_6_signals.json \
-            docs/data/v7_6_latest.json \
-            docs/data/live_ranker.json \
-            docs/data/v7_6_live.json \
-            docs/data/v7_6_top20.json \
-            docs/data/v7_6_history/ \
-            docs/data/v7_6_rank_history/
+          # Stage V7.6 outputs plus the independent market scan.
+          # Using docs/data avoids failure if an optional output is absent.
+          git add docs/data/
 
           if git diff --cached --quiet; then
             echo "No data changes."
             exit 0
           fi
 
-          git commit -m "update v7.6 and live ranking"
+          git commit -m "update v7.6 and independent market scan"
 
           for i in 1 2 3 4 5; do
             git fetch origin main
@@ -74,5 +69,5 @@ jobs:
             sleep $((i * 2))
           done
 
-          echo "Push failed after 5 attempts."
+          echo "Push failed after 5 attempts"
           exit 1
