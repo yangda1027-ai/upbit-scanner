@@ -1,207 +1,307 @@
 {
-  "generated_at": "2026-09-17T05:41:00+00:00",
+  "generated_at": "2026-09-17T05:46:00+00:00",
   "version": "V7.6 MONITOR_TOP20",
   "count": 20,
   "ranking_note": "monitor_score rewards current signal strength and historical ignition quality; CHASE/weak-repeat patterns are penalized.",
   "items": [
     {
-      "price": 50.5,
-      "score": 94.63,
+      "price": 17.5,
+      "score": 94.32,
       "label": "EARLY",
       "A": true,
-      "B": true,
-      "C": true,
-      "ABC_ALL": true,
-      "ret_5m": 0.398,
-      "ret_15m": 0.798,
-      "ret_30m": 0.398,
-      "ret_60m": 0.398,
-      "value_ratio_5m": 26.113,
-      "value_accel_15m": 13.426,
-      "value_accel_30m": 4.968,
-      "trade_value_rank_24h": 68,
-      "trade_value_24h": 2164454299.28,
+      "B": false,
+      "C": false,
+      "ABC_ALL": false,
+      "ret_5m": 0.575,
+      "ret_15m": 2.339,
+      "ret_30m": 2.339,
+      "ret_60m": 2.941,
+      "value_ratio_5m": 30.273,
+      "value_accel_15m": 10.742,
+      "value_accel_30m": 2.039,
+      "trade_value_rank_24h": 241,
+      "trade_value_24h": 212483663.67,
       "windows": {
         "1": {
           "signals": 2,
           "A": 1,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 78.72
+        },
+        "3": {
+          "signals": 4,
+          "A": 2,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 83.27
+        },
+        "6": {
+          "signals": 4,
+          "A": 2,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 83.27
+        },
+        "12": {
+          "signals": 8,
+          "A": 3,
           "B": 1,
-          "C": 1,
-          "ABC_ALL": 1,
-          "avg_score": 86.7
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 84.91
+        },
+        "24": {
+          "signals": 11,
+          "A": 4,
+          "B": 2,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 83.38
+        },
+        "72": {
+          "signals": 45,
+          "A": 13,
+          "B": 14,
+          "C": 9,
+          "ABC_ALL": 5,
+          "avg_score": 78.06
+        }
+      },
+      "independent_episodes_72h": 45,
+      "latest_signal_age_min": 0.0,
+      "ignition": {
+        "success": 8,
+        "fail": 50,
+        "evaluated": 58,
+        "rate": 0.1379,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 0.073,
+        "median_max_reaction_pct": 0.0
+      },
+      "price_change": {
+        "1h": 1.156,
+        "3h": 1.744,
+        "6h": 2.941,
+        "12h": 3.55,
+        "24h": 1.744,
+        "72h": -5.405
+      },
+      "monitor_score": 81.13,
+      "market": "KRW-BOUNTY",
+      "extension": {
+        "ret_3d": -5.914,
+        "ret_7d": 0.575,
+        "ret_14d": 4.167,
+        "ret_30d": 22.378,
+        "from_14d_low_pct": 7.362,
+        "from_30d_low_pct": 29.63,
+        "low_14d": 16.3,
+        "low_30d": 13.5
+      }
+    },
+    {
+      "price": 117.0,
+      "score": 93.86,
+      "label": "EARLY",
+      "A": true,
+      "B": false,
+      "C": false,
+      "ABC_ALL": false,
+      "ret_5m": 0.0,
+      "ret_15m": 1.739,
+      "ret_30m": 1.739,
+      "ret_60m": 2.632,
+      "value_ratio_5m": 2.394,
+      "value_accel_15m": 3.89,
+      "value_accel_30m": 2.738,
+      "trade_value_rank_24h": 50,
+      "trade_value_24h": 3153510510.55,
+      "windows": {
+        "1": {
+          "signals": 2,
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 96.93
         },
         "3": {
           "signals": 4,
           "A": 1,
-          "B": 1,
-          "C": 2,
-          "ABC_ALL": 1,
-          "avg_score": 82.48
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 85.57
         },
         "6": {
-          "signals": 7,
-          "A": 3,
-          "B": 1,
-          "C": 2,
-          "ABC_ALL": 1,
-          "avg_score": 84.82
-        },
-        "12": {
-          "signals": 13,
-          "A": 5,
-          "B": 3,
-          "C": 3,
-          "ABC_ALL": 2,
-          "avg_score": 83.4
-        },
-        "24": {
-          "signals": 25,
-          "A": 7,
-          "B": 7,
-          "C": 5,
-          "ABC_ALL": 4,
-          "avg_score": 80.69
-        },
-        "72": {
-          "signals": 68,
-          "A": 16,
-          "B": 14,
-          "C": 17,
-          "ABC_ALL": 5,
-          "avg_score": 77.85
-        }
-      },
-      "independent_episodes_72h": 68,
-      "latest_signal_age_min": 0.0,
-      "ignition": {
-        "success": 21,
-        "fail": 81,
-        "evaluated": 102,
-        "rate": 0.2059,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.201,
-        "median_max_reaction_pct": 0.0
-      },
-      "price_change": {
-        "1h": 0.798,
-        "3h": null,
-        "6h": 0.798,
-        "12h": 3.484,
-        "24h": -1.174,
-        "72h": -14.116
-      },
-      "monitor_score": 83.07,
-      "market": "KRW-CHIP",
-      "extension": {
-        "ret_3d": -10.638,
-        "ret_7d": -20.0,
-        "ret_14d": -34.031,
-        "ret_30d": 36.585,
-        "from_14d_low_pct": 4.564,
-        "from_30d_low_pct": 42.776,
-        "low_14d": 48.2,
-        "low_30d": 35.3
-      }
-    },
-    {
-      "price": 221.0,
-      "score": 80.61,
-      "label": "EARLY",
-      "A": false,
-      "B": true,
-      "C": false,
-      "ABC_ALL": false,
-      "ret_5m": -2.212,
-      "ret_15m": -2.643,
-      "ret_30m": -3.493,
-      "ret_60m": -3.913,
-      "value_ratio_5m": 4.821,
-      "value_accel_15m": 2.682,
-      "value_accel_30m": 15.434,
-      "trade_value_rank_24h": 67,
-      "trade_value_24h": 2181260826.24,
-      "windows": {
-        "1": {
-          "signals": 4,
-          "A": 2,
-          "B": 2,
-          "C": 2,
-          "ABC_ALL": 1,
-          "avg_score": 80.31
-        },
-        "3": {
           "signals": 5,
-          "A": 2,
-          "B": 2,
-          "C": 2,
-          "ABC_ALL": 1,
-          "avg_score": 78.07
-        },
-        "6": {
-          "signals": 7,
-          "A": 2,
-          "B": 2,
-          "C": 2,
-          "ABC_ALL": 1,
-          "avg_score": 78.36
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 83.22
         },
         "12": {
           "signals": 12,
-          "A": 4,
-          "B": 4,
-          "C": 2,
-          "ABC_ALL": 1,
-          "avg_score": 80.45
+          "A": 2,
+          "B": 2,
+          "C": 1,
+          "ABC_ALL": 0,
+          "avg_score": 80.02
         },
         "24": {
-          "signals": 25,
-          "A": 6,
-          "B": 7,
+          "signals": 20,
+          "A": 4,
+          "B": 4,
           "C": 4,
-          "ABC_ALL": 1,
-          "avg_score": 79.97
+          "ABC_ALL": 0,
+          "avg_score": 81.7
         },
         "72": {
-          "signals": 62,
-          "A": 12,
-          "B": 14,
-          "C": 9,
-          "ABC_ALL": 1,
-          "avg_score": 78.16
+          "signals": 58,
+          "A": 11,
+          "B": 12,
+          "C": 13,
+          "ABC_ALL": 4,
+          "avg_score": 78.54
         }
       },
-      "independent_episodes_72h": 62,
+      "independent_episodes_72h": 58,
       "latest_signal_age_min": 0.0,
       "ignition": {
-        "success": 36,
-        "fail": 56,
-        "evaluated": 92,
-        "rate": 0.3913,
+        "success": 17,
+        "fail": 69,
+        "evaluated": 86,
+        "rate": 0.1977,
         "success_threshold_pct": 1.5,
         "horizon_hours": 3,
-        "avg_max_reaction_pct": 1.008,
-        "median_max_reaction_pct": 1.01
+        "avg_max_reaction_pct": 0.291,
+        "median_max_reaction_pct": 0.0
       },
       "price_change": {
-        "1h": -3.913,
-        "3h": -3.493,
-        "6h": -6.356,
-        "12h": -5.15,
-        "24h": 0.913,
+        "1h": 4.464,
+        "3h": 4.464,
+        "6h": 5.405,
+        "12h": 6.364,
+        "24h": 5.405,
         "72h": 8.333
       },
-      "monitor_score": 79.5,
-      "market": "KRW-ARX",
+      "monitor_score": 80.6,
+      "market": "KRW-XPL",
       "extension": {
-        "ret_3d": 0.0,
-        "ret_7d": 18.919,
-        "ret_14d": 25.0,
-        "ret_30d": 38.365,
-        "from_14d_low_pct": 29.412,
-        "from_30d_low_pct": 46.667,
-        "low_14d": 170.0,
-        "low_30d": 150.0
+        "ret_3d": 3.54,
+        "ret_7d": 0.862,
+        "ret_14d": -11.364,
+        "ret_30d": 9.346,
+        "from_14d_low_pct": 11.429,
+        "from_30d_low_pct": 12.5,
+        "low_14d": 105.0,
+        "low_30d": 104.0
+      }
+    },
+    {
+      "price": 379.0,
+      "score": 92.55,
+      "label": "EARLY",
+      "A": true,
+      "B": false,
+      "C": false,
+      "ABC_ALL": false,
+      "ret_5m": 0.265,
+      "ret_15m": 0.0,
+      "ret_30m": 0.798,
+      "ret_60m": 1.067,
+      "value_ratio_5m": 2.48,
+      "value_accel_15m": 9.684,
+      "value_accel_30m": 2.688,
+      "trade_value_rank_24h": 228,
+      "trade_value_24h": 247526551.61,
+      "windows": {
+        "1": {
+          "signals": 2,
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 87.62
+        },
+        "3": {
+          "signals": 3,
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 78.79
+        },
+        "6": {
+          "signals": 4,
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 78.87
+        },
+        "12": {
+          "signals": 7,
+          "A": 2,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 78.75
+        },
+        "24": {
+          "signals": 12,
+          "A": 3,
+          "B": 1,
+          "C": 1,
+          "ABC_ALL": 1,
+          "avg_score": 78.95
+        },
+        "72": {
+          "signals": 50,
+          "A": 11,
+          "B": 10,
+          "C": 9,
+          "ABC_ALL": 6,
+          "avg_score": 77.08
+        }
+      },
+      "independent_episodes_72h": 50,
+      "latest_signal_age_min": 0.0,
+      "ignition": {
+        "success": 13,
+        "fail": 68,
+        "evaluated": 81,
+        "rate": 0.1605,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 0.231,
+        "median_max_reaction_pct": 0.251
+      },
+      "price_change": {
+        "1h": 0.265,
+        "3h": 0.798,
+        "6h": 2.156,
+        "12h": 4.696,
+        "24h": 2.71,
+        "72h": -5.721
+      },
+      "monitor_score": 79.9,
+      "market": "KRW-CYBER",
+      "extension": {
+        "ret_3d": -3.562,
+        "ret_7d": -5.721,
+        "ret_14d": -9.976,
+        "ret_30d": -6.88,
+        "from_14d_low_pct": 5.866,
+        "from_30d_low_pct": 5.866,
+        "low_14d": 358.0,
+        "low_30d": 358.0
       }
     },
     {
@@ -272,7 +372,7 @@
         }
       },
       "independent_episodes_72h": 58,
-      "latest_signal_age_min": 11.0,
+      "latest_signal_age_min": 16.0,
       "ignition": {
         "success": 14,
         "fail": 74,
@@ -285,9 +385,9 @@
       },
       "price_change": {
         "1h": 0.227,
-        "3h": 0.455,
+        "3h": 0.683,
         "6h": 0.913,
-        "12h": 4.739,
+        "12h": 5.238,
         "24h": 3.03,
         "72h": -6.751
       },
@@ -305,207 +405,7 @@
       }
     },
     {
-      "price": 3.05,
-      "score": 90.08,
-      "label": "EARLY",
-      "A": false,
-      "B": false,
-      "C": true,
-      "ABC_ALL": false,
-      "ret_5m": -0.327,
-      "ret_15m": 0.0,
-      "ret_30m": 0.0,
-      "ret_60m": 0.329,
-      "value_ratio_5m": 3.234,
-      "value_accel_15m": 2.336,
-      "value_accel_30m": 2.684,
-      "trade_value_rank_24h": 85,
-      "trade_value_24h": 1693750968.16,
-      "windows": {
-        "1": {
-          "signals": 2,
-          "A": 0,
-          "B": 0,
-          "C": 1,
-          "ABC_ALL": 0,
-          "avg_score": 81.49
-        },
-        "3": {
-          "signals": 3,
-          "A": 0,
-          "B": 0,
-          "C": 1,
-          "ABC_ALL": 0,
-          "avg_score": 78.8
-        },
-        "6": {
-          "signals": 5,
-          "A": 0,
-          "B": 0,
-          "C": 2,
-          "ABC_ALL": 0,
-          "avg_score": 81.79
-        },
-        "12": {
-          "signals": 8,
-          "A": 1,
-          "B": 0,
-          "C": 3,
-          "ABC_ALL": 0,
-          "avg_score": 78.52
-        },
-        "24": {
-          "signals": 18,
-          "A": 3,
-          "B": 2,
-          "C": 6,
-          "ABC_ALL": 1,
-          "avg_score": 80.39
-        },
-        "72": {
-          "signals": 55,
-          "A": 16,
-          "B": 14,
-          "C": 17,
-          "ABC_ALL": 5,
-          "avg_score": 79.4
-        }
-      },
-      "independent_episodes_72h": 55,
-      "latest_signal_age_min": 0.0,
-      "ignition": {
-        "success": 14,
-        "fail": 69,
-        "evaluated": 83,
-        "rate": 0.1687,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.423,
-        "median_max_reaction_pct": 0.329
-      },
-      "price_change": {
-        "1h": 0.0,
-        "3h": 0.66,
-        "6h": -0.327,
-        "12h": 0.329,
-        "24h": 1.329,
-        "72h": -0.974
-      },
-      "monitor_score": 77.63,
-      "market": "KRW-RVN",
-      "extension": {
-        "ret_3d": 0.656,
-        "ret_7d": -1.603,
-        "ret_14d": -23.821,
-        "ret_30d": -7.251,
-        "from_14d_low_pct": 6.228,
-        "from_30d_low_pct": 6.228,
-        "low_14d": 2.89,
-        "low_30d": 2.89
-      }
-    },
-    {
-      "price": 52.1,
-      "score": 71.3,
-      "label": "EARLY",
-      "A": false,
-      "B": false,
-      "C": false,
-      "ABC_ALL": false,
-      "ret_5m": -0.192,
-      "ret_15m": 0.192,
-      "ret_30m": 0.385,
-      "ret_60m": -0.382,
-      "value_ratio_5m": 2.203,
-      "value_accel_15m": 3.524,
-      "value_accel_30m": 0.709,
-      "trade_value_rank_24h": 107,
-      "trade_value_24h": 1075885392.73,
-      "windows": {
-        "1": {
-          "signals": 1,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 59.03
-        },
-        "3": {
-          "signals": 2,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 72.61
-        },
-        "6": {
-          "signals": 4,
-          "A": 1,
-          "B": 1,
-          "C": 1,
-          "ABC_ALL": 1,
-          "avg_score": 76.5
-        },
-        "12": {
-          "signals": 10,
-          "A": 4,
-          "B": 3,
-          "C": 3,
-          "ABC_ALL": 3,
-          "avg_score": 78.24
-        },
-        "24": {
-          "signals": 19,
-          "A": 5,
-          "B": 4,
-          "C": 5,
-          "ABC_ALL": 4,
-          "avg_score": 77.64
-        },
-        "72": {
-          "signals": 55,
-          "A": 15,
-          "B": 15,
-          "C": 13,
-          "ABC_ALL": 7,
-          "avg_score": 77.29
-        }
-      },
-      "independent_episodes_72h": 55,
-      "latest_signal_age_min": 16.0,
-      "ignition": {
-        "success": 27,
-        "fail": 55,
-        "evaluated": 82,
-        "rate": 0.3293,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 1.542,
-        "median_max_reaction_pct": 0.735
-      },
-      "price_change": {
-        "1h": -0.192,
-        "3h": -0.951,
-        "6h": -0.762,
-        "12h": 2.157,
-        "24h": -1.139,
-        "72h": -8.916
-      },
-      "monitor_score": 74.7,
-      "market": "KRW-POLYX",
-      "extension": {
-        "ret_3d": -2.617,
-        "ret_7d": 9.684,
-        "ret_14d": 7.423,
-        "ret_30d": 32.234,
-        "from_14d_low_pct": 10.851,
-        "from_30d_low_pct": 34.278,
-        "low_14d": 47.0,
-        "low_30d": 38.8
-      }
-    },
-    {
-      "price": 17.9,
+      "price": 31.2,
       "score": 92.0,
       "label": "EARLY",
       "A": true,
@@ -514,13 +414,13 @@
       "ABC_ALL": false,
       "ret_5m": 0.0,
       "ret_15m": 0.0,
-      "ret_30m": 0.562,
-      "ret_60m": 0.0,
-      "value_ratio_5m": 18.169,
-      "value_accel_15m": 20.472,
-      "value_accel_30m": 3.315,
-      "trade_value_rank_24h": 233,
-      "trade_value_24h": 237300972.86,
+      "ret_30m": 0.645,
+      "ret_60m": 0.971,
+      "value_ratio_5m": 9.659,
+      "value_accel_15m": 7.186,
+      "value_accel_30m": 3.476,
+      "trade_value_rank_24h": 105,
+      "trade_value_24h": 1170316445.77,
       "windows": {
         "1": {
           "signals": 2,
@@ -528,99 +428,99 @@
           "B": 1,
           "C": 0,
           "ABC_ALL": 0,
-          "avg_score": 83.92
+          "avg_score": 75.78
         },
         "3": {
-          "signals": 2,
+          "signals": 3,
           "A": 1,
           "B": 1,
           "C": 0,
           "ABC_ALL": 0,
-          "avg_score": 83.92
+          "avg_score": 78.49
         },
         "6": {
-          "signals": 4,
-          "A": 2,
-          "B": 2,
-          "C": 1,
-          "ABC_ALL": 1,
-          "avg_score": 80.85
+          "signals": 5,
+          "A": 1,
+          "B": 1,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 73.91
         },
         "12": {
-          "signals": 8,
-          "A": 3,
+          "signals": 10,
+          "A": 2,
           "B": 3,
-          "C": 2,
-          "ABC_ALL": 2,
-          "avg_score": 76.48
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 79.36
         },
         "24": {
-          "signals": 12,
-          "A": 4,
-          "B": 3,
-          "C": 3,
+          "signals": 23,
+          "A": 8,
+          "B": 7,
+          "C": 4,
           "ABC_ALL": 2,
-          "avg_score": 79.86
+          "avg_score": 80.51
         },
         "72": {
-          "signals": 44,
-          "A": 9,
-          "B": 8,
-          "C": 9,
-          "ABC_ALL": 2,
-          "avg_score": 77.89
+          "signals": 60,
+          "A": 20,
+          "B": 18,
+          "C": 15,
+          "ABC_ALL": 8,
+          "avg_score": 78.59
         }
       },
-      "independent_episodes_72h": 44,
-      "latest_signal_age_min": 6.0,
+      "independent_episodes_72h": 60,
+      "latest_signal_age_min": 0.0,
       "ignition": {
-        "success": 5,
-        "fail": 49,
-        "evaluated": 54,
-        "rate": 0.0926,
+        "success": 14,
+        "fail": 81,
+        "evaluated": 95,
+        "rate": 0.1474,
         "success_threshold_pct": 1.5,
         "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.113,
-        "median_max_reaction_pct": 0.0
+        "avg_max_reaction_pct": 0.302,
+        "median_max_reaction_pct": 0.313
       },
       "price_change": {
-        "1h": 0.0,
-        "3h": null,
-        "6h": 1.13,
-        "12h": 5.294,
-        "24h": 3.468,
-        "72h": -5.291
+        "1h": 0.322,
+        "3h": 0.645,
+        "6h": 2.295,
+        "12h": 2.97,
+        "24h": 3.654,
+        "72h": -1.577
       },
-      "monitor_score": 73.22,
-      "market": "KRW-AZTEC",
+      "monitor_score": 79.04,
+      "market": "KRW-MON",
       "extension": {
-        "ret_3d": -3.763,
-        "ret_7d": -5.789,
-        "ret_14d": -6.283,
-        "ret_30d": 6.548,
-        "from_14d_low_pct": 5.917,
-        "from_30d_low_pct": 8.485,
-        "low_14d": 16.9,
-        "low_30d": 16.5
+        "ret_3d": 0.971,
+        "ret_7d": 0.0,
+        "ret_14d": -15.447,
+        "ret_30d": 4.698,
+        "from_14d_low_pct": 8.711,
+        "from_30d_low_pct": 8.711,
+        "low_14d": 28.7,
+        "low_30d": 28.7
       }
     },
     {
-      "price": 93.1,
-      "score": 74.04,
+      "price": 93.7,
+      "score": 78.88,
       "label": "EARLY",
       "A": false,
       "B": false,
       "C": false,
       "ABC_ALL": false,
-      "ret_5m": 0.215,
-      "ret_15m": 0.758,
-      "ret_30m": 0.649,
-      "ret_60m": 0.976,
-      "value_ratio_5m": 3.458,
-      "value_accel_15m": 2.121,
-      "value_accel_30m": 0.886,
+      "ret_5m": 0.644,
+      "ret_15m": 1.407,
+      "ret_30m": 1.407,
+      "ret_60m": 1.407,
+      "value_ratio_5m": 2.19,
+      "value_accel_15m": 2.538,
+      "value_accel_30m": 1.014,
       "trade_value_rank_24h": 11,
-      "trade_value_24h": 22286719004.68,
+      "trade_value_24h": 22306621606.05,
       "windows": {
         "1": {
           "signals": 1,
@@ -672,7 +572,7 @@
         }
       },
       "independent_episodes_72h": 41,
-      "latest_signal_age_min": 0.0,
+      "latest_signal_age_min": 5.0,
       "ignition": {
         "success": 19,
         "fail": 38,
@@ -685,13 +585,13 @@
       },
       "price_change": {
         "1h": null,
-        "3h": 1.086,
-        "6h": 1.86,
-        "12h": 4.961,
-        "24h": 5.436,
-        "72h": 2.759
+        "3h": 1.737,
+        "6h": 2.516,
+        "12h": 5.637,
+        "24h": 6.116,
+        "72h": 3.422
       },
-      "monitor_score": 73.04,
+      "monitor_score": 77.88,
       "market": "KRW-LA",
       "extension": {
         "ret_3d": -3.913,
@@ -705,22 +605,122 @@
       }
     },
     {
-      "price": 390.0,
-      "score": 72.98,
+      "price": 161.0,
+      "score": 92.0,
+      "label": "EARLY",
+      "A": true,
+      "B": true,
+      "C": true,
+      "ABC_ALL": true,
+      "ret_5m": 0.0,
+      "ret_15m": 0.0,
+      "ret_30m": 0.0,
+      "ret_60m": 0.625,
+      "value_ratio_5m": 8.555,
+      "value_accel_15m": 4.46,
+      "value_accel_30m": 5.466,
+      "trade_value_rank_24h": 171,
+      "trade_value_24h": 460223889.28,
+      "windows": {
+        "1": {
+          "signals": 2,
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "ABC_ALL": 1,
+          "avg_score": 81.96
+        },
+        "3": {
+          "signals": 2,
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "ABC_ALL": 1,
+          "avg_score": 81.96
+        },
+        "6": {
+          "signals": 6,
+          "A": 3,
+          "B": 3,
+          "C": 2,
+          "ABC_ALL": 2,
+          "avg_score": 81.68
+        },
+        "12": {
+          "signals": 10,
+          "A": 4,
+          "B": 3,
+          "C": 2,
+          "ABC_ALL": 2,
+          "avg_score": 83.64
+        },
+        "24": {
+          "signals": 18,
+          "A": 6,
+          "B": 5,
+          "C": 3,
+          "ABC_ALL": 3,
+          "avg_score": 81.46
+        },
+        "72": {
+          "signals": 51,
+          "A": 13,
+          "B": 14,
+          "C": 9,
+          "ABC_ALL": 5,
+          "avg_score": 79.84
+        }
+      },
+      "independent_episodes_72h": 51,
+      "latest_signal_age_min": 0.0,
+      "ignition": {
+        "success": 8,
+        "fail": 74,
+        "evaluated": 82,
+        "rate": 0.0976,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 0.565,
+        "median_max_reaction_pct": 0.637
+      },
+      "price_change": {
+        "1h": 0.0,
+        "3h": 0.0,
+        "6h": 0.0,
+        "12h": 1.258,
+        "24h": 1.899,
+        "72h": 3.871
+      },
+      "monitor_score": 77.84,
+      "market": "KRW-JST",
+      "extension": {
+        "ret_3d": 5.921,
+        "ret_7d": 13.38,
+        "ret_14d": 9.524,
+        "ret_30d": 6.623,
+        "from_14d_low_pct": 18.382,
+        "from_30d_low_pct": 29.839,
+        "low_14d": 136.0,
+        "low_30d": 124.0
+      }
+    },
+    {
+      "price": 389.0,
+      "score": 75.89,
       "label": "EARLY",
       "A": false,
       "B": false,
       "C": false,
       "ABC_ALL": false,
-      "ret_5m": 0.0,
-      "ret_15m": 0.515,
-      "ret_30m": 1.036,
-      "ret_60m": 0.257,
-      "value_ratio_5m": 3.325,
-      "value_accel_15m": 2.318,
-      "value_accel_30m": 0.532,
-      "trade_value_rank_24h": 25,
-      "trade_value_24h": 10195628525.14,
+      "ret_5m": -0.256,
+      "ret_15m": -0.512,
+      "ret_30m": 0.777,
+      "ret_60m": 0.517,
+      "value_ratio_5m": 3.778,
+      "value_accel_15m": 3.433,
+      "value_accel_30m": 0.958,
+      "trade_value_rank_24h": 26,
+      "trade_value_24h": 9971588578.07,
       "windows": {
         "1": {
           "signals": 1,
@@ -755,12 +755,12 @@
           "avg_score": 74.09
         },
         "24": {
-          "signals": 19,
-          "A": 4,
-          "B": 5,
+          "signals": 17,
+          "A": 3,
+          "B": 4,
           "C": 0,
           "ABC_ALL": 0,
-          "avg_score": 76.83
+          "avg_score": 74.11
         },
         "72": {
           "signals": 52,
@@ -772,7 +772,7 @@
         }
       },
       "independent_episodes_72h": 52,
-      "latest_signal_age_min": 6.0,
+      "latest_signal_age_min": 11.0,
       "ignition": {
         "success": 26,
         "fail": 35,
@@ -784,43 +784,43 @@
         "median_max_reaction_pct": 0.882
       },
       "price_change": {
-        "1h": 0.257,
-        "3h": 1.299,
-        "6h": -1.266,
-        "12h": -0.256,
-        "24h": -4.878,
-        "72h": -24.855
+        "1h": 0.0,
+        "3h": 1.039,
+        "6h": -1.519,
+        "12h": -0.512,
+        "24h": -6.265,
+        "72h": -25.048
       },
-      "monitor_score": 72.71,
+      "monitor_score": 75.62,
       "market": "KRW-MTL",
       "extension": {
-        "ret_3d": -10.755,
-        "ret_7d": 18.902,
-        "ret_14d": 21.495,
-        "ret_30d": 52.344,
-        "from_14d_low_pct": 22.642,
-        "from_30d_low_pct": 53.543,
+        "ret_3d": -11.213,
+        "ret_7d": 18.293,
+        "ret_14d": 20.872,
+        "ret_30d": 51.562,
+        "from_14d_low_pct": 22.013,
+        "from_30d_low_pct": 52.756,
         "low_14d": 318.0,
         "low_30d": 254.0
       }
     },
     {
-      "price": 5.27,
-      "score": 82.92,
+      "price": 253.0,
+      "score": 74.93,
       "label": "EARLY",
       "A": false,
       "B": false,
       "C": false,
       "ABC_ALL": false,
       "ret_5m": 0.0,
-      "ret_15m": 0.0,
-      "ret_30m": -0.378,
-      "ret_60m": 0.19,
-      "value_ratio_5m": 9.252,
-      "value_accel_15m": 3.411,
-      "value_accel_30m": 1.492,
-      "trade_value_rank_24h": 47,
-      "trade_value_24h": 3416641127.78,
+      "ret_15m": -0.784,
+      "ret_30m": -1.556,
+      "ret_60m": -1.172,
+      "value_ratio_5m": 4.75,
+      "value_accel_15m": 3.603,
+      "value_accel_30m": 0.835,
+      "trade_value_rank_24h": 134,
+      "trade_value_24h": 742771572.79,
       "windows": {
         "1": {
           "signals": 1,
@@ -828,399 +828,299 @@
           "B": 0,
           "C": 0,
           "ABC_ALL": 0,
-          "avg_score": 80.39
-        },
-        "3": {
-          "signals": 1,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 80.39
-        },
-        "6": {
-          "signals": 5,
-          "A": 2,
-          "B": 3,
-          "C": 2,
-          "ABC_ALL": 1,
-          "avg_score": 84.95
-        },
-        "12": {
-          "signals": 13,
-          "A": 4,
-          "B": 5,
-          "C": 3,
-          "ABC_ALL": 1,
-          "avg_score": 78.44
-        },
-        "24": {
-          "signals": 23,
-          "A": 7,
-          "B": 8,
-          "C": 6,
-          "ABC_ALL": 2,
-          "avg_score": 81.75
-        },
-        "72": {
-          "signals": 60,
-          "A": 14,
-          "B": 17,
-          "C": 14,
-          "ABC_ALL": 6,
-          "avg_score": 78.0
-        }
-      },
-      "independent_episodes_72h": 60,
-      "latest_signal_age_min": 44.0,
-      "ignition": {
-        "success": 26,
-        "fail": 76,
-        "evaluated": 102,
-        "rate": 0.2549,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.631,
-        "median_max_reaction_pct": 0.407
-      },
-      "price_change": {
-        "1h": 0.0,
-        "3h": 2.729,
-        "6h": 5.823,
-        "12h": 3.74,
-        "24h": 9.11,
-        "72h": 6.897
-      },
-      "monitor_score": 72.54,
-      "market": "KRW-PUMP",
-      "extension": {
-        "ret_3d": 5.823,
-        "ret_7d": 5.611,
-        "ret_14d": -10.678,
-        "ret_30d": 21.149,
-        "from_14d_low_pct": 13.333,
-        "from_30d_low_pct": 29.803,
-        "low_14d": 4.65,
-        "low_30d": 4.06
-      }
-    },
-    {
-      "price": 5.99,
-      "score": 83.66,
-      "label": "EARLY",
-      "A": false,
-      "B": false,
-      "C": false,
-      "ABC_ALL": false,
-      "ret_5m": 0.167,
-      "ret_15m": 0.167,
-      "ret_30m": 0.0,
-      "ret_60m": 0.335,
-      "value_ratio_5m": 19.029,
-      "value_accel_15m": 3.401,
-      "value_accel_30m": 1.486,
-      "trade_value_rank_24h": 145,
-      "trade_value_24h": 643268790.6,
-      "windows": {
-        "1": {
-          "signals": 2,
-          "A": 1,
-          "B": 1,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 82.09
+          "avg_score": 64.94
         },
         "3": {
           "signals": 3,
-          "A": 2,
-          "B": 2,
-          "C": 1,
-          "ABC_ALL": 1,
-          "avg_score": 84.49
-        },
-        "6": {
-          "signals": 5,
-          "A": 3,
-          "B": 2,
-          "C": 2,
-          "ABC_ALL": 1,
-          "avg_score": 85.42
-        },
-        "12": {
-          "signals": 9,
-          "A": 5,
-          "B": 4,
-          "C": 3,
-          "ABC_ALL": 2,
-          "avg_score": 84.37
-        },
-        "24": {
-          "signals": 18,
-          "A": 7,
-          "B": 6,
-          "C": 6,
-          "ABC_ALL": 2,
-          "avg_score": 83.49
-        },
-        "72": {
-          "signals": 53,
-          "A": 15,
-          "B": 13,
-          "C": 13,
-          "ABC_ALL": 6,
-          "avg_score": 77.61
-        }
-      },
-      "independent_episodes_72h": 53,
-      "latest_signal_age_min": 54.0,
-      "ignition": {
-        "success": 14,
-        "fail": 78,
-        "evaluated": 92,
-        "rate": 0.1522,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.237,
-        "median_max_reaction_pct": 0.157
-      },
-      "price_change": {
-        "1h": 0.335,
-        "3h": null,
-        "6h": 3.454,
-        "12h": 6.206,
-        "24h": 4.904,
-        "72h": -4.16
-      },
-      "monitor_score": 70.81,
-      "market": "KRW-ATH",
-      "extension": {
-        "ret_3d": -2.447,
-        "ret_7d": -0.993,
-        "ret_14d": -8.282,
-        "ret_30d": 13.258,
-        "from_14d_low_pct": 6.786,
-        "from_30d_low_pct": 15.0,
-        "low_14d": 5.6,
-        "low_30d": 5.2
-      }
-    },
-    {
-      "price": 0.978,
-      "score": 83.61,
-      "label": "EARLY",
-      "A": false,
-      "B": false,
-      "C": false,
-      "ABC_ALL": false,
-      "ret_5m": 0.205,
-      "ret_15m": 0.617,
-      "ret_30m": 0.825,
-      "ret_60m": 1.033,
-      "value_ratio_5m": 2.65,
-      "value_accel_15m": 2.0,
-      "value_accel_30m": 2.088,
-      "trade_value_rank_24h": 23,
-      "trade_value_24h": 11200310431.04,
-      "windows": {
-        "1": {
-          "signals": 1,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 76.07
-        },
-        "3": {
-          "signals": 1,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 76.07
-        },
-        "6": {
-          "signals": 4,
           "A": 1,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 79.8
-        },
-        "12": {
-          "signals": 9,
-          "A": 2,
-          "B": 2,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 77.67
-        },
-        "24": {
-          "signals": 15,
-          "A": 3,
-          "B": 2,
+          "B": 1,
           "C": 1,
-          "ABC_ALL": 0,
-          "avg_score": 77.16
-        },
-        "72": {
-          "signals": 41,
-          "A": 9,
-          "B": 8,
-          "C": 5,
-          "ABC_ALL": 2,
-          "avg_score": 75.98
-        }
-      },
-      "independent_episodes_72h": 41,
-      "latest_signal_age_min": 54.0,
-      "ignition": {
-        "success": 12,
-        "fail": 32,
-        "evaluated": 44,
-        "rate": 0.2727,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.243,
-        "median_max_reaction_pct": -0.616
-      },
-      "price_change": {
-        "1h": 1.033,
-        "3h": 0.411,
-        "6h": -5.049,
-        "12h": 6.189,
-        "24h": -3.168,
-        "72h": -5.049
-      },
-      "monitor_score": 69.15,
-      "market": "KRW-VTHO",
-      "extension": {
-        "ret_3d": 12.687,
-        "ret_7d": 23.359,
-        "ret_14d": 77.96,
-        "ret_30d": 125.635,
-        "from_14d_low_pct": 81.937,
-        "from_30d_low_pct": 128.806,
-        "low_14d": 0.537,
-        "low_30d": 0.427
-      }
-    },
-    {
-      "price": 124.0,
-      "score": 81.68,
-      "label": "EARLY",
-      "A": false,
-      "B": false,
-      "C": false,
-      "ABC_ALL": false,
-      "ret_5m": 0.0,
-      "ret_15m": 0.0,
-      "ret_30m": 0.0,
-      "ret_60m": 0.813,
-      "value_ratio_5m": 3.641,
-      "value_accel_15m": 2.902,
-      "value_accel_30m": 1.368,
-      "trade_value_rank_24h": 76,
-      "trade_value_24h": 1930354075.47,
-      "windows": {
-        "1": {
-          "signals": 1,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 77.48
-        },
-        "3": {
-          "signals": 2,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 76.27
+          "ABC_ALL": 1,
+          "avg_score": 75.97
         },
         "6": {
           "signals": 5,
           "A": 1,
           "B": 1,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 75.78
+          "C": 1,
+          "ABC_ALL": 1,
+          "avg_score": 75.08
         },
         "12": {
-          "signals": 13,
+          "signals": 14,
           "A": 4,
-          "B": 3,
-          "C": 2,
+          "B": 4,
+          "C": 1,
           "ABC_ALL": 1,
           "avg_score": 78.75
         },
         "24": {
           "signals": 23,
-          "A": 7,
-          "B": 5,
-          "C": 5,
-          "ABC_ALL": 2,
-          "avg_score": 78.51
+          "A": 5,
+          "B": 4,
+          "C": 4,
+          "ABC_ALL": 1,
+          "avg_score": 77.61
         },
         "72": {
           "signals": 61,
-          "A": 17,
-          "B": 14,
-          "C": 12,
+          "A": 14,
+          "B": 9,
+          "C": 10,
           "ABC_ALL": 3,
-          "avg_score": 79.71
+          "avg_score": 76.37
         }
       },
       "independent_episodes_72h": 61,
       "latest_signal_age_min": 11.0,
       "ignition": {
-        "success": 26,
-        "fail": 82,
-        "evaluated": 108,
-        "rate": 0.2407,
+        "success": 30,
+        "fail": 58,
+        "evaluated": 88,
+        "rate": 0.3409,
         "success_threshold_pct": 1.5,
         "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.403,
-        "median_max_reaction_pct": 0.0
+        "avg_max_reaction_pct": 0.724,
+        "median_max_reaction_pct": 0.417
       },
       "price_change": {
-        "1h": null,
-        "3h": 0.0,
-        "6h": 0.813,
-        "12h": 2.479,
-        "24h": 1.639,
-        "72h": -6.061
+        "1h": -1.556,
+        "3h": -2.692,
+        "6h": -0.784,
+        "12h": 7.66,
+        "24h": 4.115,
+        "72h": -1.172
       },
-      "monitor_score": 67.96,
-      "market": "KRW-ALGO",
+      "monitor_score": 75.61,
+      "market": "KRW-BERA",
       "extension": {
-        "ret_3d": -3.876,
-        "ret_7d": -0.8,
-        "ret_14d": -2.362,
-        "ret_30d": 12.727,
-        "from_14d_low_pct": 5.983,
-        "from_30d_low_pct": 13.761,
-        "low_14d": 117.0,
-        "low_30d": 109.0
+        "ret_3d": 0.8,
+        "ret_7d": 8.621,
+        "ret_14d": 1.205,
+        "ret_30d": 19.431,
+        "from_14d_low_pct": 10.044,
+        "from_30d_low_pct": 22.927,
+        "low_14d": 229.0,
+        "low_30d": 205.0
       }
     },
     {
-      "price": 784.0,
-      "score": 83.33,
+      "price": 49.6,
+      "score": 88.9,
       "label": "EARLY",
       "A": false,
-      "B": false,
+      "B": true,
       "C": false,
       "ABC_ALL": false,
-      "ret_5m": 0.384,
-      "ret_15m": 0.256,
-      "ret_30m": 0.513,
-      "ret_60m": 1.423,
-      "value_ratio_5m": 2.927,
-      "value_accel_15m": 1.818,
-      "value_accel_30m": 2.438,
-      "trade_value_rank_24h": 45,
-      "trade_value_24h": 3732985560.85,
+      "ret_5m": 0.813,
+      "ret_15m": 0.813,
+      "ret_30m": 0.405,
+      "ret_60m": 1.018,
+      "value_ratio_5m": 2.521,
+      "value_accel_15m": 2.0,
+      "value_accel_30m": 11.727,
+      "trade_value_rank_24h": 207,
+      "trade_value_24h": 320660981.85,
+      "windows": {
+        "1": {
+          "signals": 2,
+          "A": 1,
+          "B": 2,
+          "C": 1,
+          "ABC_ALL": 1,
+          "avg_score": 89.18
+        },
+        "3": {
+          "signals": 4,
+          "A": 1,
+          "B": 2,
+          "C": 2,
+          "ABC_ALL": 1,
+          "avg_score": 82.73
+        },
+        "6": {
+          "signals": 6,
+          "A": 2,
+          "B": 3,
+          "C": 2,
+          "ABC_ALL": 1,
+          "avg_score": 82.45
+        },
+        "12": {
+          "signals": 12,
+          "A": 5,
+          "B": 6,
+          "C": 5,
+          "ABC_ALL": 2,
+          "avg_score": 84.12
+        },
+        "24": {
+          "signals": 26,
+          "A": 9,
+          "B": 9,
+          "C": 9,
+          "ABC_ALL": 3,
+          "avg_score": 81.07
+        },
+        "72": {
+          "signals": 60,
+          "A": 18,
+          "B": 14,
+          "C": 17,
+          "ABC_ALL": 5,
+          "avg_score": 79.38
+        }
+      },
+      "independent_episodes_72h": 60,
+      "latest_signal_age_min": 0.0,
+      "ignition": {
+        "success": 10,
+        "fail": 81,
+        "evaluated": 91,
+        "rate": 0.1099,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 0.268,
+        "median_max_reaction_pct": 0.196
+      },
+      "price_change": {
+        "1h": 1.018,
+        "3h": 0.813,
+        "6h": 1.018,
+        "12h": 5.757,
+        "24h": 3.333,
+        "72h": -2.935
+      },
+      "monitor_score": 75.04,
+      "market": "KRW-WCT",
+      "extension": {
+        "ret_3d": -2.362,
+        "ret_7d": 1.431,
+        "ret_14d": -3.125,
+        "ret_30d": 4.641,
+        "from_14d_low_pct": 5.757,
+        "from_30d_low_pct": 6.438,
+        "low_14d": 46.9,
+        "low_30d": 46.6
+      }
+    },
+    {
+      "price": 274.0,
+      "score": 88.58,
+      "label": "EARLY",
+      "A": true,
+      "B": false,
+      "C": true,
+      "ABC_ALL": false,
+      "ret_5m": 0.0,
+      "ret_15m": 0.0,
+      "ret_30m": 0.0,
+      "ret_60m": 1.481,
+      "value_ratio_5m": 13.399,
+      "value_accel_15m": 4.521,
+      "value_accel_30m": 2.058,
+      "trade_value_rank_24h": 240,
+      "trade_value_24h": 213375432.64,
+      "windows": {
+        "1": {
+          "signals": 2,
+          "A": 1,
+          "B": 0,
+          "C": 1,
+          "ABC_ALL": 0,
+          "avg_score": 74.6
+        },
+        "3": {
+          "signals": 5,
+          "A": 2,
+          "B": 0,
+          "C": 2,
+          "ABC_ALL": 0,
+          "avg_score": 75.54
+        },
+        "6": {
+          "signals": 9,
+          "A": 4,
+          "B": 1,
+          "C": 5,
+          "ABC_ALL": 1,
+          "avg_score": 80.25
+        },
+        "12": {
+          "signals": 14,
+          "A": 5,
+          "B": 4,
+          "C": 5,
+          "ABC_ALL": 1,
+          "avg_score": 81.3
+        },
+        "24": {
+          "signals": 17,
+          "A": 6,
+          "B": 7,
+          "C": 7,
+          "ABC_ALL": 2,
+          "avg_score": 82.62
+        },
+        "72": {
+          "signals": 49,
+          "A": 17,
+          "B": 14,
+          "C": 14,
+          "ABC_ALL": 7,
+          "avg_score": 80.55
+        }
+      },
+      "independent_episodes_72h": 49,
+      "latest_signal_age_min": 0.0,
+      "ignition": {
+        "success": 7,
+        "fail": 64,
+        "evaluated": 71,
+        "rate": 0.0986,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 0.297,
+        "median_max_reaction_pct": 0.37
+      },
+      "price_change": {
+        "1h": 1.481,
+        "3h": 1.107,
+        "6h": 1.859,
+        "12h": 2.622,
+        "24h": 1.859,
+        "72h": -5.19
+      },
+      "monitor_score": 74.45,
+      "market": "KRW-SYRUP",
+      "extension": {
+        "ret_3d": -4.861,
+        "ret_7d": -8.361,
+        "ret_14d": -5.517,
+        "ret_30d": 23.423,
+        "from_14d_low_pct": 4.58,
+        "from_30d_low_pct": 25.114,
+        "low_14d": 262.0,
+        "low_30d": 219.0
+      }
+    },
+    {
+      "price": 17.9,
+      "score": 92.0,
+      "label": "EARLY",
+      "A": true,
+      "B": true,
+      "C": false,
+      "ABC_ALL": false,
+      "ret_5m": 0.0,
+      "ret_15m": 0.0,
+      "ret_30m": 0.562,
+      "ret_60m": 0.0,
+      "value_ratio_5m": 18.169,
+      "value_accel_15m": 20.472,
+      "value_accel_30m": 3.315,
+      "trade_value_rank_24h": 233,
+      "trade_value_24h": 237300972.86,
       "windows": {
         "1": {
           "signals": 2,
@@ -1228,99 +1128,99 @@
           "B": 1,
           "C": 0,
           "ABC_ALL": 0,
-          "avg_score": 88.67
+          "avg_score": 83.92
         },
         "3": {
-          "signals": 3,
+          "signals": 2,
           "A": 1,
           "B": 1,
           "C": 0,
           "ABC_ALL": 0,
-          "avg_score": 83.03
+          "avg_score": 83.92
         },
         "6": {
-          "signals": 5,
-          "A": 1,
-          "B": 1,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 75.62
+          "signals": 4,
+          "A": 2,
+          "B": 2,
+          "C": 1,
+          "ABC_ALL": 1,
+          "avg_score": 80.85
         },
         "12": {
-          "signals": 11,
-          "A": 5,
+          "signals": 7,
+          "A": 2,
           "B": 2,
           "C": 1,
-          "ABC_ALL": 0,
-          "avg_score": 84.1
+          "ABC_ALL": 1,
+          "avg_score": 74.82
         },
         "24": {
-          "signals": 16,
-          "A": 5,
-          "B": 2,
-          "C": 1,
-          "ABC_ALL": 0,
-          "avg_score": 82.06
+          "signals": 12,
+          "A": 4,
+          "B": 3,
+          "C": 3,
+          "ABC_ALL": 2,
+          "avg_score": 79.86
         },
         "72": {
-          "signals": 49,
-          "A": 12,
-          "B": 7,
-          "C": 11,
-          "ABC_ALL": 4,
-          "avg_score": 79.17
+          "signals": 44,
+          "A": 9,
+          "B": 8,
+          "C": 9,
+          "ABC_ALL": 2,
+          "avg_score": 77.89
         }
       },
-      "independent_episodes_72h": 49,
-      "latest_signal_age_min": 20.0,
+      "independent_episodes_72h": 44,
+      "latest_signal_age_min": 11.0,
       "ignition": {
-        "success": 7,
-        "fail": 70,
-        "evaluated": 77,
-        "rate": 0.0909,
+        "success": 5,
+        "fail": 49,
+        "evaluated": 54,
+        "rate": 0.0926,
         "success_threshold_pct": 1.5,
         "horizon_hours": 3,
-        "avg_max_reaction_pct": -0.009,
+        "avg_max_reaction_pct": 0.113,
         "median_max_reaction_pct": 0.0
       },
       "price_change": {
-        "1h": 0.642,
-        "3h": 2.887,
-        "6h": 3.567,
-        "12h": 6.812,
-        "24h": 5.376,
-        "72h": -2.122
+        "1h": 0.0,
+        "3h": null,
+        "6h": 1.13,
+        "12h": 5.917,
+        "24h": 3.468,
+        "72h": -4.787
       },
-      "monitor_score": 67.51,
-      "market": "KRW-APT",
+      "monitor_score": 73.22,
+      "market": "KRW-AZTEC",
       "extension": {
-        "ret_3d": -1.88,
-        "ret_7d": -10.82,
-        "ret_14d": -4.976,
-        "ret_30d": 5.668,
-        "from_14d_low_pct": 8.901,
-        "from_30d_low_pct": 10.593,
-        "low_14d": 719.0,
-        "low_30d": 708.0
+        "ret_3d": -3.763,
+        "ret_7d": -5.789,
+        "ret_14d": -6.283,
+        "ret_30d": 6.548,
+        "from_14d_low_pct": 5.917,
+        "from_30d_low_pct": 8.485,
+        "low_14d": 16.9,
+        "low_30d": 16.5
       }
     },
     {
-      "price": 31.2,
-      "score": 78.1,
+      "price": 178.0,
+      "score": 87.17,
       "label": "EARLY",
       "A": false,
       "B": false,
       "C": false,
       "ABC_ALL": false,
-      "ret_5m": 0.0,
-      "ret_15m": 0.322,
-      "ret_30m": 0.322,
-      "ret_60m": 0.645,
-      "value_ratio_5m": 12.571,
-      "value_accel_15m": 2.171,
-      "value_accel_30m": 1.344,
-      "trade_value_rank_24h": 105,
-      "trade_value_24h": 1170316445.77,
+      "ret_5m": 0.565,
+      "ret_15m": 0.565,
+      "ret_30m": 1.136,
+      "ret_60m": 0.565,
+      "value_ratio_5m": 11.215,
+      "value_accel_15m": 3.139,
+      "value_accel_30m": 1.646,
+      "trade_value_rank_24h": 89,
+      "trade_value_24h": 1569143944.31,
       "windows": {
         "1": {
           "signals": 1,
@@ -1328,7 +1228,7 @@
           "B": 0,
           "C": 0,
           "ABC_ALL": 0,
-          "avg_score": 59.55
+          "avg_score": 65.71
         },
         "3": {
           "signals": 2,
@@ -1336,72 +1236,572 @@
           "B": 0,
           "C": 0,
           "ABC_ALL": 0,
-          "avg_score": 71.74
+          "avg_score": 77.89
+        },
+        "6": {
+          "signals": 4,
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 81.33
+        },
+        "12": {
+          "signals": 11,
+          "A": 3,
+          "B": 1,
+          "C": 1,
+          "ABC_ALL": 0,
+          "avg_score": 78.27
+        },
+        "24": {
+          "signals": 21,
+          "A": 6,
+          "B": 4,
+          "C": 3,
+          "ABC_ALL": 2,
+          "avg_score": 78.68
+        },
+        "72": {
+          "signals": 61,
+          "A": 14,
+          "B": 13,
+          "C": 13,
+          "ABC_ALL": 6,
+          "avg_score": 76.92
+        }
+      },
+      "independent_episodes_72h": 61,
+      "latest_signal_age_min": 35.0,
+      "ignition": {
+        "success": 9,
+        "fail": 91,
+        "evaluated": 100,
+        "rate": 0.09,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 0.136,
+        "median_max_reaction_pct": 0.0
+      },
+      "price_change": {
+        "1h": 1.136,
+        "3h": -0.559,
+        "6h": 1.136,
+        "12h": 3.488,
+        "24h": -0.559,
+        "72h": -14.833
+      },
+      "monitor_score": 72.83,
+      "market": "KRW-MMT",
+      "extension": {
+        "ret_3d": -14.833,
+        "ret_7d": -13.592,
+        "ret_14d": -22.609,
+        "ret_30d": -24.255,
+        "from_14d_low_pct": 4.706,
+        "from_30d_low_pct": 4.706,
+        "low_14d": 170.0,
+        "low_30d": 170.0
+      }
+    },
+    {
+      "price": 2094.0,
+      "score": 83.77,
+      "label": "EARLY",
+      "A": false,
+      "B": false,
+      "C": false,
+      "ABC_ALL": false,
+      "ret_5m": -0.048,
+      "ret_15m": 0.0,
+      "ret_30m": -0.095,
+      "ret_60m": 0.432,
+      "value_ratio_5m": 18.996,
+      "value_accel_15m": 5.162,
+      "value_accel_30m": 1.592,
+      "trade_value_rank_24h": 132,
+      "trade_value_24h": 753235050.89,
+      "windows": {
+        "1": {
+          "signals": 1,
+          "A": 0,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 58.05
+        },
+        "3": {
+          "signals": 3,
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "ABC_ALL": 1,
+          "avg_score": 74.66
+        },
+        "6": {
+          "signals": 5,
+          "A": 2,
+          "B": 1,
+          "C": 2,
+          "ABC_ALL": 1,
+          "avg_score": 78.3
+        },
+        "12": {
+          "signals": 14,
+          "A": 7,
+          "B": 5,
+          "C": 5,
+          "ABC_ALL": 3,
+          "avg_score": 83.36
+        },
+        "24": {
+          "signals": 29,
+          "A": 15,
+          "B": 10,
+          "C": 16,
+          "ABC_ALL": 6,
+          "avg_score": 84.4
+        },
+        "72": {
+          "signals": 69,
+          "A": 26,
+          "B": 24,
+          "C": 32,
+          "ABC_ALL": 12,
+          "avg_score": 80.49
+        }
+      },
+      "independent_episodes_72h": 69,
+      "latest_signal_age_min": 21.0,
+      "ignition": {
+        "success": 10,
+        "fail": 98,
+        "evaluated": 108,
+        "rate": 0.0926,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 0.176,
+        "median_max_reaction_pct": 0.0
+      },
+      "price_change": {
+        "1h": -0.095,
+        "3h": 0.916,
+        "6h": 2.146,
+        "12h": 3.51,
+        "24h": 1.453,
+        "72h": -2.605
+      },
+      "monitor_score": 69.49,
+      "market": "KRW-ATOM",
+      "extension": {
+        "ret_3d": -2.058,
+        "ret_7d": -14.531,
+        "ret_14d": 1.799,
+        "ret_30d": 5.651,
+        "from_14d_low_pct": 3.869,
+        "from_30d_low_pct": 8.105,
+        "low_14d": 2016.0,
+        "low_30d": 1937.0
+      }
+    },
+    {
+      "price": 52.1,
+      "score": 65.76,
+      "label": "EARLY",
+      "A": false,
+      "B": false,
+      "C": false,
+      "ABC_ALL": false,
+      "ret_5m": 0.0,
+      "ret_15m": -0.382,
+      "ret_30m": 0.192,
+      "ret_60m": 0.192,
+      "value_ratio_5m": 1.322,
+      "value_accel_15m": 2.001,
+      "value_accel_30m": 1.958,
+      "trade_value_rank_24h": 108,
+      "trade_value_24h": 1064666901.45,
+      "windows": {
+        "1": {
+          "signals": 1,
+          "A": 0,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 59.03
+        },
+        "3": {
+          "signals": 2,
+          "A": 0,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 72.61
+        },
+        "6": {
+          "signals": 4,
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "ABC_ALL": 1,
+          "avg_score": 76.5
+        },
+        "12": {
+          "signals": 10,
+          "A": 4,
+          "B": 3,
+          "C": 3,
+          "ABC_ALL": 3,
+          "avg_score": 78.24
+        },
+        "24": {
+          "signals": 19,
+          "A": 5,
+          "B": 4,
+          "C": 5,
+          "ABC_ALL": 4,
+          "avg_score": 77.64
+        },
+        "72": {
+          "signals": 55,
+          "A": 15,
+          "B": 15,
+          "C": 13,
+          "ABC_ALL": 7,
+          "avg_score": 77.29
+        }
+      },
+      "independent_episodes_72h": 55,
+      "latest_signal_age_min": 21.0,
+      "ignition": {
+        "success": 27,
+        "fail": 55,
+        "evaluated": 82,
+        "rate": 0.3293,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 1.542,
+        "median_max_reaction_pct": 0.735
+      },
+      "price_change": {
+        "1h": -0.192,
+        "3h": -0.951,
+        "6h": -0.762,
+        "12h": 2.157,
+        "24h": -1.139,
+        "72h": -8.916
+      },
+      "monitor_score": 69.16,
+      "market": "KRW-POLYX",
+      "extension": {
+        "ret_3d": -2.617,
+        "ret_7d": 9.684,
+        "ret_14d": 7.423,
+        "ret_30d": 32.234,
+        "from_14d_low_pct": 10.851,
+        "from_30d_low_pct": 34.278,
+        "low_14d": 47.0,
+        "low_30d": 38.8
+      }
+    },
+    {
+      "price": 11.2,
+      "score": 68.65,
+      "label": "EARLY",
+      "A": false,
+      "B": false,
+      "C": false,
+      "ABC_ALL": false,
+      "ret_5m": 0.0,
+      "ret_15m": -0.885,
+      "ret_30m": -0.885,
+      "ret_60m": -2.609,
+      "value_ratio_5m": 3.01,
+      "value_accel_15m": 1.757,
+      "value_accel_30m": 1.361,
+      "trade_value_rank_24h": 261,
+      "trade_value_24h": 159329657.59,
+      "windows": {
+        "1": {
+          "signals": 1,
+          "A": 0,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 60.52
+        },
+        "3": {
+          "signals": 4,
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 78.62
+        },
+        "6": {
+          "signals": 5,
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "ABC_ALL": 0,
+          "avg_score": 73.11
+        },
+        "12": {
+          "signals": 10,
+          "A": 2,
+          "B": 1,
+          "C": 1,
+          "ABC_ALL": 0,
+          "avg_score": 76.07
+        },
+        "24": {
+          "signals": 15,
+          "A": 4,
+          "B": 3,
+          "C": 2,
+          "ABC_ALL": 1,
+          "avg_score": 77.3
+        },
+        "72": {
+          "signals": 55,
+          "A": 14,
+          "B": 14,
+          "C": 8,
+          "ABC_ALL": 3,
+          "avg_score": 78.64
+        }
+      },
+      "independent_episodes_72h": 55,
+      "latest_signal_age_min": 29.0,
+      "ignition": {
+        "success": 25,
+        "fail": 54,
+        "evaluated": 79,
+        "rate": 0.3165,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 0.653,
+        "median_max_reaction_pct": 0.813
+      },
+      "price_change": {
+        "1h": -0.885,
+        "3h": -0.885,
+        "6h": 0.0,
+        "12h": 0.901,
+        "24h": 0.0,
+        "72h": -6.667
+      },
+      "monitor_score": 68.75,
+      "market": "KRW-FCT2",
+      "extension": {
+        "ret_3d": -6.667,
+        "ret_7d": 7.692,
+        "ret_14d": 12.112,
+        "ret_30d": 32.701,
+        "from_14d_low_pct": 16.667,
+        "from_30d_low_pct": 36.585,
+        "low_14d": 9.6,
+        "low_30d": 8.2
+      }
+    },
+    {
+      "price": 1398.0,
+      "score": 77.14,
+      "label": "EARLY",
+      "A": false,
+      "B": false,
+      "C": true,
+      "ABC_ALL": false,
+      "ret_5m": -0.285,
+      "ret_15m": -0.64,
+      "ret_30m": -0.851,
+      "ret_60m": 0.143,
+      "value_ratio_5m": 1.47,
+      "value_accel_15m": 2.755,
+      "value_accel_30m": 2.35,
+      "trade_value_rank_24h": 151,
+      "trade_value_24h": 561540754.2,
+      "windows": {
+        "1": {
+          "signals": 2,
+          "A": 0,
+          "B": 0,
+          "C": 1,
+          "ABC_ALL": 0,
+          "avg_score": 75.46
+        },
+        "3": {
+          "signals": 3,
+          "A": 0,
+          "B": 0,
+          "C": 1,
+          "ABC_ALL": 0,
+          "avg_score": 75.87
         },
         "6": {
           "signals": 4,
           "A": 0,
           "B": 0,
-          "C": 0,
+          "C": 1,
           "ABC_ALL": 0,
-          "avg_score": 69.39
+          "avg_score": 73.75
         },
         "12": {
-          "signals": 9,
-          "A": 1,
+          "signals": 8,
+          "A": 2,
           "B": 2,
-          "C": 0,
+          "C": 1,
           "ABC_ALL": 0,
-          "avg_score": 77.95
+          "avg_score": 78.91
         },
         "24": {
-          "signals": 22,
-          "A": 7,
-          "B": 6,
-          "C": 4,
-          "ABC_ALL": 2,
-          "avg_score": 79.99
+          "signals": 18,
+          "A": 6,
+          "B": 5,
+          "C": 6,
+          "ABC_ALL": 3,
+          "avg_score": 78.89
         },
         "72": {
-          "signals": 59,
-          "A": 19,
-          "B": 17,
+          "signals": 54,
+          "A": 12,
+          "B": 13,
           "C": 15,
-          "ABC_ALL": 8,
-          "avg_score": 78.36
+          "ABC_ALL": 5,
+          "avg_score": 78.06
         }
       },
-      "independent_episodes_72h": 59,
-      "latest_signal_age_min": 30.0,
+      "independent_episodes_72h": 54,
+      "latest_signal_age_min": 11.0,
       "ignition": {
-        "success": 14,
-        "fail": 80,
-        "evaluated": 94,
-        "rate": 0.1489,
+        "success": 22,
+        "fail": 69,
+        "evaluated": 91,
+        "rate": 0.2418,
         "success_threshold_pct": 1.5,
         "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.298,
-        "median_max_reaction_pct": 0.0
+        "avg_max_reaction_pct": 0.363,
+        "median_max_reaction_pct": 0.146
       },
       "price_change": {
-        "1h": 0.322,
-        "3h": 0.645,
-        "6h": 2.295,
-        "12h": 2.97,
-        "24h": 3.654,
-        "72h": -1.577
+        "1h": -0.851,
+        "3h": 1.451,
+        "6h": 2.719,
+        "12h": 3.709,
+        "24h": 5.034,
+        "72h": -2.306
       },
-      "monitor_score": 65.17,
-      "market": "KRW-MON",
+      "monitor_score": 66.44,
+      "market": "KRW-ZRO",
       "extension": {
-        "ret_3d": 0.971,
-        "ret_7d": 0.0,
-        "ret_14d": -15.447,
-        "ret_30d": 4.698,
-        "from_14d_low_pct": 8.711,
-        "from_30d_low_pct": 8.711,
-        "low_14d": 28.7,
-        "low_30d": 28.7
+        "ret_3d": 5.034,
+        "ret_7d": 0.072,
+        "ret_14d": -8.984,
+        "ret_30d": 26.287,
+        "from_14d_low_pct": 11.217,
+        "from_30d_low_pct": 26.06,
+        "low_14d": 1257.0,
+        "low_30d": 1109.0
+      }
+    },
+    {
+      "price": 3.06,
+      "score": 77.84,
+      "label": "EARLY",
+      "A": false,
+      "B": false,
+      "C": false,
+      "ABC_ALL": false,
+      "ret_5m": 0.328,
+      "ret_15m": 0.328,
+      "ret_30m": 0.328,
+      "ret_60m": 0.658,
+      "value_ratio_5m": 1.886,
+      "value_accel_15m": 1.924,
+      "value_accel_30m": 3.606,
+      "trade_value_rank_24h": 85,
+      "trade_value_24h": 1704080629.82,
+      "windows": {
+        "1": {
+          "signals": 2,
+          "A": 0,
+          "B": 0,
+          "C": 1,
+          "ABC_ALL": 0,
+          "avg_score": 81.49
+        },
+        "3": {
+          "signals": 3,
+          "A": 0,
+          "B": 0,
+          "C": 1,
+          "ABC_ALL": 0,
+          "avg_score": 78.8
+        },
+        "6": {
+          "signals": 5,
+          "A": 0,
+          "B": 0,
+          "C": 2,
+          "ABC_ALL": 0,
+          "avg_score": 81.79
+        },
+        "12": {
+          "signals": 8,
+          "A": 1,
+          "B": 0,
+          "C": 3,
+          "ABC_ALL": 0,
+          "avg_score": 78.52
+        },
+        "24": {
+          "signals": 18,
+          "A": 3,
+          "B": 2,
+          "C": 6,
+          "ABC_ALL": 1,
+          "avg_score": 80.39
+        },
+        "72": {
+          "signals": 55,
+          "A": 16,
+          "B": 14,
+          "C": 17,
+          "ABC_ALL": 5,
+          "avg_score": 79.4
+        }
+      },
+      "independent_episodes_72h": 55,
+      "latest_signal_age_min": 5.0,
+      "ignition": {
+        "success": 14,
+        "fail": 69,
+        "evaluated": 83,
+        "rate": 0.1687,
+        "success_threshold_pct": 1.5,
+        "horizon_hours": 3,
+        "avg_max_reaction_pct": 0.423,
+        "median_max_reaction_pct": 0.329
+      },
+      "price_change": {
+        "1h": 0.328,
+        "3h": 0.99,
+        "6h": 0.0,
+        "12h": 0.658,
+        "24h": 1.661,
+        "72h": -0.649
+      },
+      "monitor_score": 65.39,
+      "market": "KRW-RVN",
+      "extension": {
+        "ret_3d": 0.656,
+        "ret_7d": -1.603,
+        "ret_14d": -23.821,
+        "ret_30d": -7.251,
+        "from_14d_low_pct": 6.228,
+        "from_30d_low_pct": 6.228,
+        "low_14d": 2.89,
+        "low_30d": 2.89
       }
     },
     {
@@ -1420,7 +1820,7 @@
       "value_accel_15m": 2.52,
       "value_accel_30m": 2.376,
       "trade_value_rank_24h": 65,
-      "trade_value_24h": 2314355628.68,
+      "trade_value_24h": 2314283250.07,
       "windows": {
         "1": {
           "signals": 2,
@@ -1472,7 +1872,7 @@
         }
       },
       "independent_episodes_72h": 59,
-      "latest_signal_age_min": 0.0,
+      "latest_signal_age_min": 5.0,
       "ignition": {
         "success": 25,
         "fail": 72,
@@ -1484,7 +1884,7 @@
         "median_max_reaction_pct": 0.344
       },
       "price_change": {
-        "1h": null,
+        "1h": -1.281,
         "3h": 0.769,
         "6h": 2.504,
         "12h": 11.017,
@@ -1494,214 +1894,14 @@
       "monitor_score": 64.37,
       "market": "KRW-LIT",
       "extension": {
-        "ret_3d": 10.455,
-        "ret_7d": 11.395,
-        "ret_14d": 7.997,
+        "ret_3d": 10.961,
+        "ret_7d": 11.905,
+        "ret_14d": 8.491,
         "ret_30d": null,
-        "from_14d_low_pct": 19.744,
-        "from_30d_low_pct": 48.19,
+        "from_14d_low_pct": 20.293,
+        "from_30d_low_pct": 48.869,
         "low_14d": 5470.0,
         "low_30d": 4420.0
-      }
-    },
-    {
-      "price": 3.76,
-      "score": 76.77,
-      "label": "EARLY",
-      "A": false,
-      "B": false,
-      "C": false,
-      "ABC_ALL": false,
-      "ret_5m": -0.792,
-      "ret_15m": -0.529,
-      "ret_30m": -0.265,
-      "ret_60m": -0.265,
-      "value_ratio_5m": 6.991,
-      "value_accel_15m": 3.465,
-      "value_accel_30m": 1.21,
-      "trade_value_rank_24h": 14,
-      "trade_value_24h": 18656023406.51,
-      "windows": {
-        "1": {
-          "signals": 1,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 76.77
-        },
-        "3": {
-          "signals": 2,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 77.36
-        },
-        "6": {
-          "signals": 5,
-          "A": 0,
-          "B": 0,
-          "C": 1,
-          "ABC_ALL": 0,
-          "avg_score": 77.76
-        },
-        "12": {
-          "signals": 12,
-          "A": 3,
-          "B": 1,
-          "C": 4,
-          "ABC_ALL": 0,
-          "avg_score": 78.46
-        },
-        "24": {
-          "signals": 17,
-          "A": 4,
-          "B": 2,
-          "C": 4,
-          "ABC_ALL": 0,
-          "avg_score": 79.61
-        },
-        "72": {
-          "signals": 44,
-          "A": 13,
-          "B": 11,
-          "C": 12,
-          "ABC_ALL": 5,
-          "avg_score": 77.59
-        }
-      },
-      "independent_episodes_72h": 44,
-      "latest_signal_age_min": 0.0,
-      "ignition": {
-        "success": 12,
-        "fail": 61,
-        "evaluated": 73,
-        "rate": 0.1644,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.588,
-        "median_max_reaction_pct": 0.526
-      },
-      "price_change": {
-        "1h": -0.265,
-        "3h": null,
-        "6h": -1.571,
-        "12h": -0.529,
-        "24h": 1.622,
-        "72h": 1.348
-      },
-      "monitor_score": 64.22,
-      "market": "KRW-ZIL",
-      "extension": {
-        "ret_3d": 1.34,
-        "ret_7d": 11.504,
-        "ret_14d": 8.934,
-        "ret_30d": 23.529,
-        "from_14d_low_pct": 20.382,
-        "from_30d_low_pct": 25.581,
-        "low_14d": 3.14,
-        "low_30d": 3.01
-      }
-    },
-    {
-      "price": 68.9,
-      "score": 77.65,
-      "label": "EARLY",
-      "A": false,
-      "B": false,
-      "C": false,
-      "ABC_ALL": false,
-      "ret_5m": 0.145,
-      "ret_15m": 0.145,
-      "ret_30m": 0.437,
-      "ret_60m": 0.437,
-      "value_ratio_5m": 3.797,
-      "value_accel_15m": 1.553,
-      "value_accel_30m": 9.012,
-      "trade_value_rank_24h": 189,
-      "trade_value_24h": 397640259.76,
-      "windows": {
-        "1": {
-          "signals": 2,
-          "A": 1,
-          "B": 1,
-          "C": 1,
-          "ABC_ALL": 1,
-          "avg_score": 84.69
-        },
-        "3": {
-          "signals": 4,
-          "A": 1,
-          "B": 1,
-          "C": 1,
-          "ABC_ALL": 1,
-          "avg_score": 78.74
-        },
-        "6": {
-          "signals": 8,
-          "A": 3,
-          "B": 2,
-          "C": 3,
-          "ABC_ALL": 2,
-          "avg_score": 79.25
-        },
-        "12": {
-          "signals": 11,
-          "A": 3,
-          "B": 3,
-          "C": 5,
-          "ABC_ALL": 2,
-          "avg_score": 79.12
-        },
-        "24": {
-          "signals": 21,
-          "A": 5,
-          "B": 7,
-          "C": 5,
-          "ABC_ALL": 2,
-          "avg_score": 79.3
-        },
-        "72": {
-          "signals": 67,
-          "A": 16,
-          "B": 14,
-          "C": 19,
-          "ABC_ALL": 4,
-          "avg_score": 78.27
-        }
-      },
-      "independent_episodes_72h": 67,
-      "latest_signal_age_min": 0.0,
-      "ignition": {
-        "success": 15,
-        "fail": 83,
-        "evaluated": 98,
-        "rate": 0.1531,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.631,
-        "median_max_reaction_pct": 0.442
-      },
-      "price_change": {
-        "1h": 0.584,
-        "3h": 0.145,
-        "6h": 0.584,
-        "12h": 3.922,
-        "24h": -0.72,
-        "72h": 1.324
-      },
-      "monitor_score": 63.32,
-      "market": "KRW-ELSA",
-      "extension": {
-        "ret_3d": -0.289,
-        "ret_7d": 6.308,
-        "ret_14d": 6.636,
-        "ret_30d": 19.965,
-        "from_14d_low_pct": 8.648,
-        "from_30d_low_pct": 21.016,
-        "low_14d": 63.6,
-        "low_30d": 57.1
       }
     },
     {
@@ -1720,7 +1920,7 @@
       "value_accel_15m": 10.375,
       "value_accel_30m": 0.773,
       "trade_value_rank_24h": 139,
-      "trade_value_24h": 703857269.63,
+      "trade_value_24h": 687848421.8,
       "windows": {
         "1": {
           "signals": 1,
@@ -1772,7 +1972,7 @@
         }
       },
       "independent_episodes_72h": 43,
-      "latest_signal_age_min": 0.0,
+      "latest_signal_age_min": 5.0,
       "ignition": {
         "success": 19,
         "fail": 47,
@@ -1802,206 +2002,6 @@
         "from_30d_low_pct": 28.571,
         "low_14d": 141.0,
         "low_30d": 119.0
-      }
-    },
-    {
-      "price": 1841.0,
-      "score": 80.0,
-      "label": "EARLY",
-      "A": false,
-      "B": false,
-      "C": false,
-      "ABC_ALL": false,
-      "ret_5m": 0.163,
-      "ret_15m": 0.163,
-      "ret_30m": 0.987,
-      "ret_60m": 0.656,
-      "value_ratio_5m": 10.936,
-      "value_accel_15m": 2.698,
-      "value_accel_30m": 1.121,
-      "trade_value_rank_24h": 278,
-      "trade_value_24h": 54468542.05,
-      "windows": {
-        "1": {
-          "signals": 1,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 80.0
-        },
-        "3": {
-          "signals": 1,
-          "A": 0,
-          "B": 0,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 80.0
-        },
-        "6": {
-          "signals": 4,
-          "A": 1,
-          "B": 1,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 85.33
-        },
-        "12": {
-          "signals": 6,
-          "A": 1,
-          "B": 1,
-          "C": 0,
-          "ABC_ALL": 0,
-          "avg_score": 78.61
-        },
-        "24": {
-          "signals": 13,
-          "A": 1,
-          "B": 1,
-          "C": 2,
-          "ABC_ALL": 0,
-          "avg_score": 77.46
-        },
-        "72": {
-          "signals": 43,
-          "A": 7,
-          "B": 8,
-          "C": 12,
-          "ABC_ALL": 3,
-          "avg_score": 77.53
-        }
-      },
-      "independent_episodes_72h": 43,
-      "latest_signal_age_min": 11.0,
-      "ignition": {
-        "success": 7,
-        "fail": 58,
-        "evaluated": 65,
-        "rate": 0.1077,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.193,
-        "median_max_reaction_pct": 0.0
-      },
-      "price_change": {
-        "1h": null,
-        "3h": 0.711,
-        "6h": 0.054,
-        "12h": 3.953,
-        "24h": 2.449,
-        "72h": -4.065
-      },
-      "monitor_score": 63.08,
-      "market": "KRW-LPT",
-      "extension": {
-        "ret_3d": -3.207,
-        "ret_7d": -1.34,
-        "ret_14d": -6.785,
-        "ret_30d": 10.306,
-        "from_14d_low_pct": 4.602,
-        "from_30d_low_pct": 11.983,
-        "low_14d": 1760.0,
-        "low_30d": 1644.0
-      }
-    },
-    {
-      "price": 2.25,
-      "score": 74.14,
-      "label": "WATCH",
-      "A": false,
-      "B": false,
-      "C": false,
-      "ABC_ALL": false,
-      "ret_5m": 0.446,
-      "ret_15m": 0.446,
-      "ret_30m": 0.0,
-      "ret_60m": 0.897,
-      "value_ratio_5m": 0.833,
-      "value_accel_15m": 3.509,
-      "value_accel_30m": 3.487,
-      "trade_value_rank_24h": 192,
-      "trade_value_24h": 388222500.75,
-      "windows": {
-        "1": {
-          "signals": 3,
-          "A": 2,
-          "B": 1,
-          "C": 1,
-          "ABC_ALL": 1,
-          "avg_score": 87.65
-        },
-        "3": {
-          "signals": 3,
-          "A": 2,
-          "B": 1,
-          "C": 1,
-          "ABC_ALL": 1,
-          "avg_score": 87.65
-        },
-        "6": {
-          "signals": 4,
-          "A": 2,
-          "B": 1,
-          "C": 1,
-          "ABC_ALL": 1,
-          "avg_score": 86.45
-        },
-        "12": {
-          "signals": 10,
-          "A": 4,
-          "B": 4,
-          "C": 2,
-          "ABC_ALL": 2,
-          "avg_score": 85.16
-        },
-        "24": {
-          "signals": 16,
-          "A": 7,
-          "B": 7,
-          "C": 4,
-          "ABC_ALL": 4,
-          "avg_score": 84.86
-        },
-        "72": {
-          "signals": 51,
-          "A": 16,
-          "B": 16,
-          "C": 13,
-          "ABC_ALL": 7,
-          "avg_score": 80.2
-        }
-      },
-      "independent_episodes_72h": 51,
-      "latest_signal_age_min": 34.0,
-      "ignition": {
-        "success": 17,
-        "fail": 67,
-        "evaluated": 84,
-        "rate": 0.2024,
-        "success_threshold_pct": 1.5,
-        "horizon_hours": 3,
-        "avg_max_reaction_pct": 0.448,
-        "median_max_reaction_pct": 0.461
-      },
-      "price_change": {
-        "1h": 0.0,
-        "3h": null,
-        "6h": 4.167,
-        "12h": 6.132,
-        "24h": 7.143,
-        "72h": -0.881
-      },
-      "monitor_score": 62.5,
-      "market": "KRW-BEAM",
-      "extension": {
-        "ret_3d": -1.316,
-        "ret_7d": 11.386,
-        "ret_14d": 3.687,
-        "ret_30d": 25.0,
-        "from_14d_low_pct": 11.94,
-        "from_30d_low_pct": 25.0,
-        "low_14d": 2.01,
-        "low_30d": 1.8
       }
     }
   ]
