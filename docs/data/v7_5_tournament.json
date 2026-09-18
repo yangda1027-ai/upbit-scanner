@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-09-18T14:15:32+00:00",
-    "generated_at_kst": "2026-09-18 23:15:32 KST",
+    "generated_at_utc": "2026-09-18T14:20:34+00:00",
+    "generated_at_kst": "2026-09-18 23:20:34 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -9,7 +9,7 @@
     "note": "Official Forward는 forward_start 이후 신호만 포함.",
     "h24_note": "h24는 V7.3 evaluator가 기록한 기존 정의를 그대로 사용.",
     "leader_rule": "공식 sleeper_evaluated_n >= 30인 전략만 +5% 적중률로 임시 리더 선정",
-    "leader": "A",
+    "leader": "B",
     "abc_note": "ABC는 A/B/C 세 조건을 모두 만족한 별도 관찰 집계이며 A/B/C 전략 자체는 변경하지 않음."
   },
   "strategies": {
@@ -60,17 +60,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 841,
-        "h6_matured": 817,
+        "episodes": 840,
+        "h6_matured": 816,
         "fast_move_n": 240,
-        "fast_move_rate_pct": 29.38,
-        "sleeper_evaluated_n": 513,
+        "fast_move_rate_pct": 29.41,
+        "sleeper_evaluated_n": 512,
         "sleeper_hit3_n": 208,
-        "sleeper_hit3_pct": 40.55,
+        "sleeper_hit3_pct": 40.62,
         "sleeper_hit5_n": 111,
-        "sleeper_hit5_pct": 21.64,
+        "sleeper_hit5_pct": 21.68,
         "sleeper_hit10_n": 39,
-        "sleeper_hit10_pct": 7.6
+        "sleeper_hit10_pct": 7.62
       }
     },
     "C": {
@@ -90,17 +90,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1105,
-        "h6_matured": 1071,
+        "episodes": 1103,
+        "h6_matured": 1070,
         "fast_move_n": 282,
-        "fast_move_rate_pct": 26.33,
-        "sleeper_evaluated_n": 708,
+        "fast_move_rate_pct": 26.36,
+        "sleeper_evaluated_n": 706,
         "sleeper_hit3_n": 281,
-        "sleeper_hit3_pct": 39.69,
+        "sleeper_hit3_pct": 39.8,
         "sleeper_hit5_n": 148,
-        "sleeper_hit5_pct": 20.9,
+        "sleeper_hit5_pct": 20.96,
         "sleeper_hit10_n": 43,
-        "sleeper_hit10_pct": 6.07
+        "sleeper_hit10_pct": 6.09
       }
     }
   },
@@ -1491,7 +1491,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 2.077,
+        "max_pct": 2.077,
+        "min_pct": -4.451,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -1525,7 +1532,14 @@
         "hit_5": true,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 5.982,
+        "max_pct": 9.133,
+        "min_pct": -0.496,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -1559,7 +1573,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 0.246,
+        "max_pct": 0.737,
+        "min_pct": -0.983,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -1593,7 +1614,14 @@
         "hit_5": true,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 5.982,
+        "max_pct": 9.133,
+        "min_pct": -0.496,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -1627,7 +1655,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 2.454,
+        "max_pct": 2.454,
+        "min_pct": -0.613,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -1661,7 +1696,14 @@
         "hit_5": true,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 5.982,
+        "max_pct": 9.133,
+        "min_pct": -0.496,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -3466,9 +3508,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 1.923,
+        "max_pct": 2.885,
+        "min_pct": -0.962,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "A",
