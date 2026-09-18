@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-09-18T11:45:30+00:00",
-    "generated_at_kst": "2026-09-18 20:45:30 KST",
+    "generated_at_utc": "2026-09-18T11:50:33+00:00",
+    "generated_at_kst": "2026-09-18 20:50:33 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -9,7 +9,7 @@
     "note": "Official Forward는 forward_start 이후 신호만 포함.",
     "h24_note": "h24는 V7.3 evaluator가 기록한 기존 정의를 그대로 사용.",
     "leader_rule": "공식 sleeper_evaluated_n >= 30인 전략만 +5% 적중률로 임시 리더 선정",
-    "leader": "A",
+    "leader": "B",
     "abc_note": "ABC는 A/B/C 세 조건을 모두 만족한 별도 관찰 집계이며 A/B/C 전략 자체는 변경하지 않음."
   },
   "strategies": {
@@ -64,13 +64,13 @@
         "h6_matured": 813,
         "fast_move_n": 237,
         "fast_move_rate_pct": 29.15,
-        "sleeper_evaluated_n": 507,
-        "sleeper_hit3_n": 198,
-        "sleeper_hit3_pct": 39.05,
-        "sleeper_hit5_n": 105,
-        "sleeper_hit5_pct": 20.71,
+        "sleeper_evaluated_n": 508,
+        "sleeper_hit3_n": 199,
+        "sleeper_hit3_pct": 39.17,
+        "sleeper_hit5_n": 106,
+        "sleeper_hit5_pct": 20.87,
         "sleeper_hit10_n": 36,
-        "sleeper_hit10_pct": 7.1
+        "sleeper_hit10_pct": 7.09
       }
     },
     "C": {
@@ -1728,7 +1728,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 1.544,
+        "max_pct": 3.282,
+        "min_pct": 0.193,
+        "hit_3": true,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -1762,7 +1769,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 0.765,
+        "max_pct": 2.294,
+        "min_pct": -1.338,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -24454,8 +24468,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 7.298,
+        "max_pct": 7.988,
+        "min_pct": 0.493,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
+      "status": "PHOENIX_5"
     },
     {
       "strategy": "C",
