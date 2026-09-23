@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-09-23T06:10:30+00:00",
-    "generated_at_kst": "2026-09-23 15:10:30 KST",
+    "generated_at_utc": "2026-09-23T06:15:29+00:00",
+    "generated_at_kst": "2026-09-23 15:15:29 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -30,17 +30,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 830,
-        "h6_matured": 807,
-        "fast_move_n": 300,
-        "fast_move_rate_pct": 37.17,
-        "sleeper_evaluated_n": 434,
-        "sleeper_hit3_n": 228,
-        "sleeper_hit3_pct": 52.53,
-        "sleeper_hit5_n": 133,
-        "sleeper_hit5_pct": 30.65,
+        "episodes": 828,
+        "h6_matured": 810,
+        "fast_move_n": 302,
+        "fast_move_rate_pct": 37.28,
+        "sleeper_evaluated_n": 433,
+        "sleeper_hit3_n": 226,
+        "sleeper_hit3_pct": 52.19,
+        "sleeper_hit5_n": 132,
+        "sleeper_hit5_pct": 30.48,
         "sleeper_hit10_n": 41,
-        "sleeper_hit10_pct": 9.45
+        "sleeper_hit10_pct": 9.47
       }
     },
     "B": {
@@ -60,17 +60,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 656,
+        "episodes": 653,
         "h6_matured": 639,
         "fast_move_n": 242,
         "fast_move_rate_pct": 37.87,
-        "sleeper_evaluated_n": 339,
-        "sleeper_hit3_n": 179,
-        "sleeper_hit3_pct": 52.8,
+        "sleeper_evaluated_n": 338,
+        "sleeper_hit3_n": 178,
+        "sleeper_hit3_pct": 52.66,
         "sleeper_hit5_n": 94,
-        "sleeper_hit5_pct": 27.73,
+        "sleeper_hit5_pct": 27.81,
         "sleeper_hit10_n": 30,
-        "sleeper_hit10_pct": 8.85
+        "sleeper_hit10_pct": 8.88
       }
     },
     "C": {
@@ -90,10 +90,10 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 829,
-        "h6_matured": 808,
-        "fast_move_n": 289,
-        "fast_move_rate_pct": 35.77,
+        "episodes": 826,
+        "h6_matured": 807,
+        "fast_move_n": 287,
+        "fast_move_rate_pct": 35.56,
         "sleeper_evaluated_n": 448,
         "sleeper_hit3_n": 225,
         "sleeper_hit3_pct": 50.22,
@@ -119,17 +119,17 @@
       "sleeper_hit10_pct": null
     },
     "official_forward": {
-      "episodes": 246,
+      "episodes": 245,
       "h6_matured": 240,
       "fast_move_n": 82,
       "fast_move_rate_pct": 34.17,
-      "sleeper_evaluated_n": 139,
-      "sleeper_hit3_n": 73,
-      "sleeper_hit3_pct": 52.52,
+      "sleeper_evaluated_n": 138,
+      "sleeper_hit3_n": 72,
+      "sleeper_hit3_pct": 52.17,
       "sleeper_hit5_n": 33,
-      "sleeper_hit5_pct": 23.74,
+      "sleeper_hit5_pct": 23.91,
       "sleeper_hit10_n": 7,
-      "sleeper_hit10_pct": 5.04
+      "sleeper_hit10_pct": 5.07
     }
   },
   "signals": [
@@ -1890,9 +1890,16 @@
         "hit_5": true,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 2.049,
+        "max_pct": 6.284,
+        "min_pct": -1.093,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "A",
@@ -1931,9 +1938,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.529,
+        "max_pct": -0.106,
+        "min_pct": -3.488,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "B",
@@ -1972,9 +1986,16 @@
         "hit_5": true,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 2.049,
+        "max_pct": 6.284,
+        "min_pct": -1.093,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "C",
@@ -2013,9 +2034,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.529,
+        "max_pct": -0.106,
+        "min_pct": -3.488,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "A",
@@ -2054,9 +2082,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -2.015,
+        "max_pct": 3.275,
+        "min_pct": -3.275,
+        "hit_3": true,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "A",
@@ -2095,9 +2130,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.81,
+        "max_pct": 1.822,
+        "min_pct": -2.429,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "A",
@@ -2136,9 +2178,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 0.93,
+        "max_pct": 1.628,
+        "min_pct": -1.86,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "B",
@@ -2177,9 +2226,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -2.015,
+        "max_pct": 3.275,
+        "min_pct": -3.275,
+        "hit_3": true,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "B",
@@ -2218,9 +2274,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 0.93,
+        "max_pct": 1.628,
+        "min_pct": -1.86,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "C",
@@ -2259,9 +2322,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 0.93,
+        "max_pct": 1.628,
+        "min_pct": -1.86,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "C",
@@ -18100,8 +18170,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 0.293,
+        "max_pct": 4.1,
+        "min_pct": -2.05,
+        "hit_3": true,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "PHOENIX_3"
     },
     {
       "strategy": "A",
@@ -18148,8 +18225,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -14.262,
+        "max_pct": -13.101,
+        "min_pct": -15.589,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
