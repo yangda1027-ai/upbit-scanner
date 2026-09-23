@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-09-23T15:35:33+00:00",
-    "generated_at_kst": "2026-09-24 00:35:33 KST",
+    "generated_at_utc": "2026-09-23T15:40:36+00:00",
+    "generated_at_kst": "2026-09-24 00:40:36 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -31,16 +31,16 @@
       },
       "official_forward": {
         "episodes": 784,
-        "h6_matured": 760,
-        "fast_move_n": 279,
-        "fast_move_rate_pct": 36.71,
-        "sleeper_evaluated_n": 420,
+        "h6_matured": 761,
+        "fast_move_n": 280,
+        "fast_move_rate_pct": 36.79,
+        "sleeper_evaluated_n": 421,
         "sleeper_hit3_n": 216,
-        "sleeper_hit3_pct": 51.43,
+        "sleeper_hit3_pct": 51.31,
         "sleeper_hit5_n": 125,
-        "sleeper_hit5_pct": 29.76,
+        "sleeper_hit5_pct": 29.69,
         "sleeper_hit10_n": 35,
-        "sleeper_hit10_pct": 8.33
+        "sleeper_hit10_pct": 8.31
       }
     },
     "B": {
@@ -1617,7 +1617,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": -4.292,
+        "max_pct": 1.561,
+        "min_pct": -4.59,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -3053,9 +3060,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -2.5,
+        "max_pct": 3.542,
+        "min_pct": -6.042,
+        "hit_3": true,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "C",
@@ -16446,8 +16460,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -9.043,
+        "max_pct": -1.064,
+        "min_pct": -13.298,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "C",
