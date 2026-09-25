@@ -27,13 +27,15 @@ jobs:
           TOP_A: "5"
           TOP_B: "5"
         run: python src/analyze.py
+      - name: Run independent KRW market scan
+        run: python src/market_scan.py
       - name: Update V6 live validation
         run: python src/track.py
       - name: Commit refreshed result and live history
         run: |
           git config user.name "upbit-scanner-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/data/latest.json docs/data/signals.json
-          git diff --cached --quiet || git commit -m "Update hourly Upbit V6 scan"
+          git add docs/data/latest.json docs/data/signals.json docs/data/market_scan_latest.json
+          git diff --cached --quiet || git commit -m "Update hourly Upbit scans"
           git pull --rebase
           git push
