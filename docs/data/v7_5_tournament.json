@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-09-26T10:05:31+00:00",
-    "generated_at_kst": "2026-09-26 19:05:31 KST",
+    "generated_at_utc": "2026-09-26T10:10:38+00:00",
+    "generated_at_kst": "2026-09-26 19:10:38 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -30,17 +30,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 724,
-        "h6_matured": 694,
-        "fast_move_n": 235,
+        "episodes": 721,
+        "h6_matured": 691,
+        "fast_move_n": 234,
         "fast_move_rate_pct": 33.86,
-        "sleeper_evaluated_n": 374,
-        "sleeper_hit3_n": 181,
-        "sleeper_hit3_pct": 48.4,
-        "sleeper_hit5_n": 93,
-        "sleeper_hit5_pct": 24.87,
+        "sleeper_evaluated_n": 372,
+        "sleeper_hit3_n": 179,
+        "sleeper_hit3_pct": 48.12,
+        "sleeper_hit5_n": 91,
+        "sleeper_hit5_pct": 24.46,
         "sleeper_hit10_n": 17,
-        "sleeper_hit10_pct": 4.55
+        "sleeper_hit10_pct": 4.57
       }
     },
     "B": {
@@ -61,16 +61,16 @@
       },
       "official_forward": {
         "episodes": 600,
-        "h6_matured": 573,
+        "h6_matured": 574,
         "fast_move_n": 203,
-        "fast_move_rate_pct": 35.43,
-        "sleeper_evaluated_n": 291,
+        "fast_move_rate_pct": 35.37,
+        "sleeper_evaluated_n": 292,
         "sleeper_hit3_n": 146,
-        "sleeper_hit3_pct": 50.17,
+        "sleeper_hit3_pct": 50.0,
         "sleeper_hit5_n": 75,
-        "sleeper_hit5_pct": 25.77,
+        "sleeper_hit5_pct": 25.68,
         "sleeper_hit10_n": 15,
-        "sleeper_hit10_pct": 5.15
+        "sleeper_hit10_pct": 5.14
       }
     },
     "C": {
@@ -90,17 +90,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 780,
-        "h6_matured": 749,
-        "fast_move_n": 251,
-        "fast_move_rate_pct": 33.51,
-        "sleeper_evaluated_n": 416,
-        "sleeper_hit3_n": 223,
-        "sleeper_hit3_pct": 53.61,
-        "sleeper_hit5_n": 124,
-        "sleeper_hit5_pct": 29.81,
+        "episodes": 778,
+        "h6_matured": 748,
+        "fast_move_n": 250,
+        "fast_move_rate_pct": 33.42,
+        "sleeper_evaluated_n": 415,
+        "sleeper_hit3_n": 222,
+        "sleeper_hit3_pct": 53.49,
+        "sleeper_hit5_n": 123,
+        "sleeper_hit5_pct": 29.64,
         "sleeper_hit10_n": 20,
-        "sleeper_hit10_pct": 4.81
+        "sleeper_hit10_pct": 4.82
       }
     }
   },
@@ -613,7 +613,14 @@
         "ret_60m": 0.086
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": 0.406,
+        "max_pct": 0.996,
+        "min_pct": -0.849,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -640,7 +647,14 @@
         "ret_60m": 0.086
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": 0.0,
+        "max_pct": 0.0,
+        "min_pct": -0.82,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -3192,9 +3206,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 0.0,
+        "max_pct": 0.68,
+        "min_pct": -2.041,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "C",
@@ -3233,9 +3254,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 0.0,
+        "max_pct": 0.68,
+        "min_pct": -2.041,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "B",
@@ -20130,8 +20158,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 1.492,
+        "max_pct": 2.089,
+        "min_pct": -4.103,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
