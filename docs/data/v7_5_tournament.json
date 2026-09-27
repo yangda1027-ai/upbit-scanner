@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-09-27T11:40:37+00:00",
-    "generated_at_kst": "2026-09-27 20:40:37 KST",
+    "generated_at_utc": "2026-09-27T11:45:34+00:00",
+    "generated_at_kst": "2026-09-27 20:45:34 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -34,13 +34,13 @@
         "h6_matured": 749,
         "fast_move_n": 227,
         "fast_move_rate_pct": 30.31,
-        "sleeper_evaluated_n": 411,
+        "sleeper_evaluated_n": 412,
         "sleeper_hit3_n": 197,
-        "sleeper_hit3_pct": 47.93,
+        "sleeper_hit3_pct": 47.82,
         "sleeper_hit5_n": 110,
-        "sleeper_hit5_pct": 26.76,
+        "sleeper_hit5_pct": 26.7,
         "sleeper_hit10_n": 26,
-        "sleeper_hit10_pct": 6.33
+        "sleeper_hit10_pct": 6.31
       }
     },
     "B": {
@@ -64,13 +64,13 @@
         "h6_matured": 594,
         "fast_move_n": 195,
         "fast_move_rate_pct": 32.83,
-        "sleeper_evaluated_n": 328,
+        "sleeper_evaluated_n": 329,
         "sleeper_hit3_n": 153,
-        "sleeper_hit3_pct": 46.65,
+        "sleeper_hit3_pct": 46.5,
         "sleeper_hit5_n": 89,
-        "sleeper_hit5_pct": 27.13,
+        "sleeper_hit5_pct": 27.05,
         "sleeper_hit10_n": 26,
-        "sleeper_hit10_pct": 7.93
+        "sleeper_hit10_pct": 7.9
       }
     },
     "C": {
@@ -90,17 +90,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 856,
+        "episodes": 857,
         "h6_matured": 818,
         "fast_move_n": 247,
         "fast_move_rate_pct": 30.2,
-        "sleeper_evaluated_n": 443,
+        "sleeper_evaluated_n": 444,
         "sleeper_hit3_n": 237,
-        "sleeper_hit3_pct": 53.5,
+        "sleeper_hit3_pct": 53.38,
         "sleeper_hit5_n": 135,
-        "sleeper_hit5_pct": 30.47,
+        "sleeper_hit5_pct": 30.41,
         "sleeper_hit10_n": 25,
-        "sleeper_hit10_pct": 5.64
+        "sleeper_hit10_pct": 5.63
       }
     }
   },
@@ -123,16 +123,43 @@
       "h6_matured": 249,
       "fast_move_n": 76,
       "fast_move_rate_pct": 30.52,
-      "sleeper_evaluated_n": 128,
+      "sleeper_evaluated_n": 129,
       "sleeper_hit3_n": 57,
-      "sleeper_hit3_pct": 44.53,
+      "sleeper_hit3_pct": 44.19,
       "sleeper_hit5_n": 33,
-      "sleeper_hit5_pct": 25.78,
+      "sleeper_hit5_pct": 25.58,
       "sleeper_hit10_n": 5,
-      "sleeper_hit10_pct": 3.91
+      "sleeper_hit10_pct": 3.88
     }
   },
   "signals": [
+    {
+      "strategy": "C",
+      "market": "KRW-AERO",
+      "price": 1158.0,
+      "score": 91.39,
+      "source_label": "EARLY",
+      "ret_5m": -0.086,
+      "ret_15m": -0.086,
+      "ret_30m": -0.601,
+      "ret_60m": -0.601,
+      "value_ratio_5m": 4.315,
+      "value_accel_15m": 2.378,
+      "value_accel_30m": 2.882,
+      "ts": "2026-09-27T11:40:00+00:00",
+      "ts_kst": "2026-09-27 20:40:00 KST",
+      "rank": 1,
+      "btc": {
+        "ret_15m": -0.023,
+        "ret_60m": 0.031
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "A",
       "market": "KRW-MMT",
@@ -937,7 +964,14 @@
         "ret_60m": 0.104
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": -2.864,
+        "max_pct": -0.687,
+        "min_pct": -3.093,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -23541,8 +23575,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -2.396,
+        "max_pct": -0.16,
+        "min_pct": -3.834,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "B",
@@ -23589,8 +23630,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -2.396,
+        "max_pct": -0.16,
+        "min_pct": -3.834,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "C",
@@ -23637,8 +23685,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -2.396,
+        "max_pct": -0.16,
+        "min_pct": -3.834,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
@@ -50097,61 +50152,6 @@
     },
     {
       "strategy": "A",
-      "market": "KRW-QTUM",
-      "price": 1400.0,
-      "score": 93.72,
-      "source_label": "EARLY",
-      "ret_5m": 0.358,
-      "ret_15m": 0.358,
-      "ret_30m": 0.0,
-      "ret_60m": -0.285,
-      "value_ratio_5m": 10.802,
-      "value_accel_15m": 5.393,
-      "value_accel_30m": 3.085,
-      "ts": "2026-09-25T10:25:00+00:00",
-      "ts_kst": "2026-09-25 19:25:00 KST",
-      "rank": 1,
-      "btc": {
-        "ret_15m": 0.131,
-        "ret_60m": -0.312
-      },
-      "abc_all": true,
-      "h1": {
-        "close_pct": 0.643,
-        "max_pct": 1.071,
-        "min_pct": -0.286,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": -0.357,
-        "max_pct": 1.071,
-        "min_pct": -0.929,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 0.214,
-        "max_pct": 1.071,
-        "min_pct": -1.714,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 2.214,
-        "max_pct": 5.0,
-        "min_pct": -0.714,
-        "hit_3": true,
-        "hit_5": true,
-        "hit_10": false
-      },
-      "status": "PHOENIX_5"
-    },
-    {
-      "strategy": "B",
       "market": "KRW-QTUM",
       "price": 1400.0,
       "score": 93.72,
