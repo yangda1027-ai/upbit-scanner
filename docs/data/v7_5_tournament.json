@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-04T18:00:59+00:00",
-    "generated_at_kst": "2026-10-05 03:00:59 KST",
+    "generated_at_utc": "2026-10-04T18:05:32+00:00",
+    "generated_at_kst": "2026-10-05 03:05:32 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -9,7 +9,7 @@
     "note": "Official Forward는 forward_start 이후 신호만 포함.",
     "h24_note": "h24는 V7.3 evaluator가 기록한 기존 정의를 그대로 사용.",
     "leader_rule": "공식 sleeper_evaluated_n >= 30인 전략만 +5% 적중률로 임시 리더 선정",
-    "leader": "A",
+    "leader": "C",
     "abc_note": "ABC는 A/B/C 세 조건을 모두 만족한 별도 관찰 집계이며 A/B/C 전략 자체는 변경하지 않음."
   },
   "strategies": {
@@ -30,15 +30,15 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1045,
+        "episodes": 1044,
         "h6_matured": 1000,
         "fast_move_n": 220,
         "fast_move_rate_pct": 22.0,
-        "sleeper_evaluated_n": 611,
+        "sleeper_evaluated_n": 612,
         "sleeper_hit3_n": 227,
-        "sleeper_hit3_pct": 37.15,
+        "sleeper_hit3_pct": 37.09,
         "sleeper_hit5_n": 109,
-        "sleeper_hit5_pct": 17.84,
+        "sleeper_hit5_pct": 17.81,
         "sleeper_hit10_n": 23,
         "sleeper_hit10_pct": 3.76
       }
@@ -61,16 +61,16 @@
       },
       "official_forward": {
         "episodes": 839,
-        "h6_matured": 793,
-        "fast_move_n": 174,
-        "fast_move_rate_pct": 21.94,
-        "sleeper_evaluated_n": 486,
+        "h6_matured": 792,
+        "fast_move_n": 173,
+        "fast_move_rate_pct": 21.84,
+        "sleeper_evaluated_n": 487,
         "sleeper_hit3_n": 185,
-        "sleeper_hit3_pct": 38.07,
+        "sleeper_hit3_pct": 37.99,
         "sleeper_hit5_n": 86,
-        "sleeper_hit5_pct": 17.7,
+        "sleeper_hit5_pct": 17.66,
         "sleeper_hit10_n": 15,
-        "sleeper_hit10_pct": 3.09
+        "sleeper_hit10_pct": 3.08
       }
     },
     "C": {
@@ -90,15 +90,15 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1163,
+        "episodes": 1164,
         "h6_matured": 1113,
         "fast_move_n": 218,
         "fast_move_rate_pct": 19.59,
-        "sleeper_evaluated_n": 701,
+        "sleeper_evaluated_n": 702,
         "sleeper_hit3_n": 277,
-        "sleeper_hit3_pct": 39.51,
+        "sleeper_hit3_pct": 39.46,
         "sleeper_hit5_n": 125,
-        "sleeper_hit5_pct": 17.83,
+        "sleeper_hit5_pct": 17.81,
         "sleeper_hit10_n": 24,
         "sleeper_hit10_pct": 3.42
       }
@@ -123,16 +123,70 @@
       "h6_matured": 368,
       "fast_move_n": 65,
       "fast_move_rate_pct": 17.66,
-      "sleeper_evaluated_n": 225,
+      "sleeper_evaluated_n": 226,
       "sleeper_hit3_n": 87,
-      "sleeper_hit3_pct": 38.67,
+      "sleeper_hit3_pct": 38.5,
       "sleeper_hit5_n": 39,
-      "sleeper_hit5_pct": 17.33,
+      "sleeper_hit5_pct": 17.26,
       "sleeper_hit10_n": 9,
-      "sleeper_hit10_pct": 4.0
+      "sleeper_hit10_pct": 3.98
     }
   },
   "signals": [
+    {
+      "strategy": "B",
+      "market": "KRW-CAP",
+      "price": 88.2,
+      "score": 84.62,
+      "source_label": "EARLY",
+      "ret_5m": -0.226,
+      "ret_15m": -0.787,
+      "ret_30m": -0.787,
+      "ret_60m": -0.787,
+      "value_ratio_5m": 2.059,
+      "value_accel_15m": 4.866,
+      "value_accel_30m": 3.946,
+      "ts": "2026-10-04T18:00:00+00:00",
+      "ts_kst": "2026-10-05 03:00:00 KST",
+      "rank": 3,
+      "btc": {
+        "ret_15m": -0.091,
+        "ret_60m": -0.083
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
+    {
+      "strategy": "C",
+      "market": "KRW-CAP",
+      "price": 88.2,
+      "score": 84.62,
+      "source_label": "EARLY",
+      "ret_5m": -0.226,
+      "ret_15m": -0.787,
+      "ret_30m": -0.787,
+      "ret_60m": -0.787,
+      "value_ratio_5m": 2.059,
+      "value_accel_15m": 4.866,
+      "value_accel_30m": 3.946,
+      "ts": "2026-10-04T18:00:00+00:00",
+      "ts_kst": "2026-10-05 03:00:00 KST",
+      "rank": 3,
+      "btc": {
+        "ret_15m": -0.091,
+        "ret_60m": -0.083
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "A",
       "market": "KRW-PLUME",
@@ -5259,9 +5313,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -2.098,
+        "max_pct": 3.497,
+        "min_pct": -2.797,
+        "hit_3": true,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "A",
@@ -33628,8 +33689,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 1.75,
+        "max_pct": 2.174,
+        "min_pct": 0.636,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "B",
@@ -33676,8 +33744,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 1.75,
+        "max_pct": 2.174,
+        "min_pct": 0.636,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "C",
@@ -33724,8 +33799,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 1.75,
+        "max_pct": 2.174,
+        "min_pct": 0.636,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
@@ -48246,116 +48328,6 @@
         "hit_10": false
       },
       "status": "FAST_MOVE"
-    },
-    {
-      "strategy": "A",
-      "market": "KRW-ENA",
-      "price": 314.0,
-      "score": 86.67,
-      "source_label": "EARLY",
-      "ret_5m": -0.633,
-      "ret_15m": -0.633,
-      "ret_30m": -0.633,
-      "ret_60m": -0.317,
-      "value_ratio_5m": 8.415,
-      "value_accel_15m": 6.513,
-      "value_accel_30m": 2.171,
-      "ts": "2026-10-03T08:30:00+00:00",
-      "ts_kst": "2026-10-03 17:30:00 KST",
-      "rank": 2,
-      "btc": {
-        "ret_15m": 0.015,
-        "ret_60m": -0.013
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": 0.637,
-        "max_pct": 0.637,
-        "min_pct": 0.0,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 1.911,
-        "max_pct": 2.229,
-        "min_pct": 0.0,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 1.274,
-        "max_pct": 2.229,
-        "min_pct": 0.0,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 2.866,
-        "max_pct": 4.777,
-        "min_pct": 0.318,
-        "hit_3": true,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "PHOENIX_3"
-    },
-    {
-      "strategy": "C",
-      "market": "KRW-ENA",
-      "price": 314.0,
-      "score": 86.67,
-      "source_label": "EARLY",
-      "ret_5m": -0.633,
-      "ret_15m": -0.633,
-      "ret_30m": -0.633,
-      "ret_60m": -0.317,
-      "value_ratio_5m": 8.415,
-      "value_accel_15m": 6.513,
-      "value_accel_30m": 2.171,
-      "ts": "2026-10-03T08:30:00+00:00",
-      "ts_kst": "2026-10-03 17:30:00 KST",
-      "rank": 2,
-      "btc": {
-        "ret_15m": 0.015,
-        "ret_60m": -0.013
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": 0.637,
-        "max_pct": 0.637,
-        "min_pct": 0.0,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 1.911,
-        "max_pct": 2.229,
-        "min_pct": 0.0,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 1.274,
-        "max_pct": 2.229,
-        "min_pct": 0.0,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 2.866,
-        "max_pct": 4.777,
-        "min_pct": 0.318,
-        "hit_3": true,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "PHOENIX_3"
     }
   ]
 }
