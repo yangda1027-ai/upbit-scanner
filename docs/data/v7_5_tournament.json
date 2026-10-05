@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-05T09:05:35+00:00",
-    "generated_at_kst": "2026-10-05 18:05:35 KST",
+    "generated_at_utc": "2026-10-05T09:10:39+00:00",
+    "generated_at_kst": "2026-10-05 18:10:39 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -92,8 +92,8 @@
       "official_forward": {
         "episodes": 1184,
         "h6_matured": 1134,
-        "fast_move_n": 222,
-        "fast_move_rate_pct": 19.58,
+        "fast_move_n": 221,
+        "fast_move_rate_pct": 19.49,
         "sleeper_evaluated_n": 748,
         "sleeper_hit3_n": 275,
         "sleeper_hit3_pct": 36.76,
@@ -133,6 +133,33 @@
     }
   },
   "signals": [
+    {
+      "strategy": "C",
+      "market": "KRW-MANTRA",
+      "price": 6.8,
+      "score": 75.58,
+      "source_label": "EARLY",
+      "ret_5m": 0.0,
+      "ret_15m": -0.293,
+      "ret_30m": -0.585,
+      "ret_60m": -0.585,
+      "value_ratio_5m": 1.176,
+      "value_accel_15m": 4.194,
+      "value_accel_30m": 5.468,
+      "ts": "2026-10-05T09:05:00+00:00",
+      "ts_kst": "2026-10-05 18:05:00 KST",
+      "rank": 2,
+      "btc": {
+        "ret_15m": -0.09,
+        "ret_60m": -0.318
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "A",
       "market": "KRW-BIGTIME",
@@ -4928,9 +4955,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.806,
+        "max_pct": 1.266,
+        "min_pct": -1.381,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "A",
@@ -48725,61 +48759,6 @@
     },
     {
       "strategy": "B",
-      "market": "KRW-IMX",
-      "price": 248.0,
-      "score": 89.36,
-      "source_label": "EARLY",
-      "ret_5m": -0.402,
-      "ret_15m": -0.8,
-      "ret_30m": -0.402,
-      "ret_60m": -0.8,
-      "value_ratio_5m": 53.781,
-      "value_accel_15m": 19.457,
-      "value_accel_30m": 6.216,
-      "ts": "2026-10-03T22:10:00+00:00",
-      "ts_kst": "2026-10-04 07:10:00 KST",
-      "rank": 1,
-      "btc": {
-        "ret_15m": 0.063,
-        "ret_60m": 0.157
-      },
-      "abc_all": true,
-      "h1": {
-        "close_pct": 0.806,
-        "max_pct": 0.806,
-        "min_pct": 0.0,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 0.806,
-        "max_pct": 0.806,
-        "min_pct": -0.403,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 4.839,
-        "max_pct": 4.839,
-        "min_pct": -0.403,
-        "hit_3": true,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 0.403,
-        "max_pct": 6.048,
-        "min_pct": -0.403,
-        "hit_3": true,
-        "hit_5": true,
-        "hit_10": false
-      },
-      "status": "FAST_MOVE"
-    },
-    {
-      "strategy": "C",
       "market": "KRW-IMX",
       "price": 248.0,
       "score": 89.36,
