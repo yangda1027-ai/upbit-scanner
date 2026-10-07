@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-07T15:50:41+00:00",
-    "generated_at_kst": "2026-10-08 00:50:41 KST",
+    "generated_at_utc": "2026-10-07T15:55:34+00:00",
+    "generated_at_kst": "2026-10-08 00:55:34 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -30,17 +30,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1163,
-        "h6_matured": 1123,
+        "episodes": 1161,
+        "h6_matured": 1122,
         "fast_move_n": 198,
-        "fast_move_rate_pct": 17.63,
-        "sleeper_evaluated_n": 754,
-        "sleeper_hit3_n": 220,
-        "sleeper_hit3_pct": 29.18,
+        "fast_move_rate_pct": 17.65,
+        "sleeper_evaluated_n": 752,
+        "sleeper_hit3_n": 219,
+        "sleeper_hit3_pct": 29.12,
         "sleeper_hit5_n": 112,
-        "sleeper_hit5_pct": 14.85,
+        "sleeper_hit5_pct": 14.89,
         "sleeper_hit10_n": 31,
-        "sleeper_hit10_pct": 4.11
+        "sleeper_hit10_pct": 4.12
       }
     },
     "B": {
@@ -60,17 +60,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 911,
+        "episodes": 910,
         "h6_matured": 880,
         "fast_move_n": 158,
         "fast_move_rate_pct": 17.95,
-        "sleeper_evaluated_n": 590,
-        "sleeper_hit3_n": 181,
-        "sleeper_hit3_pct": 30.68,
-        "sleeper_hit5_n": 98,
-        "sleeper_hit5_pct": 16.61,
+        "sleeper_evaluated_n": 589,
+        "sleeper_hit3_n": 180,
+        "sleeper_hit3_pct": 30.56,
+        "sleeper_hit5_n": 97,
+        "sleeper_hit5_pct": 16.47,
         "sleeper_hit10_n": 21,
-        "sleeper_hit10_pct": 3.56
+        "sleeper_hit10_pct": 3.57
       }
     },
     "C": {
@@ -91,16 +91,16 @@
       },
       "official_forward": {
         "episodes": 1288,
-        "h6_matured": 1244,
+        "h6_matured": 1245,
         "fast_move_n": 181,
-        "fast_move_rate_pct": 14.55,
-        "sleeper_evaluated_n": 869,
-        "sleeper_hit3_n": 268,
-        "sleeper_hit3_pct": 30.84,
-        "sleeper_hit5_n": 141,
-        "sleeper_hit5_pct": 16.23,
+        "fast_move_rate_pct": 14.54,
+        "sleeper_evaluated_n": 868,
+        "sleeper_hit3_n": 267,
+        "sleeper_hit3_pct": 30.76,
+        "sleeper_hit5_n": 140,
+        "sleeper_hit5_pct": 16.13,
         "sleeper_hit10_n": 32,
-        "sleeper_hit10_pct": 3.68
+        "sleeper_hit10_pct": 3.69
       }
     }
   },
@@ -120,9 +120,9 @@
     },
     "official_forward": {
       "episodes": 471,
-      "h6_matured": 452,
+      "h6_matured": 453,
       "fast_move_n": 59,
-      "fast_move_rate_pct": 13.05,
+      "fast_move_rate_pct": 13.02,
       "sleeper_evaluated_n": 321,
       "sleeper_hit3_n": 100,
       "sleeper_hit3_pct": 31.15,
@@ -133,6 +133,33 @@
     }
   },
   "signals": [
+    {
+      "strategy": "C",
+      "market": "KRW-SEI",
+      "price": 92.5,
+      "score": 78.97,
+      "source_label": "EARLY",
+      "ret_5m": 0.108,
+      "ret_15m": 0.108,
+      "ret_30m": 0.325,
+      "ret_60m": 0.108,
+      "value_ratio_5m": 1.371,
+      "value_accel_15m": 3.009,
+      "value_accel_30m": 4.35,
+      "ts": "2026-10-07T15:50:00+00:00",
+      "ts_kst": "2026-10-08 00:50:00 KST",
+      "rank": 2,
+      "btc": {
+        "ret_15m": 0.118,
+        "ret_60m": 0.535
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "C",
       "market": "KRW-SLX",
@@ -4399,9 +4426,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.735,
+        "max_pct": 0.0,
+        "min_pct": -6.618,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "B",
@@ -4440,9 +4474,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.735,
+        "max_pct": 0.0,
+        "min_pct": -6.618,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "C",
@@ -4481,9 +4522,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.735,
+        "max_pct": 0.0,
+        "min_pct": -6.618,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "C",
@@ -4522,9 +4570,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -1.721,
+        "max_pct": 0.939,
+        "min_pct": -2.817,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "A",
@@ -49306,61 +49361,6 @@
     },
     {
       "strategy": "B",
-      "market": "KRW-CHZ",
-      "price": 23.0,
-      "score": 92.0,
-      "source_label": "EARLY",
-      "ret_5m": 0.0,
-      "ret_15m": 0.0,
-      "ret_30m": 0.0,
-      "ret_60m": -0.433,
-      "value_ratio_5m": 3.369,
-      "value_accel_15m": 2.879,
-      "value_accel_30m": 3.595,
-      "ts": "2026-10-05T23:35:00+00:00",
-      "ts_kst": "2026-10-06 08:35:00 KST",
-      "rank": 2,
-      "btc": {
-        "ret_15m": -0.023,
-        "ret_60m": 0.039
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": -0.435,
-        "max_pct": 0.435,
-        "min_pct": -0.87,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": -2.609,
-        "max_pct": 0.435,
-        "min_pct": -2.609,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": -1.739,
-        "max_pct": 0.435,
-        "min_pct": -3.043,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": -1.739,
-        "max_pct": 0.435,
-        "min_pct": -3.043,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "FAILED_LATE"
-    },
-    {
-      "strategy": "C",
       "market": "KRW-CHZ",
       "price": 23.0,
       "score": 92.0,
