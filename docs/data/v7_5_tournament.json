@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-10T12:55:32+00:00",
-    "generated_at_kst": "2026-10-10 21:55:32 KST",
+    "generated_at_utc": "2026-10-10T13:00:55+00:00",
+    "generated_at_kst": "2026-10-10 22:00:55 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -31,9 +31,9 @@
       },
       "official_forward": {
         "episodes": 1078,
-        "h6_matured": 1036,
+        "h6_matured": 1037,
         "fast_move_n": 180,
-        "fast_move_rate_pct": 17.37,
+        "fast_move_rate_pct": 17.36,
         "sleeper_evaluated_n": 726,
         "sleeper_hit3_n": 177,
         "sleeper_hit3_pct": 24.38,
@@ -60,17 +60,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 857,
-        "h6_matured": 825,
-        "fast_move_n": 167,
-        "fast_move_rate_pct": 20.24,
-        "sleeper_evaluated_n": 558,
+        "episodes": 855,
+        "h6_matured": 824,
+        "fast_move_n": 168,
+        "fast_move_rate_pct": 20.39,
+        "sleeper_evaluated_n": 556,
         "sleeper_hit3_n": 141,
-        "sleeper_hit3_pct": 25.27,
+        "sleeper_hit3_pct": 25.36,
         "sleeper_hit5_n": 76,
-        "sleeper_hit5_pct": 13.62,
+        "sleeper_hit5_pct": 13.67,
         "sleeper_hit10_n": 14,
-        "sleeper_hit10_pct": 2.51
+        "sleeper_hit10_pct": 2.52
       }
     },
     "C": {
@@ -90,17 +90,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1234,
+        "episodes": 1233,
         "h6_matured": 1179,
         "fast_move_n": 200,
         "fast_move_rate_pct": 16.96,
-        "sleeper_evaluated_n": 845,
+        "sleeper_evaluated_n": 843,
         "sleeper_hit3_n": 215,
-        "sleeper_hit3_pct": 25.44,
+        "sleeper_hit3_pct": 25.5,
         "sleeper_hit5_n": 115,
-        "sleeper_hit5_pct": 13.61,
+        "sleeper_hit5_pct": 13.64,
         "sleeper_hit10_n": 22,
-        "sleeper_hit10_pct": 2.6
+        "sleeper_hit10_pct": 2.61
       }
     }
   },
@@ -133,6 +133,33 @@
     }
   },
   "signals": [
+    {
+      "strategy": "C",
+      "market": "KRW-ARK",
+      "price": 296.0,
+      "score": 74.51,
+      "source_label": "EARLY",
+      "ret_5m": -0.337,
+      "ret_15m": -0.337,
+      "ret_30m": -0.337,
+      "ret_60m": 0.0,
+      "value_ratio_5m": 1.177,
+      "value_accel_15m": 3.414,
+      "value_accel_30m": 7.176,
+      "ts": "2026-10-10T12:55:00+00:00",
+      "ts_kst": "2026-10-10 21:55:00 KST",
+      "rank": 2,
+      "btc": {
+        "ret_15m": -0.02,
+        "ret_60m": -0.167
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "A",
       "market": "KRW-QUID",
@@ -2383,7 +2410,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 0.847,
+        "max_pct": 0.847,
+        "min_pct": -0.847,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -2417,7 +2451,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 0.847,
+        "max_pct": 0.847,
+        "min_pct": -0.847,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -4714,9 +4755,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -3.259,
+        "max_pct": 0.148,
+        "min_pct": -3.407,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "B",
@@ -4755,9 +4803,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": 3.824,
+        "max_pct": 6.471,
+        "min_pct": -0.588,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "C",
@@ -4796,9 +4851,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -3.259,
+        "max_pct": 0.148,
+        "min_pct": -3.407,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "C",
@@ -4837,9 +4899,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.733,
+        "max_pct": 0.733,
+        "min_pct": -2.93,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "C",
@@ -49215,61 +49284,6 @@
     },
     {
       "strategy": "B",
-      "market": "KRW-VTHO",
-      "price": 0.906,
-      "score": 89.76,
-      "source_label": "EARLY",
-      "ret_5m": -0.22,
-      "ret_15m": -0.875,
-      "ret_30m": -0.44,
-      "ret_60m": -0.44,
-      "value_ratio_5m": 4.339,
-      "value_accel_15m": 2.768,
-      "value_accel_30m": 5.103,
-      "ts": "2026-10-08T21:15:00+00:00",
-      "ts_kst": "2026-10-09 06:15:00 KST",
-      "rank": 2,
-      "btc": {
-        "ret_15m": 0.021,
-        "ret_60m": -0.1
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": 0.883,
-        "max_pct": 1.214,
-        "min_pct": 0.331,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 1.435,
-        "max_pct": 2.208,
-        "min_pct": 0.331,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": -0.11,
-        "max_pct": 2.208,
-        "min_pct": -0.662,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": -0.773,
-        "max_pct": 2.539,
-        "min_pct": -1.766,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "FAILED_LATE"
-    },
-    {
-      "strategy": "C",
       "market": "KRW-VTHO",
       "price": 0.906,
       "score": 89.76,
