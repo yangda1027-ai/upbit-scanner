@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-13T10:30:48+00:00",
-    "generated_at_kst": "2026-10-13 19:30:48 KST",
+    "generated_at_utc": "2026-10-13T10:35:33+00:00",
+    "generated_at_kst": "2026-10-13 19:35:33 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -30,7 +30,7 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1117,
+        "episodes": 1118,
         "h6_matured": 1078,
         "fast_move_n": 220,
         "fast_move_rate_pct": 20.41,
@@ -94,11 +94,11 @@
         "h6_matured": 1186,
         "fast_move_n": 240,
         "fast_move_rate_pct": 20.24,
-        "sleeper_evaluated_n": 822,
+        "sleeper_evaluated_n": 823,
         "sleeper_hit3_n": 258,
-        "sleeper_hit3_pct": 31.39,
+        "sleeper_hit3_pct": 31.35,
         "sleeper_hit5_n": 150,
-        "sleeper_hit5_pct": 18.25,
+        "sleeper_hit5_pct": 18.23,
         "sleeper_hit10_n": 33,
         "sleeper_hit10_pct": 4.01
       }
@@ -133,6 +133,33 @@
     }
   },
   "signals": [
+    {
+      "strategy": "A",
+      "market": "KRW-FIL",
+      "price": 1547.0,
+      "score": 85.57,
+      "source_label": "EARLY",
+      "ret_5m": -0.322,
+      "ret_15m": -2.089,
+      "ret_30m": -2.397,
+      "ret_60m": -2.027,
+      "value_ratio_5m": 2.358,
+      "value_accel_15m": 3.215,
+      "value_accel_30m": 2.411,
+      "ts": "2026-10-13T10:30:00+00:00",
+      "ts_kst": "2026-10-13 19:30:00 KST",
+      "rank": 1,
+      "btc": {
+        "ret_15m": -0.091,
+        "ret_60m": -0.016
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "A",
       "market": "KRW-BSV",
@@ -23363,8 +23390,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -6.285,
+        "max_pct": 0.673,
+        "min_pct": -11.111,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
@@ -50198,61 +50232,6 @@
         "hit_10": true
       },
       "status": "FAST_MOVE"
-    },
-    {
-      "strategy": "C",
-      "market": "KRW-BCH",
-      "price": 382600.0,
-      "score": 91.75,
-      "source_label": "EARLY",
-      "ret_5m": -0.131,
-      "ret_15m": 0.078,
-      "ret_30m": 0.341,
-      "ret_60m": 0.711,
-      "value_ratio_5m": 9.264,
-      "value_accel_15m": 2.789,
-      "value_accel_30m": 2.509,
-      "ts": "2026-10-11T16:00:00+00:00",
-      "ts_kst": "2026-10-12 01:00:00 KST",
-      "rank": 2,
-      "btc": {
-        "ret_15m": 0.482,
-        "ret_60m": 0.732
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": 0.523,
-        "max_pct": 0.627,
-        "min_pct": 0.131,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 0.706,
-        "max_pct": 1.385,
-        "min_pct": 0.131,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 0.575,
-        "max_pct": 1.673,
-        "min_pct": 0.131,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": -2.169,
-        "max_pct": 1.673,
-        "min_pct": -3.11,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "FAILED_LATE"
     }
   ]
 }
