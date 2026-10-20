@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-20T22:20:42+00:00",
-    "generated_at_kst": "2026-10-21 07:20:42 KST",
+    "generated_at_utc": "2026-10-20T22:25:33+00:00",
+    "generated_at_kst": "2026-10-21 07:25:33 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -9,7 +9,7 @@
     "note": "Official Forward는 forward_start 이후 신호만 포함.",
     "h24_note": "h24는 V7.3 evaluator가 기록한 기존 정의를 그대로 사용.",
     "leader_rule": "공식 sleeper_evaluated_n >= 30인 전략만 +5% 적중률로 임시 리더 선정",
-    "leader": "C",
+    "leader": "A",
     "abc_note": "ABC는 A/B/C 세 조건을 모두 만족한 별도 관찰 집계이며 A/B/C 전략 자체는 변경하지 않음."
   },
   "strategies": {
@@ -30,15 +30,15 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1309,
-        "h6_matured": 1240,
-        "fast_move_n": 242,
-        "fast_move_rate_pct": 19.52,
-        "sleeper_evaluated_n": 885,
+        "episodes": 1303,
+        "h6_matured": 1234,
+        "fast_move_n": 237,
+        "fast_move_rate_pct": 19.21,
+        "sleeper_evaluated_n": 886,
         "sleeper_hit3_n": 192,
-        "sleeper_hit3_pct": 21.69,
+        "sleeper_hit3_pct": 21.67,
         "sleeper_hit5_n": 94,
-        "sleeper_hit5_pct": 10.62,
+        "sleeper_hit5_pct": 10.61,
         "sleeper_hit10_n": 23,
         "sleeper_hit10_pct": 2.6
       }
@@ -60,15 +60,15 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1083,
-        "h6_matured": 1027,
-        "fast_move_n": 212,
-        "fast_move_rate_pct": 20.64,
-        "sleeper_evaluated_n": 707,
+        "episodes": 1078,
+        "h6_matured": 1022,
+        "fast_move_n": 208,
+        "fast_move_rate_pct": 20.35,
+        "sleeper_evaluated_n": 708,
         "sleeper_hit3_n": 151,
-        "sleeper_hit3_pct": 21.36,
+        "sleeper_hit3_pct": 21.33,
         "sleeper_hit5_n": 70,
-        "sleeper_hit5_pct": 9.9,
+        "sleeper_hit5_pct": 9.89,
         "sleeper_hit10_n": 16,
         "sleeper_hit10_pct": 2.26
       }
@@ -90,15 +90,15 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1388,
-        "h6_matured": 1334,
-        "fast_move_n": 223,
-        "fast_move_rate_pct": 16.72,
+        "episodes": 1381,
+        "h6_matured": 1327,
+        "fast_move_n": 217,
+        "fast_move_rate_pct": 16.35,
         "sleeper_evaluated_n": 984,
-        "sleeper_hit3_n": 213,
-        "sleeper_hit3_pct": 21.65,
-        "sleeper_hit5_n": 105,
-        "sleeper_hit5_pct": 10.67,
+        "sleeper_hit3_n": 212,
+        "sleeper_hit3_pct": 21.54,
+        "sleeper_hit5_n": 104,
+        "sleeper_hit5_pct": 10.57,
         "sleeper_hit10_n": 24,
         "sleeper_hit10_pct": 2.44
       }
@@ -119,15 +119,15 @@
       "sleeper_hit10_pct": null
     },
     "official_forward": {
-      "episodes": 515,
-      "h6_matured": 493,
-      "fast_move_n": 78,
-      "fast_move_rate_pct": 15.82,
-      "sleeper_evaluated_n": 369,
-      "sleeper_hit3_n": 81,
-      "sleeper_hit3_pct": 21.95,
-      "sleeper_hit5_n": 31,
-      "sleeper_hit5_pct": 8.4,
+      "episodes": 511,
+      "h6_matured": 489,
+      "fast_move_n": 75,
+      "fast_move_rate_pct": 15.34,
+      "sleeper_evaluated_n": 368,
+      "sleeper_hit3_n": 80,
+      "sleeper_hit3_pct": 21.74,
+      "sleeper_hit5_n": 30,
+      "sleeper_hit5_pct": 8.15,
       "sleeper_hit10_n": 7,
       "sleeper_hit10_pct": 1.9
     }
@@ -1531,7 +1531,14 @@
         "ret_60m": 0.339
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": 0.0,
+        "max_pct": 0.377,
+        "min_pct": -0.755,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -1558,7 +1565,14 @@
         "ret_60m": 0.339
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": -0.541,
+        "max_pct": -0.271,
+        "min_pct": -0.947,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -1585,7 +1599,14 @@
         "ret_60m": 0.339
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": 0.0,
+        "max_pct": 0.377,
+        "min_pct": -0.755,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -1612,7 +1633,14 @@
         "ret_60m": 0.339
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": -0.541,
+        "max_pct": -0.271,
+        "min_pct": -0.947,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -4197,7 +4225,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 1.09,
+        "max_pct": 2.997,
+        "min_pct": -0.545,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -4231,7 +4266,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 0.0,
+        "max_pct": 0.706,
+        "min_pct": -1.647,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -4265,7 +4307,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 4.678,
+        "max_pct": 5.637,
+        "min_pct": -2.531,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -32265,8 +32314,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 6.045,
+        "max_pct": 8.816,
+        "min_pct": -1.259,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
+      "status": "PHOENIX_5"
     },
     {
       "strategy": "A",
@@ -32313,7 +32369,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
+      "h24": {
+        "close_pct": 1.796,
+        "max_pct": 1.916,
+        "min_pct": -3.473,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "status": "FAST_MOVE"
     },
     {
@@ -32361,8 +32424,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 1.085,
+        "max_pct": 2.326,
+        "min_pct": -1.55,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "B",
@@ -32409,8 +32479,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 6.045,
+        "max_pct": 8.816,
+        "min_pct": -1.259,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
+      "status": "PHOENIX_5"
     },
     {
       "strategy": "B",
@@ -32457,8 +32534,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -1.121,
+        "max_pct": 0.0,
+        "min_pct": -1.345,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "B",
@@ -32505,7 +32589,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
+      "h24": {
+        "close_pct": 1.796,
+        "max_pct": 1.916,
+        "min_pct": -3.473,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "status": "FAST_MOVE"
     },
     {
@@ -32553,8 +32644,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -1.121,
+        "max_pct": 0.0,
+        "min_pct": -1.345,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "C",
@@ -32601,7 +32699,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
+      "h24": {
+        "close_pct": 1.796,
+        "max_pct": 1.916,
+        "min_pct": -3.473,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "status": "FAST_MOVE"
     },
     {
