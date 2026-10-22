@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-22T13:05:38+00:00",
-    "generated_at_kst": "2026-10-22 22:05:38 KST",
+    "generated_at_utc": "2026-10-22T13:10:45+00:00",
+    "generated_at_kst": "2026-10-22 22:10:45 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -34,13 +34,13 @@
         "h6_matured": 1244,
         "fast_move_n": 225,
         "fast_move_rate_pct": 18.09,
-        "sleeper_evaluated_n": 874,
+        "sleeper_evaluated_n": 873,
         "sleeper_hit3_n": 283,
-        "sleeper_hit3_pct": 32.38,
+        "sleeper_hit3_pct": 32.42,
         "sleeper_hit5_n": 147,
-        "sleeper_hit5_pct": 16.82,
+        "sleeper_hit5_pct": 16.84,
         "sleeper_hit10_n": 37,
-        "sleeper_hit10_pct": 4.23
+        "sleeper_hit10_pct": 4.24
       }
     },
     "B": {
@@ -64,11 +64,11 @@
         "h6_matured": 1022,
         "fast_move_n": 193,
         "fast_move_rate_pct": 18.88,
-        "sleeper_evaluated_n": 720,
-        "sleeper_hit3_n": 246,
-        "sleeper_hit3_pct": 34.17,
-        "sleeper_hit5_n": 122,
-        "sleeper_hit5_pct": 16.94,
+        "sleeper_evaluated_n": 721,
+        "sleeper_hit3_n": 247,
+        "sleeper_hit3_pct": 34.26,
+        "sleeper_hit5_n": 123,
+        "sleeper_hit5_pct": 17.06,
         "sleeper_hit10_n": 34,
         "sleeper_hit10_pct": 4.72
       }
@@ -90,17 +90,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1415,
-        "h6_matured": 1347,
+        "episodes": 1413,
+        "h6_matured": 1345,
         "fast_move_n": 198,
-        "fast_move_rate_pct": 14.7,
-        "sleeper_evaluated_n": 976,
-        "sleeper_hit3_n": 315,
-        "sleeper_hit3_pct": 32.27,
+        "fast_move_rate_pct": 14.72,
+        "sleeper_evaluated_n": 974,
+        "sleeper_hit3_n": 314,
+        "sleeper_hit3_pct": 32.24,
         "sleeper_hit5_n": 156,
-        "sleeper_hit5_pct": 15.98,
+        "sleeper_hit5_pct": 16.02,
         "sleeper_hit10_n": 37,
-        "sleeper_hit10_pct": 3.79
+        "sleeper_hit10_pct": 3.8
       }
     }
   },
@@ -133,6 +133,33 @@
     }
   },
   "signals": [
+    {
+      "strategy": "A",
+      "market": "KRW-SAHARA",
+      "price": 10.1,
+      "score": 96.8,
+      "source_label": "EARLY",
+      "ret_5m": 1.0,
+      "ret_15m": 1.0,
+      "ret_30m": 0.0,
+      "ret_60m": 0.0,
+      "value_ratio_5m": 4.857,
+      "value_accel_15m": 6.118,
+      "value_accel_30m": 7.341,
+      "ts": "2026-10-22T13:05:00+00:00",
+      "ts_kst": "2026-10-22 22:05:00 KST",
+      "rank": 1,
+      "btc": {
+        "ret_15m": 0.01,
+        "ret_60m": -0.16
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "A",
       "market": "KRW-LA",
@@ -1558,7 +1585,14 @@
         "ret_60m": -0.216
       },
       "abc_all": true,
-      "h1": null,
+      "h1": {
+        "close_pct": 1.872,
+        "max_pct": 2.139,
+        "min_pct": -0.535,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -1585,7 +1619,14 @@
         "ret_60m": -0.216
       },
       "abc_all": true,
-      "h1": null,
+      "h1": {
+        "close_pct": 1.872,
+        "max_pct": 2.139,
+        "min_pct": -0.535,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -1612,7 +1653,14 @@
         "ret_60m": -0.216
       },
       "abc_all": true,
-      "h1": null,
+      "h1": {
+        "close_pct": 1.872,
+        "max_pct": 2.139,
+        "min_pct": -0.535,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -5851,9 +5899,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.662,
+        "max_pct": 0.662,
+        "min_pct": -1.987,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "B",
@@ -28748,8 +28803,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 4.192,
+        "max_pct": 8.683,
+        "min_pct": -2.096,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
+      "status": "PHOENIX_5"
     },
     {
       "strategy": "A",
@@ -48385,61 +48447,6 @@
         "hit_10": false
       },
       "status": "FAILED_LATE"
-    },
-    {
-      "strategy": "A",
-      "market": "KRW-ENSO",
-      "price": 874.0,
-      "score": 91.5,
-      "source_label": "EARLY",
-      "ret_5m": -0.114,
-      "ret_15m": 0.115,
-      "ret_30m": 0.46,
-      "ret_60m": 1.04,
-      "value_ratio_5m": 2.47,
-      "value_accel_15m": 3.032,
-      "value_accel_30m": 4.882,
-      "ts": "2026-10-20T23:10:00+00:00",
-      "ts_kst": "2026-10-21 08:10:00 KST",
-      "rank": 1,
-      "btc": {
-        "ret_15m": -0.143,
-        "ret_60m": -0.128
-      },
-      "abc_all": true,
-      "h1": {
-        "close_pct": -0.114,
-        "max_pct": 0.915,
-        "min_pct": -1.144,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": -1.945,
-        "max_pct": 1.487,
-        "min_pct": -1.945,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": -0.915,
-        "max_pct": 1.487,
-        "min_pct": -2.059,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 6.407,
-        "max_pct": 8.238,
-        "min_pct": -0.458,
-        "hit_3": true,
-        "hit_5": true,
-        "hit_10": false
-      },
-      "status": "PHOENIX_5"
     }
   ]
 }
