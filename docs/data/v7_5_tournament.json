@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-23T21:25:33+00:00",
-    "generated_at_kst": "2026-10-24 06:25:33 KST",
+    "generated_at_utc": "2026-10-23T21:30:48+00:00",
+    "generated_at_kst": "2026-10-24 06:30:48 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -30,17 +30,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1228,
-        "h6_matured": 1189,
+        "episodes": 1226,
+        "h6_matured": 1187,
         "fast_move_n": 241,
-        "fast_move_rate_pct": 20.27,
-        "sleeper_evaluated_n": 821,
-        "sleeper_hit3_n": 324,
-        "sleeper_hit3_pct": 39.46,
-        "sleeper_hit5_n": 164,
-        "sleeper_hit5_pct": 19.98,
+        "fast_move_rate_pct": 20.3,
+        "sleeper_evaluated_n": 820,
+        "sleeper_hit3_n": 323,
+        "sleeper_hit3_pct": 39.39,
+        "sleeper_hit5_n": 163,
+        "sleeper_hit5_pct": 19.88,
         "sleeper_hit10_n": 40,
-        "sleeper_hit10_pct": 4.87
+        "sleeper_hit10_pct": 4.88
       }
     },
     "B": {
@@ -60,17 +60,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1009,
-        "h6_matured": 971,
+        "episodes": 1008,
+        "h6_matured": 970,
         "fast_move_n": 209,
-        "fast_move_rate_pct": 21.52,
-        "sleeper_evaluated_n": 653,
+        "fast_move_rate_pct": 21.55,
+        "sleeper_evaluated_n": 654,
         "sleeper_hit3_n": 268,
-        "sleeper_hit3_pct": 41.04,
+        "sleeper_hit3_pct": 40.98,
         "sleeper_hit5_n": 135,
-        "sleeper_hit5_pct": 20.67,
+        "sleeper_hit5_pct": 20.64,
         "sleeper_hit10_n": 35,
-        "sleeper_hit10_pct": 5.36
+        "sleeper_hit10_pct": 5.35
       }
     },
     "C": {
@@ -90,17 +90,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1324,
-        "h6_matured": 1272,
+        "episodes": 1322,
+        "h6_matured": 1270,
         "fast_move_n": 219,
-        "fast_move_rate_pct": 17.22,
-        "sleeper_evaluated_n": 914,
-        "sleeper_hit3_n": 362,
-        "sleeper_hit3_pct": 39.61,
-        "sleeper_hit5_n": 175,
-        "sleeper_hit5_pct": 19.15,
-        "sleeper_hit10_n": 45,
-        "sleeper_hit10_pct": 4.92
+        "fast_move_rate_pct": 17.24,
+        "sleeper_evaluated_n": 913,
+        "sleeper_hit3_n": 361,
+        "sleeper_hit3_pct": 39.54,
+        "sleeper_hit5_n": 174,
+        "sleeper_hit5_pct": 19.06,
+        "sleeper_hit10_n": 44,
+        "sleeper_hit10_pct": 4.82
       }
     }
   },
@@ -119,17 +119,17 @@
       "sleeper_hit10_pct": null
     },
     "official_forward": {
-      "episodes": 481,
-      "h6_matured": 459,
+      "episodes": 480,
+      "h6_matured": 458,
       "fast_move_n": 86,
-      "fast_move_rate_pct": 18.74,
-      "sleeper_evaluated_n": 314,
+      "fast_move_rate_pct": 18.78,
+      "sleeper_evaluated_n": 315,
       "sleeper_hit3_n": 138,
-      "sleeper_hit3_pct": 43.95,
+      "sleeper_hit3_pct": 43.81,
       "sleeper_hit5_n": 56,
-      "sleeper_hit5_pct": 17.83,
+      "sleeper_hit5_pct": 17.78,
       "sleeper_hit10_n": 16,
-      "sleeper_hit10_pct": 5.1
+      "sleeper_hit10_pct": 5.08
     }
   },
   "signals": [
@@ -370,7 +370,14 @@
         "ret_60m": -0.007
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": 0.6,
+        "max_pct": 0.8,
+        "min_pct": -0.2,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -397,7 +404,14 @@
         "ret_60m": -0.007
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": 0.454,
+        "max_pct": 1.249,
+        "min_pct": -0.227,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -28124,8 +28138,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -1.083,
+        "max_pct": 1.3,
+        "min_pct": -1.733,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
@@ -28172,7 +28193,14 @@
         "hit_5": true,
         "hit_10": false
       },
-      "h24": null,
+      "h24": {
+        "close_pct": -49.429,
+        "max_pct": 30.714,
+        "min_pct": -56.286,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": true
+      },
       "status": "FAST_MOVE"
     },
     {
@@ -28220,8 +28248,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -1.681,
+        "max_pct": 2.101,
+        "min_pct": -2.521,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "B",
@@ -28268,8 +28303,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -1.083,
+        "max_pct": 1.3,
+        "min_pct": -1.733,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "B",
@@ -28316,7 +28358,14 @@
         "hit_5": true,
         "hit_10": false
       },
-      "h24": null,
+      "h24": {
+        "close_pct": -49.429,
+        "max_pct": 30.714,
+        "min_pct": -56.286,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": true
+      },
       "status": "FAST_MOVE"
     },
     {
@@ -28364,7 +28413,14 @@
         "hit_5": true,
         "hit_10": false
       },
-      "h24": null,
+      "h24": {
+        "close_pct": 30.085,
+        "max_pct": 38.136,
+        "min_pct": 5.085,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": true
+      },
       "status": "FAST_MOVE"
     },
     {
@@ -28412,8 +28468,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -1.083,
+        "max_pct": 1.3,
+        "min_pct": -1.733,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
