@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-24T22:20:37+00:00",
-    "generated_at_kst": "2026-10-25 07:20:37 KST",
+    "generated_at_utc": "2026-10-24T22:25:33+00:00",
+    "generated_at_kst": "2026-10-25 07:25:33 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -30,17 +30,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1184,
+        "episodes": 1185,
         "h6_matured": 1126,
         "fast_move_n": 255,
         "fast_move_rate_pct": 22.65,
-        "sleeper_evaluated_n": 765,
+        "sleeper_evaluated_n": 767,
         "sleeper_hit3_n": 293,
-        "sleeper_hit3_pct": 38.3,
+        "sleeper_hit3_pct": 38.2,
         "sleeper_hit5_n": 148,
-        "sleeper_hit5_pct": 19.35,
+        "sleeper_hit5_pct": 19.3,
         "sleeper_hit10_n": 37,
-        "sleeper_hit10_pct": 4.84
+        "sleeper_hit10_pct": 4.82
       }
     },
     "B": {
@@ -64,11 +64,11 @@
         "h6_matured": 911,
         "fast_move_n": 214,
         "fast_move_rate_pct": 23.49,
-        "sleeper_evaluated_n": 629,
+        "sleeper_evaluated_n": 630,
         "sleeper_hit3_n": 246,
-        "sleeper_hit3_pct": 39.11,
+        "sleeper_hit3_pct": 39.05,
         "sleeper_hit5_n": 125,
-        "sleeper_hit5_pct": 19.87,
+        "sleeper_hit5_pct": 19.84,
         "sleeper_hit10_n": 35,
         "sleeper_hit10_pct": 5.56
       }
@@ -90,17 +90,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1245,
+        "episodes": 1246,
         "h6_matured": 1199,
         "fast_move_n": 219,
         "fast_move_rate_pct": 18.27,
-        "sleeper_evaluated_n": 851,
+        "sleeper_evaluated_n": 853,
         "sleeper_hit3_n": 317,
-        "sleeper_hit3_pct": 37.25,
+        "sleeper_hit3_pct": 37.16,
         "sleeper_hit5_n": 149,
-        "sleeper_hit5_pct": 17.51,
+        "sleeper_hit5_pct": 17.47,
         "sleeper_hit10_n": 41,
-        "sleeper_hit10_pct": 4.82
+        "sleeper_hit10_pct": 4.81
       }
     }
   },
@@ -123,16 +123,70 @@
       "h6_matured": 444,
       "fast_move_n": 84,
       "fast_move_rate_pct": 18.92,
-      "sleeper_evaluated_n": 315,
+      "sleeper_evaluated_n": 316,
       "sleeper_hit3_n": 124,
-      "sleeper_hit3_pct": 39.37,
+      "sleeper_hit3_pct": 39.24,
       "sleeper_hit5_n": 51,
-      "sleeper_hit5_pct": 16.19,
+      "sleeper_hit5_pct": 16.14,
       "sleeper_hit10_n": 15,
-      "sleeper_hit10_pct": 4.76
+      "sleeper_hit10_pct": 4.75
     }
   },
   "signals": [
+    {
+      "strategy": "A",
+      "market": "KRW-BARD",
+      "price": 153.0,
+      "score": 88.88,
+      "source_label": "EARLY",
+      "ret_5m": -0.649,
+      "ret_15m": -0.649,
+      "ret_30m": -1.29,
+      "ret_60m": -1.923,
+      "value_ratio_5m": 4.67,
+      "value_accel_15m": 3.175,
+      "value_accel_30m": 2.401,
+      "ts": "2026-10-24T22:20:00+00:00",
+      "ts_kst": "2026-10-25 07:20:00 KST",
+      "rank": 1,
+      "btc": {
+        "ret_15m": -0.049,
+        "ret_60m": -0.032
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
+    {
+      "strategy": "C",
+      "market": "KRW-BARD",
+      "price": 153.0,
+      "score": 88.88,
+      "source_label": "EARLY",
+      "ret_5m": -0.649,
+      "ret_15m": -0.649,
+      "ret_30m": -1.29,
+      "ret_60m": -1.923,
+      "value_ratio_5m": 4.67,
+      "value_accel_15m": 3.175,
+      "value_accel_30m": 2.401,
+      "ts": "2026-10-24T22:20:00+00:00",
+      "ts_kst": "2026-10-25 07:20:00 KST",
+      "rank": 1,
+      "btc": {
+        "ret_15m": -0.049,
+        "ret_60m": -0.032
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "C",
       "market": "KRW-APT",
@@ -1045,7 +1099,14 @@
         "ret_60m": -0.3
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": 0.909,
+        "max_pct": 0.909,
+        "min_pct": 0.0,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -1072,7 +1133,14 @@
         "ret_60m": -0.3
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": 0.0,
+        "max_pct": 1.025,
+        "min_pct": -0.146,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -1099,7 +1167,14 @@
         "ret_60m": -0.3
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": 0.909,
+        "max_pct": 0.909,
+        "min_pct": 0.0,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -2970,7 +3045,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 3.524,
+        "max_pct": 4.405,
+        "min_pct": 0.0,
+        "hit_3": true,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -3004,7 +3086,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 3.524,
+        "max_pct": 4.405,
+        "min_pct": 0.0,
+        "hit_3": true,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -3038,7 +3127,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 3.524,
+        "max_pct": 4.405,
+        "min_pct": 0.0,
+        "hit_3": true,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -23220,8 +23316,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -0.043,
+        "max_pct": 1.026,
+        "min_pct": -5.643,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
@@ -23268,8 +23371,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 0.226,
+        "max_pct": 0.679,
+        "min_pct": -0.226,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "B",
@@ -23316,8 +23426,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -0.043,
+        "max_pct": 1.026,
+        "min_pct": -5.643,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "C",
@@ -23364,8 +23481,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -0.043,
+        "max_pct": 1.026,
+        "min_pct": -5.643,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "C",
@@ -23412,8 +23536,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": 0.226,
+        "max_pct": 0.679,
+        "min_pct": -0.226,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
@@ -49429,116 +49560,6 @@
         "hit_10": false
       },
       "status": "FAILED_LATE"
-    },
-    {
-      "strategy": "A",
-      "market": "KRW-PEPE",
-      "price": 0.00591,
-      "score": 91.21,
-      "source_label": "EARLY",
-      "ret_5m": 0.34,
-      "ret_15m": 0.34,
-      "ret_30m": 0.169,
-      "ret_60m": 0.51,
-      "value_ratio_5m": 4.949,
-      "value_accel_15m": 3.881,
-      "value_accel_30m": 2.158,
-      "ts": "2026-10-23T01:05:00+00:00",
-      "ts_kst": "2026-10-23 10:05:00 KST",
-      "rank": 1,
-      "btc": {
-        "ret_15m": -0.084,
-        "ret_60m": 0.156
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": 0.0,
-        "max_pct": 0.508,
-        "min_pct": -0.846,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 2.03,
-        "max_pct": 2.369,
-        "min_pct": -0.846,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 4.061,
-        "max_pct": 4.907,
-        "min_pct": -0.846,
-        "hit_3": true,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 3.723,
-        "max_pct": 15.567,
-        "min_pct": 2.2,
-        "hit_3": true,
-        "hit_5": true,
-        "hit_10": true
-      },
-      "status": "FAST_MOVE"
-    },
-    {
-      "strategy": "A",
-      "market": "KRW-BCH",
-      "price": 370000.0,
-      "score": 88.15,
-      "source_label": "EARLY",
-      "ret_5m": 0.0,
-      "ret_15m": 0.244,
-      "ret_30m": 0.38,
-      "ret_60m": 0.68,
-      "value_ratio_5m": 2.143,
-      "value_accel_15m": 7.723,
-      "value_accel_30m": 3.041,
-      "ts": "2026-10-23T01:05:00+00:00",
-      "ts_kst": "2026-10-23 10:05:00 KST",
-      "rank": 2,
-      "btc": {
-        "ret_15m": -0.084,
-        "ret_60m": 0.156
-      },
-      "abc_all": true,
-      "h1": {
-        "close_pct": 0.757,
-        "max_pct": 1.486,
-        "min_pct": -0.351,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 2.757,
-        "max_pct": 3.486,
-        "min_pct": -0.351,
-        "hit_3": true,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 2.649,
-        "max_pct": 4.135,
-        "min_pct": -0.351,
-        "hit_3": true,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 1.703,
-        "max_pct": 3.973,
-        "min_pct": 0.0,
-        "hit_3": true,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "status": "FAST_MOVE"
     }
   ]
 }
