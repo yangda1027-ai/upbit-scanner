@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-25T02:00:54+00:00",
-    "generated_at_kst": "2026-10-25 11:00:54 KST",
+    "generated_at_utc": "2026-10-25T02:05:38+00:00",
+    "generated_at_kst": "2026-10-25 11:05:38 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -30,17 +30,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1201,
-        "h6_matured": 1123,
-        "fast_move_n": 262,
-        "fast_move_rate_pct": 23.33,
-        "sleeper_evaluated_n": 766,
-        "sleeper_hit3_n": 272,
-        "sleeper_hit3_pct": 35.51,
+        "episodes": 1199,
+        "h6_matured": 1122,
+        "fast_move_n": 263,
+        "fast_move_rate_pct": 23.44,
+        "sleeper_evaluated_n": 764,
+        "sleeper_hit3_n": 270,
+        "sleeper_hit3_pct": 35.34,
         "sleeper_hit5_n": 138,
-        "sleeper_hit5_pct": 18.02,
+        "sleeper_hit5_pct": 18.06,
         "sleeper_hit10_n": 35,
-        "sleeper_hit10_pct": 4.57
+        "sleeper_hit10_pct": 4.58
       }
     },
     "B": {
@@ -60,17 +60,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 974,
-        "h6_matured": 909,
+        "episodes": 973,
+        "h6_matured": 908,
         "fast_move_n": 221,
-        "fast_move_rate_pct": 24.31,
-        "sleeper_evaluated_n": 626,
-        "sleeper_hit3_n": 228,
-        "sleeper_hit3_pct": 36.42,
+        "fast_move_rate_pct": 24.34,
+        "sleeper_evaluated_n": 625,
+        "sleeper_hit3_n": 227,
+        "sleeper_hit3_pct": 36.32,
         "sleeper_hit5_n": 114,
-        "sleeper_hit5_pct": 18.21,
+        "sleeper_hit5_pct": 18.24,
         "sleeper_hit10_n": 32,
-        "sleeper_hit10_pct": 5.11
+        "sleeper_hit10_pct": 5.12
       }
     },
     "C": {
@@ -90,15 +90,15 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 1250,
+        "episodes": 1249,
         "h6_matured": 1182,
-        "fast_move_n": 222,
-        "fast_move_rate_pct": 18.78,
-        "sleeper_evaluated_n": 858,
-        "sleeper_hit3_n": 300,
-        "sleeper_hit3_pct": 34.97,
+        "fast_move_n": 223,
+        "fast_move_rate_pct": 18.87,
+        "sleeper_evaluated_n": 857,
+        "sleeper_hit3_n": 299,
+        "sleeper_hit3_pct": 34.89,
         "sleeper_hit5_n": 141,
-        "sleeper_hit5_pct": 16.43,
+        "sleeper_hit5_pct": 16.45,
         "sleeper_hit10_n": 38,
         "sleeper_hit10_pct": 4.43
       }
@@ -119,17 +119,17 @@
       "sleeper_hit10_pct": null
     },
     "official_forward": {
-      "episodes": 465,
-      "h6_matured": 437,
+      "episodes": 463,
+      "h6_matured": 435,
       "fast_move_n": 88,
-      "fast_move_rate_pct": 20.14,
-      "sleeper_evaluated_n": 317,
-      "sleeper_hit3_n": 115,
-      "sleeper_hit3_pct": 36.28,
+      "fast_move_rate_pct": 20.23,
+      "sleeper_evaluated_n": 315,
+      "sleeper_hit3_n": 113,
+      "sleeper_hit3_pct": 35.87,
       "sleeper_hit5_n": 47,
-      "sleeper_hit5_pct": 14.83,
+      "sleeper_hit5_pct": 14.92,
       "sleeper_hit10_n": 14,
-      "sleeper_hit10_pct": 4.42
+      "sleeper_hit10_pct": 4.44
     }
   },
   "signals": [
@@ -3615,7 +3615,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 0.56,
+        "max_pct": 1.519,
+        "min_pct": -0.719,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -7962,9 +7969,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -6.057,
+        "max_pct": 6.532,
+        "min_pct": -7.245,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "C",
@@ -8003,9 +8017,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -6.057,
+        "max_pct": 6.532,
+        "min_pct": -7.245,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "FAST_MOVE"
     },
     {
       "strategy": "A",
