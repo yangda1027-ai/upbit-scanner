@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at_utc": "2026-10-27T11:45:43+00:00",
-    "generated_at_kst": "2026-10-27 20:45:43 KST",
+    "generated_at_utc": "2026-10-27T11:50:40+00:00",
+    "generated_at_kst": "2026-10-27 20:50:40 KST",
     "forward_start_utc": "2026-09-10T19:20:15+00:00",
     "forward_start_kst": "2026-09-11 04:20:15 KST",
     "episode_gap_minutes": 60,
@@ -31,9 +31,9 @@
       },
       "official_forward": {
         "episodes": 1139,
-        "h6_matured": 1076,
+        "h6_matured": 1075,
         "fast_move_n": 227,
-        "fast_move_rate_pct": 21.1,
+        "fast_move_rate_pct": 21.12,
         "sleeper_evaluated_n": 701,
         "sleeper_hit3_n": 171,
         "sleeper_hit3_pct": 24.39,
@@ -60,17 +60,17 @@
         "sleeper_hit10_pct": null
       },
       "official_forward": {
-        "episodes": 902,
+        "episodes": 901,
         "h6_matured": 858,
         "fast_move_n": 208,
         "fast_move_rate_pct": 24.24,
-        "sleeper_evaluated_n": 536,
+        "sleeper_evaluated_n": 535,
         "sleeper_hit3_n": 127,
-        "sleeper_hit3_pct": 23.69,
+        "sleeper_hit3_pct": 23.74,
         "sleeper_hit5_n": 73,
-        "sleeper_hit5_pct": 13.62,
+        "sleeper_hit5_pct": 13.64,
         "sleeper_hit10_n": 29,
-        "sleeper_hit10_pct": 5.41
+        "sleeper_hit10_pct": 5.42
       }
     },
     "C": {
@@ -91,16 +91,16 @@
       },
       "official_forward": {
         "episodes": 1217,
-        "h6_matured": 1158,
+        "h6_matured": 1157,
         "fast_move_n": 190,
-        "fast_move_rate_pct": 16.41,
-        "sleeper_evaluated_n": 791,
+        "fast_move_rate_pct": 16.42,
+        "sleeper_evaluated_n": 790,
         "sleeper_hit3_n": 204,
-        "sleeper_hit3_pct": 25.79,
+        "sleeper_hit3_pct": 25.82,
         "sleeper_hit5_n": 107,
-        "sleeper_hit5_pct": 13.53,
+        "sleeper_hit5_pct": 13.54,
         "sleeper_hit10_n": 41,
-        "sleeper_hit10_pct": 5.18
+        "sleeper_hit10_pct": 5.19
       }
     }
   },
@@ -119,20 +119,74 @@
       "sleeper_hit10_pct": null
     },
     "official_forward": {
-      "episodes": 468,
-      "h6_matured": 451,
+      "episodes": 467,
+      "h6_matured": 450,
       "fast_move_n": 70,
-      "fast_move_rate_pct": 15.52,
-      "sleeper_evaluated_n": 309,
+      "fast_move_rate_pct": 15.56,
+      "sleeper_evaluated_n": 308,
       "sleeper_hit3_n": 70,
-      "sleeper_hit3_pct": 22.65,
+      "sleeper_hit3_pct": 22.73,
       "sleeper_hit5_n": 37,
-      "sleeper_hit5_pct": 11.97,
+      "sleeper_hit5_pct": 12.01,
       "sleeper_hit10_n": 9,
-      "sleeper_hit10_pct": 2.91
+      "sleeper_hit10_pct": 2.92
     }
   },
   "signals": [
+    {
+      "strategy": "A",
+      "market": "KRW-TOSHI",
+      "price": 0.145,
+      "score": 85.49,
+      "source_label": "EARLY",
+      "ret_5m": -0.685,
+      "ret_15m": -1.361,
+      "ret_30m": -1.361,
+      "ret_60m": -0.685,
+      "value_ratio_5m": 4.401,
+      "value_accel_15m": 5.411,
+      "value_accel_30m": 2.199,
+      "ts": "2026-10-27T11:45:00+00:00",
+      "ts_kst": "2026-10-27 20:45:00 KST",
+      "rank": 1,
+      "btc": {
+        "ret_15m": -0.012,
+        "ret_60m": -0.129
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
+    {
+      "strategy": "C",
+      "market": "KRW-TOSHI",
+      "price": 0.145,
+      "score": 85.49,
+      "source_label": "EARLY",
+      "ret_5m": -0.685,
+      "ret_15m": -1.361,
+      "ret_30m": -1.361,
+      "ret_60m": -0.685,
+      "value_ratio_5m": 4.401,
+      "value_accel_15m": 5.411,
+      "value_accel_30m": 2.199,
+      "ts": "2026-10-27T11:45:00+00:00",
+      "ts_kst": "2026-10-27 20:45:00 KST",
+      "rank": 1,
+      "btc": {
+        "ret_15m": -0.012,
+        "ret_60m": -0.129
+      },
+      "abc_all": false,
+      "h1": null,
+      "h3": null,
+      "h6": null,
+      "h24": null,
+      "status": "TRACKING"
+    },
     {
       "strategy": "B",
       "market": "KRW-APT",
@@ -640,7 +694,14 @@
         "ret_60m": 0.308
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": -0.309,
+        "max_pct": 0.412,
+        "min_pct": -0.412,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -667,7 +728,14 @@
         "ret_60m": 0.308
       },
       "abc_all": false,
-      "h1": null,
+      "h1": {
+        "close_pct": -0.309,
+        "max_pct": 0.412,
+        "min_pct": -0.412,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h3": null,
       "h6": null,
       "h24": null,
@@ -2470,7 +2538,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": -0.375,
+        "max_pct": 1.311,
+        "min_pct": -1.311,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -2504,7 +2579,14 @@
         "hit_5": true,
         "hit_10": true
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 5.371,
+        "max_pct": 14.066,
+        "min_pct": -1.023,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": true
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -2538,7 +2620,14 @@
         "hit_5": true,
         "hit_10": true
       },
-      "h3": null,
+      "h3": {
+        "close_pct": 5.371,
+        "max_pct": 14.066,
+        "min_pct": -1.023,
+        "hit_3": true,
+        "hit_5": true,
+        "hit_10": true
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -2572,7 +2661,14 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h3": null,
+      "h3": {
+        "close_pct": -0.375,
+        "max_pct": 1.311,
+        "min_pct": -1.311,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h6": null,
       "h24": null,
       "status": "TRACKING"
@@ -6263,9 +6359,16 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h6": null,
+      "h6": {
+        "close_pct": -0.709,
+        "max_pct": 0.0,
+        "min_pct": -1.418,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
       "h24": null,
-      "status": "TRACKING"
+      "status": "SLEEPING"
     },
     {
       "strategy": "A",
@@ -32376,8 +32479,15 @@
         "hit_5": false,
         "hit_10": false
       },
-      "h24": null,
-      "status": "SLEEPING"
+      "h24": {
+        "close_pct": -4.615,
+        "max_pct": -0.44,
+        "min_pct": -9.89,
+        "hit_3": false,
+        "hit_5": false,
+        "hit_10": false
+      },
+      "status": "FAILED_LATE"
     },
     {
       "strategy": "A",
@@ -48166,116 +48276,6 @@
     },
     {
       "strategy": "A",
-      "market": "KRW-TOSHI",
-      "price": 0.141,
-      "score": 87.37,
-      "source_label": "EARLY",
-      "ret_5m": -0.704,
-      "ret_15m": -1.399,
-      "ret_30m": -0.704,
-      "ret_60m": -0.704,
-      "value_ratio_5m": 4.539,
-      "value_accel_15m": 8.67,
-      "value_accel_30m": 4.829,
-      "ts": "2026-10-25T23:10:00+00:00",
-      "ts_kst": "2026-10-26 08:10:00 KST",
-      "rank": 4,
-      "btc": {
-        "ret_15m": -0.06,
-        "ret_60m": 0.091
-      },
-      "abc_all": true,
-      "h1": {
-        "close_pct": 0.709,
-        "max_pct": 1.418,
-        "min_pct": 0.0,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": 0.0,
-        "max_pct": 1.418,
-        "min_pct": -1.418,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 0.709,
-        "max_pct": 2.128,
-        "min_pct": -2.128,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 7.801,
-        "max_pct": 18.44,
-        "min_pct": 0.709,
-        "hit_3": true,
-        "hit_5": true,
-        "hit_10": true
-      },
-      "status": "PHOENIX_10"
-    },
-    {
-      "strategy": "A",
-      "market": "KRW-O",
-      "price": 543.0,
-      "score": 85.79,
-      "source_label": "EARLY",
-      "ret_5m": -0.367,
-      "ret_15m": -0.731,
-      "ret_30m": -0.912,
-      "ret_60m": -1.093,
-      "value_ratio_5m": 5.574,
-      "value_accel_15m": 4.917,
-      "value_accel_30m": 2.02,
-      "ts": "2026-10-25T23:10:00+00:00",
-      "ts_kst": "2026-10-26 08:10:00 KST",
-      "rank": 5,
-      "btc": {
-        "ret_15m": -0.06,
-        "ret_60m": 0.091
-      },
-      "abc_all": false,
-      "h1": {
-        "close_pct": -0.368,
-        "max_pct": 0.368,
-        "min_pct": -1.105,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h3": {
-        "close_pct": -1.289,
-        "max_pct": 0.368,
-        "min_pct": -2.21,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h6": {
-        "close_pct": 0.184,
-        "max_pct": 0.737,
-        "min_pct": -3.131,
-        "hit_3": false,
-        "hit_5": false,
-        "hit_10": false
-      },
-      "h24": {
-        "close_pct": 5.525,
-        "max_pct": 7.366,
-        "min_pct": -3.131,
-        "hit_3": true,
-        "hit_5": true,
-        "hit_10": false
-      },
-      "status": "PHOENIX_5"
-    },
-    {
-      "strategy": "B",
       "market": "KRW-TOSHI",
       "price": 0.141,
       "score": 87.37,
